@@ -29,9 +29,9 @@ export function UploadMenu(props: Props) {
     }
     const filesArray = Array.from(files);
     (event.target as HTMLInputElement).value = ''; // Reset the file input.
-    analyticsEvent('upload_files_selected', {
-      event_value: files.length,
-    });
+    // analyticsEvent('upload_files_selected', {
+      // event_value: files.length,
+    // });
 
     const gedcomFile =
       filesArray.length === 1
