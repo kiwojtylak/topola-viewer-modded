@@ -167,9 +167,9 @@ export class UploadedDataSource implements DataSource<UploadSourceSpec> {
       );
       const software = getSoftware(data.gedcom.head);
       // analyticsEvent('upload_file_loaded', {
-        event_label: software,
-        event_value: (source.spec.images && source.spec.images.size) || 0,
-      });
+        // event_label: software,
+        // event_value: (source.spec.images && source.spec.images.size) || 0,
+      // });
       return data;
     } catch (error) {
       // analyticsEvent('upload_file_error');

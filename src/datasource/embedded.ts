@@ -58,8 +58,8 @@ export class EmbeddedDataSource implements DataSource<EmbeddedSourceSpec> {
         const data = await loadGedcom('', gedcom);
         const software = getSoftware(data.gedcom.head);
         // analyticsEvent('embedded_file_loaded', {
-          event_label: software,
-        });
+          // event_label: software,
+        // });
         resolve(data);
       } catch (error) {
         // analyticsEvent('embedded_file_error');
