@@ -33,7 +33,7 @@ export function WikiTreeMenu(props: Props) {
     if (!wikiTreeId) {
       return;
     }
-    analyticsEvent('wikitree_id_selected');
+    // analyticsEvent('wikitree_id_selected');
     const search = queryString.parse(location.search);
     const standalone =
       search.standalone !== undefined ? search.standalone : true;

@@ -879,10 +879,10 @@ export class WikiTreeDataSource implements DataSource<WikiTreeSourceSpec> {
         this.intl,
         source.spec.authcode,
       );
-      analyticsEvent('wikitree_loaded');
+      // analyticsEvent('wikitree_loaded');
       return data;
     } catch (error) {
-      analyticsEvent('wikitree_error');
+      // analyticsEvent('wikitree_error');
       throw error;
     }
   }

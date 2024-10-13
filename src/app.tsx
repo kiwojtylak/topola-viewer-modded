@@ -418,7 +418,7 @@ export function App() {
     if (selection.id.startsWith(PRIVATE_ID_PREFIX)) {
       return;
     }
-    analyticsEvent('selection_changed');
+    // analyticsEvent('selection_changed');
     updateUrl({
       indi: selection.id,
       gen: selection.generation,
@@ -426,7 +426,7 @@ export function App() {
   }
 
   function onPrint() {
-    analyticsEvent('print');
+    // analyticsEvent('print');
     printChart();
   }
 
@@ -436,7 +436,7 @@ export function App() {
   }
 
   async function onDownloadPdf() {
-    analyticsEvent('download_pdf');
+    // analyticsEvent('download_pdf');
     try {
       await downloadPdf();
     } catch (e) {
@@ -452,7 +452,7 @@ export function App() {
   }
 
   async function onDownloadPng() {
-    analyticsEvent('download_png');
+    // analyticsEvent('download_png');
     try {
       await downloadPng();
     } catch (e) {
@@ -468,7 +468,7 @@ export function App() {
   }
 
   function onDownloadSvg() {
-    analyticsEvent('download_svg');
+    // analyticsEvent('download_svg');
     downloadSvg();
   }
 

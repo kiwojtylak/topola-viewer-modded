@@ -166,13 +166,13 @@ export class UploadedDataSource implements DataSource<UploadSourceSpec> {
         source.spec.images,
       );
       const software = getSoftware(data.gedcom.head);
-      analyticsEvent('upload_file_loaded', {
+      // analyticsEvent('upload_file_loaded', {
         event_label: software,
         event_value: (source.spec.images && source.spec.images.size) || 0,
       });
       return data;
     } catch (error) {
-      analyticsEvent('upload_file_error');
+      // analyticsEvent('upload_file_error');
       throw error;
     }
   }
@@ -199,10 +199,10 @@ export class GedcomUrlDataSource implements DataSource<UrlSourceSpec> {
     try {
       const data = await loadFromUrl(source.spec.url, source.spec.handleCors);
       const software = getSoftware(data.gedcom.head);
-      analyticsEvent('upload_file_loaded', {event_label: software});
+      // analyticsEvent('upload_file_loaded', {event_label: software});
       return data;
     } catch (error) {
-      analyticsEvent('url_file_error');
+      // analyticsEvent('url_file_error');
       throw error;
     }
   }
