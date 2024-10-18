@@ -1,5 +1,4 @@
 import debounce from 'debounce';
-import {analyticsEvent} from '../util/analytics';
 import {buildSearchIndex, SearchIndex, SearchResult} from './search_index';
 import {formatDateOrRange} from '../util/date_util';
 import {IndiInfo, JsonGedcomData} from 'topola';

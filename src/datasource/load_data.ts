@@ -1,4 +1,3 @@
-import {analyticsEvent} from '../util/analytics';
 import {convertGedcom, getSoftware, TopolaData} from '../util/gedcom_util';
 import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
 import {IndiInfo, JsonGedcomData} from 'topola';

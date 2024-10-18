@@ -1,5 +1,4 @@
 import * as queryString from 'query-string';
-import {analyticsEvent} from '../util/analytics';
 import {Button, Form, Header, Icon, Input, Modal} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
 import {MenuItem, MenuType} from './menu_item';

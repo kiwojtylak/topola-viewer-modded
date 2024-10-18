@@ -1,4 +1,3 @@
-import {analyticsEvent} from '../util/analytics';
 import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
 import {
   Date,

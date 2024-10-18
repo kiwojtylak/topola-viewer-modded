@@ -1,6 +1,5 @@
 import * as queryString from 'query-string';
 import md5 from 'md5';
-import {analyticsEvent} from '../util/analytics';
 import {Dropdown, Icon, Menu} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
 import {MenuType} from './menu_item';
