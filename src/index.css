@@ -10,6 +10,9 @@ body, html {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-image: url('topola.png');
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 #content {
@@ -56,18 +59,6 @@ div.ui.card.intro {
 
 .version {
   color: #888;
-}
-
-.backgroundImage {
-  width: 100%;
-  height: 100%;
-  background-image: url(topola.jpg);
-  background-size: cover;
-  background-position: 0% 20%;
-  position: fixed;
-  z-index: -100;
-  filter: blur(8px) opacity(30%);
-  -webkit-filter: blur(8px) opacity(30%);
 }
 
 div.zoom {

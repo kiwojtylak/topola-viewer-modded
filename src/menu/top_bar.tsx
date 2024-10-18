@@ -9,7 +9,6 @@ import {SearchBar} from './search';
 import {UploadMenu} from './upload_menu';
 import {UrlMenu} from './url_menu';
 import {useHistory, useLocation} from 'react-router';
-import {WikiTreeLoginMenu, WikiTreeMenu} from './wikitree_menu';
 
 enum ScreenSize {
   LARGE,
@@ -183,30 +182,7 @@ export function TopBar(props: Props) {
     }
   }
 
-  function title() {
-    return (
-      <Menu.Item>
-        <b>Topola Genealogy</b>
-      </Menu.Item>
-    );
-  }
-
   function fileMenus(screenSize: ScreenSize) {
-    // In standalone WikiTree mode, show only the "Select WikiTree ID" menu.
-    if (!props.standalone && props.showWikiTreeMenus) {
-      switch (screenSize) {
-        case ScreenSize.LARGE:
-          return <WikiTreeMenu menuType={MenuType.Menu} {...props} />;
-        case ScreenSize.SMALL:
-          return (
-            <>
-              <WikiTreeMenu menuType={MenuType.Dropdown} {...props} />
-              <Dropdown.Divider />
-            </>
-          );
-      }
-    }
-
     // Don't show "open" menus in non-standalone mode.
     if (!props.standalone) {
       return null;
@@ -229,14 +205,12 @@ export function TopBar(props: Props) {
             <Dropdown.Menu>
               <UploadMenu menuType={MenuType.Dropdown} {...props} />
               <UrlMenu menuType={MenuType.Dropdown} {...props} />
-              <WikiTreeMenu menuType={MenuType.Dropdown} {...props} />
             </Dropdown.Menu>
           </Dropdown>
         ) : (
           <>
             <UploadMenu menuType={MenuType.Menu} {...props} />
             <UrlMenu menuType={MenuType.Menu} {...props} />
-            <WikiTreeMenu menuType={MenuType.Menu} {...props} />
           </>
         );
         return menus;
@@ -246,28 +220,10 @@ export function TopBar(props: Props) {
           <>
             <UploadMenu menuType={MenuType.Dropdown} {...props} />
             <UrlMenu menuType={MenuType.Dropdown} {...props} />
-            <WikiTreeMenu menuType={MenuType.Dropdown} {...props} />
             <Dropdown.Divider />
           </>
         );
     }
-  }
-
-  function wikiTreeLoginMenu(screenSize: ScreenSize) {
-    if (!props.showWikiTreeMenus) {
-      return null;
-    }
-    return (
-      <>
-        <WikiTreeLoginMenu
-          menuType={
-            screenSize === ScreenSize.SMALL ? MenuType.Dropdown : MenuType.Menu
-          }
-          {...props}
-        />
-        {screenSize === ScreenSize.SMALL ? <Dropdown.Divider /> : null}
-      </>
-    );
   }
 
   function mobileMenus() {
@@ -285,7 +241,6 @@ export function TopBar(props: Props) {
           <Dropdown.Menu>
             {fileMenus(ScreenSize.SMALL)}
             {chartMenus(ScreenSize.SMALL)}
-            {wikiTreeLoginMenu(ScreenSize.SMALL)}
 
             <Dropdown.Item
               href="https://github.com/PeWu/topola-viewer"
@@ -299,7 +254,6 @@ export function TopBar(props: Props) {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        {props.standalone ? <Link to="/">{title()}</Link> : title()}
       </>
     );
   }
@@ -307,22 +261,8 @@ export function TopBar(props: Props) {
   function desktopMenus() {
     return (
       <>
-        {props.standalone ? <Link to="/">{title()}</Link> : null}
         {fileMenus(ScreenSize.LARGE)}
         {chartMenus(ScreenSize.LARGE)}
-        <Menu.Menu position="right">
-          {wikiTreeLoginMenu(ScreenSize.LARGE)}
-          <Menu.Item
-            href="https://github.com/PeWu/topola-viewer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FormattedMessage
-              id="menu.github"
-              defaultMessage="GitHub project"
-            />
-          </Menu.Item>
-        </Menu.Menu>
       </>
     );
   }
