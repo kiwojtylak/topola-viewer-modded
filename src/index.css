@@ -10,10 +10,13 @@ body, html {
   height: 100%;
   display: flex;
   flex-direction: column;
-  /*background-image: url('topola2.png');*/
-  /*background-repeat: no-repeat;*/
-  /*background-position: center center;*/
-  /*background-size: 50%;*/
+}
+
+.bgLogo {
+  background-image: url('topola2.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50%;
 }
 
 #content {

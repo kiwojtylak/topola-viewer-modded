@@ -322,6 +322,15 @@ export function App() {
   }
 
   useEffect(() => {
+    const rootElement = document.getElementById('root');
+    if (location.pathname === '/') {
+      // @ts-ignore
+      rootElement.classList.add('bgLogo');
+    } else {
+      // @ts-ignore
+      rootElement.classList.remove('bgLogo');
+    }
+
     (async () => {
       if (location.pathname !== '/view') {
         if (state !== AppState.INITIAL) {
@@ -331,7 +340,6 @@ export function App() {
       }
 
       const args = getArguments(location);
-
       if (!args.sourceSpec) {
         history.replace({pathname: '/'});
         return;
