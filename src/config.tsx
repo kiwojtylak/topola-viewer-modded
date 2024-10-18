@@ -89,11 +89,7 @@ export function ConfigPanel(props: {
               <Checkbox
                 radio
                 label={
-                  <FormattedMessage
-                    tagName="label"
-                    id="config.colors.NO_COLOR"
-                    defaultMessage="none"
-                  />
+                  <FormattedMessage tagName="label" id="config.colors.NO_COLOR" defaultMessage="none"/>
                 }
                 name="checkboxRadioGroup"
                 value="none"
@@ -107,11 +103,7 @@ export function ConfigPanel(props: {
               <Checkbox
                 radio
                 label={
-                  <FormattedMessage
-                    tagName="label"
-                    id="config.colors.COLOR_BY_GENERATION"
-                    defaultMessage="by generation"
-                  />
+                  <FormattedMessage tagName="label" id="config.colors.COLOR_BY_GENERATION" defaultMessage="by generation"/>
                 }
                 name="checkboxRadioGroup"
                 value="generation"
@@ -125,11 +117,7 @@ export function ConfigPanel(props: {
               <Checkbox
                 radio
                 label={
-                  <FormattedMessage
-                    tagName="label"
-                    id="config.colors.COLOR_BY_SEX"
-                    defaultMessage="by sex"
-                  />
+                  <FormattedMessage tagName="label" id="config.colors.COLOR_BY_SEX" defaultMessage="by sex"/>
                 }
                 name="checkboxRadioGroup"
                 value="gender"
@@ -150,11 +138,7 @@ export function ConfigPanel(props: {
               <Checkbox
                 radio
                 label={
-                  <FormattedMessage
-                    tagName="label"
-                    id="config.ids.HIDE"
-                    defaultMessage="hide"
-                  />
+                  <FormattedMessage tagName="label" id="config.ids.HIDE" defaultMessage="hide"/>
                 }
                 name="checkboxRadioGroup"
                 value="hide"
@@ -168,11 +152,7 @@ export function ConfigPanel(props: {
               <Checkbox
                 radio
                 label={
-                  <FormattedMessage
-                    tagName="label"
-                    id="config.ids.SHOW"
-                    defaultMessage="show"
-                  />
+                  <FormattedMessage tagName="label" id="config.ids.SHOW" defaultMessage="show"/>
                 }
                 name="checkboxRadioGroup"
                 value="show"
@@ -193,11 +173,7 @@ export function ConfigPanel(props: {
               <Checkbox
                 radio
                 label={
-                  <FormattedMessage
-                    tagName="label"
-                    id="config.sex.HIDE"
-                    defaultMessage="hide"
-                  />
+                  <FormattedMessage tagName="label" id="config.sex.HIDE" defaultMessage="hide"/>
                 }
                 name="checkboxRadioGroup"
                 value="hide"
@@ -211,11 +187,7 @@ export function ConfigPanel(props: {
               <Checkbox
                 radio
                 label={
-                  <FormattedMessage
-                    tagName="label"
-                    id="config.sex.SHOW"
-                    defaultMessage="show"
-                  />
+                  <FormattedMessage tagName="label" id="config.sex.SHOW" defaultMessage="show"/>
                 }
                 name="checkboxRadioGroup"
                 value="show"
