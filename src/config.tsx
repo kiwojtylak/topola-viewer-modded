@@ -24,7 +24,7 @@ export interface Config {
   sex: Sex;
 }
 
-export const DEFALUT_CONFIG: Config = {
+export const DEFAULT_CONFIG: Config = {
   color: ChartColors.COLOR_BY_GENERATION,
   id: Ids.SHOW,
   sex: Sex.SHOW,
@@ -59,9 +59,9 @@ export function argsToConfig(args: ParsedQuery<any>): Config {
   };
 
   return {
-    color: COLOR_ARG.get(getParam('c') ?? '') ?? DEFALUT_CONFIG.color,
-    id: ID_ARG.get(getParam('i') ?? '') ?? DEFALUT_CONFIG.id,
-    sex: SEX_ARG.get(getParam('s') ?? '') ?? DEFALUT_CONFIG.sex,
+    color: COLOR_ARG.get(getParam('c') ?? '') ?? DEFAULT_CONFIG.color,
+    id: ID_ARG.get(getParam('i') ?? '') ?? DEFAULT_CONFIG.id,
+    sex: SEX_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.sex,
   };
 }
 

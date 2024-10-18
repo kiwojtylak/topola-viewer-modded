@@ -28,9 +28,6 @@ export function UploadMenu(props: Props) {
     }
     const filesArray = Array.from(files);
     (event.target as HTMLInputElement).value = ''; // Reset the file input.
-    // analyticsEvent('upload_files_selected', {
-      // event_value: files.length,
-    // });
 
     const gedcomFile =
       filesArray.length === 1
@@ -50,8 +47,7 @@ export function UploadMenu(props: Props) {
     const imageFileNames = Array.from(images.keys()).sort().join('|');
     const hash = md5(md5(gedcom) + imageFileNames);
 
-    // Use history.replace() when reuploading the same file and history.push() when loading
-    // a new file.
+    // Use history.replace() when re-uploading the same file and history.push() when loading a new file.
     const search = queryString.parse(location.search);
     const historyPush = search.file === hash ? history.replace : history.push;
 

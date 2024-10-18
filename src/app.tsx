@@ -28,7 +28,7 @@ import {
   Config,
   ConfigPanel,
   configToArgs,
-  DEFALUT_CONFIG,
+  DEFAULT_CONFIG,
   Ids,
   Sex,
 } from './config';
@@ -217,7 +217,7 @@ export function App() {
   const [sourceSpec, setSourceSpec] = useState<DataSourceSpec>();
   /** Freeze animations after initial chart render. */
   const [freezeAnimation, setFreezeAnimation] = useState(false);
-  const [config, setConfig] = useState(DEFALUT_CONFIG);
+  const [config, setConfig] = useState(DEFAULT_CONFIG);
 
   const intl = useIntl();
   const history = useHistory();
@@ -466,7 +466,6 @@ export function App() {
   }
 
   function onDownloadSvg() {
-    // analyticsEvent('download_svg');
     downloadSvg();
   }
 
@@ -534,10 +533,8 @@ export function App() {
             <Changelog />
           </div>
         );
-
       case AppState.ERROR:
         return <ErrorMessage message={error!} />;
-
       case AppState.INITIAL:
       case AppState.LOADING:
         return <Loader active size="large" />;
@@ -550,13 +547,10 @@ export function App() {
         render={() => (
           <TopBar
             data={data?.chartData}
-            allowAllRelativesChart={
-              sourceSpec?.source !== DataSourceEnum.WIKITREE
-            }
+            allowAllRelativesChart={sourceSpec?.source !== DataSourceEnum.WIKITREE}
             showingChart={
               history.location.pathname === '/view' &&
-              (state === AppState.SHOWING_CHART ||
-                state === AppState.LOADING_MORE)
+              (state === AppState.SHOWING_CHART || state === AppState.LOADING_MORE)
             }
             standalone={standalone}
             eventHandlers={{
@@ -567,8 +561,7 @@ export function App() {
               onDownloadSvg,
             }}
             showWikiTreeMenus={
-              sourceSpec?.source === DataSourceEnum.WIKITREE &&
-              showWikiTreeMenus
+              sourceSpec?.source === DataSourceEnum.WIKITREE && showWikiTreeMenus
             }
           />
         )}
