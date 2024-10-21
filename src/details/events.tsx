@@ -263,9 +263,7 @@ function Event(props: { event: EventData }) {
             <Item.Content>
                 <EventHeader event={props.event}/>
                 {!!props.event.age && <Item.Meta>{props.event.age}</Item.Meta>}
-                {!!props.event.personLink && (
-                    <PersonLink person={props.event.personLink}/>
-                )}
+                {!!props.event.personLink && (<PersonLink person={props.event.personLink}/>)}
                 {!!props.event.place && (
                     <Item.Description>{props.event.place}</Item.Description>
                 )}

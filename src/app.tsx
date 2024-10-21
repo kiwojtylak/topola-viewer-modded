@@ -480,7 +480,7 @@ export function App() {
                 render={() => (
                     <TopBar
                         data={data?.chartData}
-                        allowAllRelativesChart={false}
+                        allowAllRelativesChart={true}
                         showingChart={
                             history.location.pathname === '/view' &&
                             (state === AppState.SHOWING_CHART || state === AppState.LOADING_MORE)

@@ -4,6 +4,7 @@ import messages_cs from './translations/cs.json';
 import messages_de from './translations/de.json';
 import messages_fr from './translations/fr.json';
 import messages_it from './translations/it.json';
+import messages_es from './translations/es.json';
 import messages_pl from './translations/pl.json';
 import messages_ru from './translations/ru.json';
 import {App} from './app';
@@ -20,6 +21,7 @@ const messages = {
     de: messages_de,
     fr: messages_fr,
     it: messages_it,
+    es: messages_es,
     pl: messages_pl,
     ru: messages_ru,
 };
