@@ -37,12 +37,6 @@ import {
     GedcomUrlDataSource,
     UploadedDataSource,
 } from './datasource/load_data';
-import {
-    loadWikiTree,
-    PRIVATE_ID_PREFIX,
-    WikiTreeDataSource,
-    WikiTreeSourceSpec,
-} from './datasource/wikitree';
 
 /**
  * Load GEDCOM URL from REACT_APP_STATIC_URL environment variable.
@@ -100,7 +94,6 @@ enum AppState {
 type DataSourceSpec =
     | UrlSourceSpec
     | UploadSourceSpec
-    | WikiTreeSourceSpec
     | EmbeddedSourceSpec;
 
 /**
@@ -145,12 +138,6 @@ function getArguments(location: H.Location<any>): Arguments {
             source: DataSourceEnum.GEDCOM_URL,
             url: staticUrl,
             handleCors: false,
-        };
-    } else if (getParam('source') === 'wikitree') {
-        const windowSearch = queryString.parse(window.location.search);
-        sourceSpec = {
-            source: DataSourceEnum.WIKITREE,
-            authcode: getParam('authcode') || getParamFromSearch('authcode', windowSearch),
         };
     } else if (hash) {
         sourceSpec = {
@@ -246,7 +233,6 @@ export function App() {
 
     const uploadedDataSource = new UploadedDataSource();
     const gedcomUrlDataSource = new GedcomUrlDataSource();
-    const wikiTreeDataSource = new WikiTreeDataSource(intl);
     const embeddedDataSource = new EmbeddedDataSource();
 
     function isNewData(newSourceSpec: DataSourceSpec, newSelection?: IndiInfo) {
@@ -272,12 +258,6 @@ export function App() {
                     oldSource as SourceSelection<UrlSourceSpec>,
                     data,
                 );
-            case DataSourceEnum.WIKITREE:
-                return wikiTreeDataSource.isNewData(
-                    newSource as SourceSelection<WikiTreeSourceSpec>,
-                    oldSource as SourceSelection<WikiTreeSourceSpec>,
-                    data,
-                );
             case DataSourceEnum.EMBEDDED:
                 return embeddedDataSource.isNewData(
                     newSource as SourceSelection<EmbeddedSourceSpec>,
@@ -296,11 +276,6 @@ export function App() {
                 });
             case DataSourceEnum.GEDCOM_URL:
                 return gedcomUrlDataSource.loadData({
-                    spec: newSourceSpec,
-                    selection: newSelection,
-                });
-            case DataSourceEnum.WIKITREE:
-                return wikiTreeDataSource.loadData({
                     spec: newSourceSpec,
                     selection: newSelection,
                 });
@@ -337,8 +312,7 @@ export function App() {
             }
 
             if (
-                state === AppState.INITIAL ||
-                isNewData(args.sourceSpec, args.selection)
+                state === AppState.INITIAL || isNewData(args.sourceSpec, args.selection)
             ) {
                 // Set loading state.
                 setState(AppState.LOADING);
@@ -360,38 +334,12 @@ export function App() {
                     setErrorMessage(getI18nMessage(error, intl));
                 }
             } else if (
-                state === AppState.SHOWING_CHART ||
-                state === AppState.LOADING_MORE
+                state === AppState.SHOWING_CHART || state === AppState.LOADING_MORE
             ) {
                 // Update selection if it has changed in the URL.
-                const loadMoreFromWikitree =
-                    args.sourceSpec.source === DataSourceEnum.WIKITREE &&
-                    (!selection || selection.id !== args.selection?.id);
                 setChartType(args.chartType);
-                setState(
-                    loadMoreFromWikitree ? AppState.LOADING_MORE : AppState.SHOWING_CHART,
-                );
+                setState(AppState.SHOWING_CHART);
                 updateDisplay(args.selection!);
-                if (loadMoreFromWikitree) {
-                    try {
-                        const data = await loadWikiTree(args.selection!.id, intl);
-                        const newSelection = getSelection(data.chartData, args.selection);
-                        setData(data);
-                        setSelection(newSelection);
-                        setState(AppState.SHOWING_CHART);
-                    } catch (error: any) {
-                        setState(AppState.SHOWING_CHART);
-                        displayErrorPopup(
-                            intl.formatMessage(
-                                {
-                                    id: 'error.failed_wikitree_load_more',
-                                    defaultMessage: 'Failed to load data from WikiTree. {error}',
-                                },
-                                {error},
-                            ),
-                        );
-                    }
-                }
             }
         })();
     });
@@ -410,11 +358,6 @@ export function App() {
      * Updates the browser URL.
      */
     function onSelection(selection: IndiInfo) {
-        // Don't allow selecting WikiTree private profiles.
-        if (selection.id.startsWith(PRIVATE_ID_PREFIX)) {
-            return;
-        }
-        // analyticsEvent('selection_changed');
         updateUrl({
             indi: selection.id,
             gen: selection.generation,
@@ -450,9 +393,7 @@ export function App() {
             displayErrorPopup(
                 intl.formatMessage({
                     id: 'error.failed_png',
-                    defaultMessage:
-                        'Failed to generate PNG file.' +
-                        ' Please try with a smaller diagram or download an SVG file.',
+                    defaultMessage:'Failed to generate PNG file. Please try with a smaller diagram or download an SVG file.'
                 }),
             );
         }
@@ -539,7 +480,7 @@ export function App() {
                 render={() => (
                     <TopBar
                         data={data?.chartData}
-                        allowAllRelativesChart={sourceSpec?.source !== DataSourceEnum.WIKITREE}
+                        allowAllRelativesChart={false}
                         showingChart={
                             history.location.pathname === '/view' &&
                             (state === AppState.SHOWING_CHART || state === AppState.LOADING_MORE)

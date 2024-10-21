@@ -69,7 +69,7 @@ const EVENT_TAGS = [
     'BURI',
 ];
 
-const FAMILY_EVENT_TAGS = ['MARR', 'DIV'];
+const FAMILY_EVENT_TAGS = ['MARR', 'MARS', 'DIV'];
 
 function EventHeader(props: { event: EventData }) {
     const intl = useIntl();
