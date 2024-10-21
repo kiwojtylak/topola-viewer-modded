@@ -79,12 +79,10 @@
   "config.colors.NO_COLOR": "ninguno",
   "config.colors.COLOR_BY_GENERATION": "por generación",
   "config.colors.COLOR_BY_SEX": "por sexo",
-
   "config.ids.SHOW":  "mostrar",
   "config.ids.HIDE":  "ocultar",
   "config.sex.SHOW":  "mostrar",
   "config.sex.HIDE":  "ocultar",
-
   "name.unknown_name": "?",
   "whats_new.title": "¿Qué hay de nuevo en esta versión?"
 }
