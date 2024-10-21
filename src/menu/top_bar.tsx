@@ -30,8 +30,6 @@ interface Props {
     /** Whether to show the "All relatives" chart type in the menu. */
     allowAllRelativesChart: boolean;
     eventHandlers: EventHandlers;
-    /** Whether to show additional WikiTree menus. */
-    showWikiTreeMenus: boolean;
 }
 
 export function TopBar(props: Props) {

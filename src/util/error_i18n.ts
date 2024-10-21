@@ -6,14 +6,14 @@ import {TopolaError} from './error';
  * translated, the original error.message is returned.
  */
 export function getI18nMessage(error: Error, intl: IntlShape): string {
-  if (!(error instanceof TopolaError)) {
-    return error.message;
-  }
-  return intl.formatMessage(
-    {
-      id: `error.${error.code}`,
-      defaultMessage: error.message,
-    },
-    error.args,
-  );
+    if (!(error instanceof TopolaError)) {
+        return error.message;
+    }
+    return intl.formatMessage(
+        {
+            id: `error.${error.code}`,
+            defaultMessage: error.message,
+        },
+        error.args,
+    );
 }

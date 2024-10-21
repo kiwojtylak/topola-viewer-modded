@@ -16,34 +16,31 @@ import 'semantic-ui-css/semantic.min.css';
 import 'canvas-toBlob';
 
 const messages = {
-  cs: messages_cs,
-  de: messages_de,
-  fr: messages_fr,
-  it: messages_it,
-  pl: messages_pl,
-  ru: messages_ru,
+    cs: messages_cs,
+    de: messages_de,
+    fr: messages_fr,
+    it: messages_it,
+    pl: messages_pl,
+    ru: messages_ru,
 };
 const language = navigator.language && navigator.language.split(/[-_]/)[0];
-
 const browser = detect();
 
 if (browser && browser.name === 'ie') {
-  ReactDOM.render(
-    <p>
-      Topola Genealogy Viewer does not support Internet Explorer. Please try a different (modern) browser.
-    </p>,
-    document.querySelector('#root'),
-  );
+    ReactDOM.render(
+        <p>Genealogy Viewer does not support Internet Explorer. Please try a different (modern) browser.</p>,
+        document.querySelector('#root'),
+    );
 } else {
-  ReactDOM.render(
-    <IntlProvider locale={language} messages={messages[language]}>
-      <MediaContextProvider>
-        <style>{mediaStyles}</style>
-        <Router>
-          <Route component={App} />
-        </Router>
-      </MediaContextProvider>
-    </IntlProvider>,
-    document.querySelector('#root'),
-  );
+    ReactDOM.render(
+        <IntlProvider locale={language} messages={messages[language]}>
+            <MediaContextProvider>
+                <style>{mediaStyles}</style>
+                <Router>
+                    <Route component={App}/>
+                </Router>
+            </MediaContextProvider>
+        </IntlProvider>,
+        document.querySelector('#root'),
+    );
 }
