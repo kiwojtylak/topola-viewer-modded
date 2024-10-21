@@ -238,9 +238,10 @@ function filterImages(
 
 /**
  * Converts GEDCOM file into JSON data performing additional transformations:
- * - sort children by birth date
+ * - sort children by birthdate
  * - remove images that are not HTTP links and aren't mapped in `images`.
  *
+ * @param gedcom
  * @param images Map from file name to image URL. This is used to pass in
  *   uploaded images.
  */
