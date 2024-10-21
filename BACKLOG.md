@@ -1,6 +1,6 @@
 Backlog:  
 - [x] Consistent menus
-- [ ] Recenter view
+- [x] Recenter view
 - [x] Languages in details
 - [ ] Languages in card
 - [x] Prettify search box
