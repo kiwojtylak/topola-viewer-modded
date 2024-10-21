@@ -5,7 +5,6 @@ import {TopolaData} from '../util/gedcom_util';
 export enum DataSourceEnum {
     UPLOADED,
     GEDCOM_URL,
-    WIKITREE,
     EMBEDDED,
 }
 

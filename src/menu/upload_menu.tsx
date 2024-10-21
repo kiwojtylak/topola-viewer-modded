@@ -38,9 +38,7 @@ export function UploadMenu(props: Props) {
 
         // Convert uploaded images to object URLs.
         filesArray
-            .filter(
-                (file) => file.name !== gedcomFile.name && isImageFileName(file.name),
-            )
+            .filter((file) => file.name !== gedcomFile.name && isImageFileName(file.name))
             .forEach((file) => images.set(file.name, URL.createObjectURL(file)));
 
         // Hash GEDCOM contents with uploaded image file names.

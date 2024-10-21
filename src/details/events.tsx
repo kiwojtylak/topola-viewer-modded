@@ -21,20 +21,13 @@ import {EventExtras, Image, Source} from './event-extras';
 
 function PersonLink(props: { person: GedcomEntry }) {
     const location = useLocation();
-
     const name = getName(props.person);
-
     const search = queryString.parse(location.search);
     search['indi'] = pointerToId(props.person.pointer);
-
     return (
         <Item.Meta>
             <Link to={{pathname: '/view', search: queryString.stringify(search)}}>
-                {name ? (
-                    name
-                ) : (
-                    <FormattedMessage id="name.unknown_name" defaultMessage="N.N."/>
-                )}
+                {name ? (name) : (<FormattedMessage id="name.unknown_name" defaultMessage="N.N."/>)}
             </Link>
         </Item.Meta>
     );
@@ -91,7 +84,6 @@ function getSpouse(indi: string, familyEntry: GedcomEntry, gedcom: GedcomData) {
     const spouseReference = familyEntry.tree
         .filter((familySubEntry) => ['WIFE', 'HUSB'].includes(familySubEntry.tag))
         .find((familySubEntry) => !familySubEntry.data.includes(indi));
-
     if (!spouseReference) {
         return undefined;
     }
@@ -108,12 +100,10 @@ function getAge(
         return undefined;
     }
     const deathDate = resolveDate(eventEntry);
-
     const birthDate = gedcom.indis[indi].tree
         .filter((indiSubEntry) => indiSubEntry.tag === 'BIRT')
         .map((birthEvent) => resolveDate(birthEvent))
         .find((topolaDate) => topolaDate);
-
     if (!birthDate || !deathDate) {
         return undefined;
     }
@@ -153,33 +143,25 @@ function eventSources(entry: GedcomEntry, gedcom: GedcomData): Source[] {
                 gedcom,
                 (gedcom) => gedcom.other,
             );
-
             const title = sourceEntry.tree.find(
                 (subEntry) => 'TITL' === subEntry.tag,
             );
-
             const abbr = sourceEntry.tree.find(
                 (subEntry) => 'ABBR' === subEntry.tag,
             );
-
             const author = sourceEntry.tree.find(
                 (subEntry) => 'AUTH' === subEntry.tag,
             );
-
             const publicationInfo = sourceEntry.tree.find(
                 (subEntry) => 'PUBL' === subEntry.tag,
             );
-
             const page = sourceEntryReference.tree.find(
                 (subEntry) => 'PAGE' === subEntry.tag,
             );
-
             const sourceData = sourceEntryReference.tree.find(
                 (subEntry) => 'DATA' === subEntry.tag,
             );
-
             const date = sourceData ? resolveDate(sourceData) : undefined;
-
             return {
                 title: title?.data || abbr?.data,
                 author: author?.data,
@@ -264,9 +246,7 @@ function Event(props: { event: EventData }) {
                 <EventHeader event={props.event}/>
                 {!!props.event.age && <Item.Meta>{props.event.age}</Item.Meta>}
                 {!!props.event.personLink && (<PersonLink person={props.event.personLink}/>)}
-                {!!props.event.place && (
-                    <Item.Description>{props.event.place}</Item.Description>
-                )}
+                {!!props.event.place && (<Item.Description>{props.event.place}</Item.Description>)}
                 <EventExtras
                     images={props.event.images}
                     notes={props.event.notes}
@@ -280,7 +260,6 @@ function Event(props: { event: EventData }) {
 
 export function Events(props: Props) {
     const intl = useIntl();
-
     const events = flatMap(EVENT_TAGS, (tag) =>
         props.entries
             .filter((entry) => entry.tag === tag)

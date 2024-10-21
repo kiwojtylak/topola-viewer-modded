@@ -18,7 +18,7 @@ const TAG_DESCRIPTIONS = new Map([
     ['MARR', 'Marriage'],
     ['MARS', 'Marriage settlement'],
     ['ETHN', 'Ethnic'],
-    ['TRIB', 'Tribe'],
+    ['TRIB', 'Clan'],
     ['LANG', 'Language'],
     ['DIV', 'Divorce'],
     ['MILT', 'Military services'],

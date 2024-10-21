@@ -354,8 +354,7 @@ export function App() {
     }
 
     /**
-     * Called when the user clicks an individual box in the chart.
-     * Updates the browser URL.
+     * Called when the user clicks an individual box in the chart. Updates the browser URL.
      */
     function onSelection(selection: IndiInfo) {
         updateUrl({
@@ -401,6 +400,14 @@ export function App() {
 
     function onDownloadSvg() {
         downloadSvg();
+    }
+
+    function onCenterView() {
+        const startIndi: IndiInfo = {
+            id: data?.chartData?.indis?.[0]?.id || 'I0',
+            generation: 0,
+        };
+        onSelection(startIndi)
     }
 
     function onDismissErrorPopup() {
@@ -490,6 +497,7 @@ export function App() {
                             onDownloadPdf,
                             onDownloadPng,
                             onDownloadSvg,
+                            onCenterView,
                         }}
                     />
                 )}

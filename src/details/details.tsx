@@ -28,6 +28,7 @@ const EXCLUDED_TAGS = [
     'FAMS',
     'NOTE',
     'SOUR',
+    'LANG'
 ];
 
 function dataDetails(entry: GedcomEntry) {
@@ -79,11 +80,9 @@ function noteDetails(entry: GedcomEntry) {
 
 function nameDetails(entry: GedcomEntry) {
     const fullName = entry.data.replaceAll('/', '');
-
     const nameType = entry.tree.find(
         (entry) => entry.tag === 'TYPE' && entry.data !== 'Unknown',
     )?.data;
-
     return (
         <>
             <Header as="span" size="large">
@@ -142,6 +141,28 @@ function getOtherDetails(entries: GedcomEntry[]) {
         ));
 }
 
+function getMultilineDetails(entries: GedcomEntry[], tags: string[]) {
+    return (
+        <Item key="languages">
+            <Item.Content>
+                <Header sub>
+                    <FormattedMessage id="gedcom.languages" defaultMessage="Languages"/>
+                </Header>
+                <span>
+                    <MultilineText
+                        lines={
+                            entries
+                                .filter((entry) => tags.includes(entry.tag))
+                                .filter(hasData)
+                                .map((element) => element.data)
+                        }
+                    />
+                </span>
+            </Item.Content>
+        </Item>
+    );
+}
+
 interface Props {
     gedcom: GedcomData;
     indi: string;
@@ -160,6 +181,7 @@ export function Details(props: Props) {
                 {getDetails(entriesWithData, ['OBJE'], fileDetails)}
                 <Events gedcom={props.gedcom} entries={entries} indi={props.indi}/>
                 {getOtherDetails(entriesWithData)}
+                {getMultilineDetails(entriesWithData, ['LANG'])}
                 {getDetails(entriesWithData, ['NOTE'], noteDetails)}
             </Item.Group>
         </div>

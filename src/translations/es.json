@@ -11,7 +11,7 @@
   "menu.download_pdf": "Imagen PDF",
   "menu.download_png": "Imagen PNG",
   "menu.download_svg": "Imagen SVG",
-  "menu.view": "Visualizar",
+  "menu.view": "Centrar gráfica",
   "menu.hourglass": "Gráfica de reloj de arena",
   "menu.relatives": "Todos los parientes",
   "menu.fancy": "Árbol ornamental (experimental)",
@@ -61,6 +61,7 @@
   "gedcom.married": "Nombre de casado/a",
   "gedcom.maiden": "Nombre de soltera",
   "gedcom.aka": "Apodo",
+  "gedcom.languages": "Lenguas",
   "date.abt": "hacia",
   "date.cal": "calculado",
   "date.est": "estimado",
@@ -84,5 +85,6 @@
   "config.sex.SHOW":  "mostrar",
   "config.sex.HIDE":  "ocultar",
   "name.unknown_name": "?",
-  "whats_new.title": "¿Qué hay de nuevo en esta versión?"
+  "whats_new.title": "¿Qué hay de nuevo en esta versión?",
+  "extras.notes": "Notas"
 }

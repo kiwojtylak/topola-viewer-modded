@@ -1,4 +1,3 @@
-import * as queryString from 'query-string';
 import {Dropdown, Icon, Menu} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
 import {IndiInfo, JsonGedcomData} from 'topola';
@@ -19,6 +18,7 @@ interface EventHandlers {
     onDownloadPdf: () => void;
     onDownloadPng: () => void;
     onDownloadSvg: () => void;
+    onCenterView: () => void;
 }
 
 interface Props {
@@ -31,18 +31,8 @@ interface Props {
 }
 
 export function TopBar(props: Props) {
-    const history = useHistory();
-    const location = useLocation();
-
-    function changeView(view: string) {
-        const search = queryString.parse(location.search);
-        if (search.view !== view) {
-            search.view = view;
-            location.search = queryString.stringify(search);
-            history.push(location);
-        }
-    }
-
+    useHistory();
+    useLocation();
     function chartMenus(screenSize: ScreenSize) {
         if (!props.showingChart) {
             return null;
@@ -55,35 +45,28 @@ export function TopBar(props: Props) {
                             trigger={
                                 <div>
                                     <Icon name="download"/>
-                                    <FormattedMessage
-                                        id="menu.download"
-                                        defaultMessage="Download"
-                                    />
+                                    <FormattedMessage id="menu.download" defaultMessage="Download"/>
                                 </div>
                             }
                             className="item"
                         >
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={props.eventHandlers.onDownloadPdf}>
-                                    <FormattedMessage
-                                        id="menu.pdf_file"
-                                        defaultMessage="PDF file"
-                                    />
+                                    <FormattedMessage id="menu.pdf_file" defaultMessage="PDF file"/>
                                 </Dropdown.Item>
                                 <Dropdown.Item onClick={props.eventHandlers.onDownloadPng}>
-                                    <FormattedMessage
-                                        id="menu.png_file"
-                                        defaultMessage="PNG file"
-                                    />
+                                    <FormattedMessage id="menu.png_file" defaultMessage="PNG file"/>
                                 </Dropdown.Item>
                                 <Dropdown.Item onClick={props.eventHandlers.onDownloadSvg}>
-                                    <FormattedMessage
-                                        id="menu.svg_file"
-                                        defaultMessage="SVG file"
-                                    />
+                                    <FormattedMessage id="menu.svg_file" defaultMessage="SVG file"/>
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+
+                        <Menu.Item onClick={props.eventHandlers.onCenterView}>
+                            <Icon name="eye" />
+                            <FormattedMessage id="menu.view" defaultMessage="Center view" />
+                        </Menu.Item>
 
                         <Menu.Menu position="right">
                             <SearchBar
@@ -100,24 +83,15 @@ export function TopBar(props: Props) {
                     <>
                         <Dropdown.Item onClick={props.eventHandlers.onDownloadPdf}>
                             <Icon name="download"/>
-                            <FormattedMessage
-                                id="menu.download_pdf"
-                                defaultMessage="Download PDF"
-                            />
+                            <FormattedMessage id="menu.download_pdf" defaultMessage="Download PDF"/>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={props.eventHandlers.onDownloadPng}>
                             <Icon name="download"/>
-                            <FormattedMessage
-                                id="menu.download_png"
-                                defaultMessage="Download PNG"
-                            />
+                            <FormattedMessage id="menu.download_png" defaultMessage="Download PNG"/>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={props.eventHandlers.onDownloadSvg}>
                             <Icon name="download"/>
-                            <FormattedMessage
-                                id="menu.download_svg"
-                                defaultMessage="Download SVG"
-                            />
+                            <FormattedMessage id="menu.download_svg" defaultMessage="Download SVG"/>
                         </Dropdown.Item>
                         <Dropdown.Divider/>
                     </>
@@ -134,7 +108,7 @@ export function TopBar(props: Props) {
         switch (screenSize) {
             case ScreenSize.LARGE:
                 // Show dropdown if chart is shown, otherwise show individual menu items.
-                const menus = props.showingChart ? (
+                return props.showingChart ? (
                     <>
                         <UploadMenu menuType={MenuType.Menu} {...props} />
                         {/*<UrlMenu menuType={MenuType.Menu} {...props} />*/}
@@ -155,7 +129,6 @@ export function TopBar(props: Props) {
                         </Dropdown.Menu>
                     </Dropdown>
                 );
-                return menus;
 
             case ScreenSize.SMALL:
                 return (

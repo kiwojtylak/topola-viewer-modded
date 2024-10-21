@@ -1,7 +1,8 @@
 Backlog:  
-- [] Consistent menus
-- [] Recenter view
-- [] Translations details
-- [] Prettify search box
-- [] Color by clan
-- [] Language dropdown
+- [x] Consistent menus
+- [ ] Recenter view
+- [x] Languages in details
+- [ ] Languages in card
+- [x] Prettify search box
+- [ ] Color by clan
+- [ ] Languages dropdown

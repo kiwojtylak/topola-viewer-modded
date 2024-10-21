@@ -76,7 +76,7 @@ function strcmp(a: string, b: string) {
     return 0;
 }
 
-/** Birth date comparator for individuals. */
+/** Birthdate comparator for individuals. */
 function birthDatesComparator(gedcom: JsonGedcomData) {
     const indiMap = idToIndiMap(gedcom);
 
