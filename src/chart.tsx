@@ -40,7 +40,6 @@ function zoomed(
     event: D3ZoomEvent<ZoomedElementBaseType, unknown>,
 ) {
     const parent = select('#svgContainer').node() as Element;
-
     const scale = event.transform.k;
     const offsetX = max([0, (parent.clientWidth - size[0] * scale) / 2]);
     const offsetY = max([0, (parent.clientHeight - size[1] * scale) / 2]);
@@ -111,13 +110,11 @@ function drawImageOnCanvas(image: HTMLImageElement) {
     // Scale image for better quality.
     canvas.width = image.width * 2;
     canvas.height = image.height * 2;
-
     const ctx = canvas.getContext('2d')!;
     const oldFill = ctx.fillStyle;
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = oldFill;
-
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     return canvas;
 }
@@ -137,7 +134,6 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string) {
 /** Return a copy of the SVG chart but without scaling and positioning. */
 function getStrippedSvg() {
     const svg = document.getElementById('chartSvg')!.cloneNode(true) as Element;
-
     svg.removeAttribute('transform');
     const parent = select('#svgContainer').node() as Element;
     const scale = zoomTransform(parent).k;
@@ -147,12 +143,7 @@ function getStrippedSvg() {
         String(Number(svg.getAttribute('height')) / scale),
     );
     svg.querySelector('#chart')!.removeAttribute('transform');
-
     return svg;
-}
-
-function getSvgContents() {
-    return new XMLSerializer().serializeToString(getStrippedSvg());
 }
 
 async function getSvgContentsWithInlinedImages() {
@@ -161,30 +152,10 @@ async function getSvgContentsWithInlinedImages() {
     return new XMLSerializer().serializeToString(svg);
 }
 
-/** Shows the print dialog to print the currently displayed chart. */
-export function printChart() {
-    const printWindow = document.createElement('iframe');
-    printWindow.style.position = 'absolute';
-    printWindow.style.top = '-1000px';
-    printWindow.style.left = '-1000px';
-    printWindow.onload = () => {
-        printWindow.contentDocument!.open();
-        printWindow.contentDocument!.write(getSvgContents());
-        printWindow.contentDocument!.close();
-        // Doesn't work on Firefox without the setTimeout.
-        setTimeout(() => {
-            printWindow.contentWindow!.focus();
-            printWindow.contentWindow!.print();
-            printWindow.parentNode!.removeChild(printWindow);
-        }, 500);
-    };
-    document.body.appendChild(printWindow);
-}
-
 export async function downloadSvg() {
     const contents = await getSvgContentsWithInlinedImages();
     const blob = new Blob([contents], {type: 'image/svg+xml'});
-    saveAs(blob, 'topola.svg');
+    saveAs(blob, 'genealogy.svg');
 }
 
 async function drawOnCanvas(): Promise<HTMLCanvasElement> {
@@ -196,7 +167,7 @@ async function drawOnCanvas(): Promise<HTMLCanvasElement> {
 export async function downloadPng() {
     const canvas = await drawOnCanvas();
     const blob = await canvasToBlob(canvas, 'image/png');
-    saveAs(blob, 'topola.png');
+    saveAs(blob, 'genealogy.png');
 }
 
 export async function downloadPdf() {
@@ -209,7 +180,7 @@ export async function downloadPdf() {
         format: [canvas.width, canvas.height],
     });
     doc.addImage(canvas, 'PNG', 0, 0, canvas.width, canvas.height, 'NONE');
-    doc.save('topola.pdf');
+    doc.save('genealogy.pdf');
 }
 
 /** Supported chart types. */
@@ -268,7 +239,7 @@ class ChartWrapper {
     private rerenderRequired = false;
     /** The d3 zoom behavior object. */
     private zoomBehavior?: ZoomBehavior<Element, any>;
-    /** Props that will be used for rerendering. */
+    /** Props that will be used for re-rendering. */
     private rerenderProps?: ChartProps;
     private rerenderResetPosition?: boolean;
 
@@ -319,13 +290,13 @@ class ChartWrapper {
         } else {
             this.chart!.setData(props.data);
         }
+
         const chartInfo = this.chart!.render({
             startIndi: props.selection.id,
             baseGeneration: props.selection.generation,
         });
         const svg = select('#chartSvg');
         const parent = select('#svgContainer').node() as Element;
-
         const scale = zoomTransform(parent).k;
         const zoomOutFactor = min([
             1,
@@ -441,18 +412,8 @@ export function Chart(props: ChartProps) {
     return (
         <div id="svgContainer">
             <Media greaterThanOrEqual="large" className="zoom">
-                <button
-                    className="zoom-in"
-                    onClick={() => chartWrapper.current.zoom(ZOOM_FACTOR)}
-                >
-                    +
-                </button>
-                <button
-                    className="zoom-out"
-                    onClick={() => chartWrapper.current.zoom(1 / ZOOM_FACTOR)}
-                >
-                    −
-                </button>
+                <button className="zoom-in" onClick={() => chartWrapper.current.zoom(ZOOM_FACTOR)}>+</button>
+                <button className="zoom-out" onClick={() => chartWrapper.current.zoom(1 / ZOOM_FACTOR)}>−</button>
             </Media>
             <svg id="chartSvg">
                 <g id="chart"/>

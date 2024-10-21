@@ -49,15 +49,14 @@ function dataDetails(entry: GedcomEntry) {
                 <TranslatedTag tag={entry.tag}/>
             </Header>
             <span>
-        <MultilineText lines={lines}/>
-      </span>
+                <MultilineText lines={lines}/>
+            </span>
         </>
     );
 }
 
 function fileDetails(objectEntry: GedcomEntry) {
     const imageFileEntry = getImageFileEntry(objectEntry);
-
     return imageFileEntry ? (
         <div className="person-image">
             <WrappedImage

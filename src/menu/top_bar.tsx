@@ -27,8 +27,6 @@ interface Props {
     /** Data used for the search index. */
     data?: JsonGedcomData;
     standalone: boolean;
-    /** Whether to show the "All relatives" chart type in the menu. */
-    allowAllRelativesChart: boolean;
     eventHandlers: EventHandlers;
 }
 
@@ -49,26 +47,6 @@ export function TopBar(props: Props) {
         if (!props.showingChart) {
             return null;
         }
-        const chartTypeItems = (
-            <>
-                <Dropdown.Item onClick={() => changeView('hourglass')}>
-                    <Icon name="hourglass"/>
-                    <FormattedMessage
-                        id="menu.hourglass"
-                        defaultMessage="Hourglass chart"
-                    />
-                </Dropdown.Item>
-                {props.allowAllRelativesChart ? (
-                    <Dropdown.Item onClick={() => changeView('relatives')}>
-                        <Icon name="users"/>
-                        <FormattedMessage
-                            id="menu.relatives"
-                            defaultMessage="All relatives"
-                        />
-                    </Dropdown.Item>
-                ) : null}
-            </>
-        );
         switch (screenSize) {
             case ScreenSize.LARGE:
                 return (
@@ -107,22 +85,13 @@ export function TopBar(props: Props) {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <Dropdown
-                            trigger={
-                                <div>
-                                    <Icon name="eye"/>
-                                    <FormattedMessage id="menu.view" defaultMessage="View"/>
-                                </div>
-                            }
-                            className="item"
-                        >
-                            <Dropdown.Menu>{chartTypeItems}</Dropdown.Menu>
-                        </Dropdown>
-                        <SearchBar
-                            data={props.data!}
-                            onSelection={props.eventHandlers.onSelection}
-                            {...props}
-                        />
+                        <Menu.Menu position="right">
+                            <SearchBar
+                                data={props.data!}
+                                onSelection={props.eventHandlers.onSelection}
+                                {...props}
+                            />
+                        </Menu.Menu>
                     </>
                 );
 
@@ -150,9 +119,6 @@ export function TopBar(props: Props) {
                                 defaultMessage="Download SVG"
                             />
                         </Dropdown.Item>
-
-                        <Dropdown.Divider/>
-                        {chartTypeItems}
                         <Dropdown.Divider/>
                     </>
                 );
@@ -169,6 +135,11 @@ export function TopBar(props: Props) {
             case ScreenSize.LARGE:
                 // Show dropdown if chart is shown, otherwise show individual menu items.
                 const menus = props.showingChart ? (
+                    <>
+                        <UploadMenu menuType={MenuType.Menu} {...props} />
+                        {/*<UrlMenu menuType={MenuType.Menu} {...props} />*/}
+                    </>
+                ) : (
                     <Dropdown
                         trigger={
                             <div>
@@ -183,11 +154,6 @@ export function TopBar(props: Props) {
                             <UrlMenu menuType={MenuType.Dropdown} {...props} />
                         </Dropdown.Menu>
                     </Dropdown>
-                ) : (
-                    <>
-                        <UploadMenu menuType={MenuType.Menu} {...props} />
-                        <UrlMenu menuType={MenuType.Menu} {...props} />
-                    </>
                 );
                 return menus;
 
@@ -195,7 +161,7 @@ export function TopBar(props: Props) {
                 return (
                     <>
                         <UploadMenu menuType={MenuType.Dropdown} {...props} />
-                        <UrlMenu menuType={MenuType.Dropdown} {...props} />
+                        {/*<UrlMenu menuType={MenuType.Dropdown} {...props} />*/}
                         <Dropdown.Divider/>
                     </>
                 );
