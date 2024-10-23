@@ -62,7 +62,7 @@
   "config.sex": "Sexo",
   "config.sex.SHOW": "mostrar",
   "config.sex.HIDE": "ocultar",
-  "name.unknown_name": "?",
+  "name.unknown_name": "N.N.",
   "extras.notes": "Notas",
   "extras.images": "Imágenes",
   "extras.sources": "Fuentes"

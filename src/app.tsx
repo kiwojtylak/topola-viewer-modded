@@ -116,8 +116,7 @@ function getParamFromSearch(name: string, search: queryString.ParsedQuery) {
 }
 
 /**
- * Retrieve arguments passed into the application through the URL and uploaded
- * data.
+ * Retrieve arguments passed into the application through the URL and uploaded data.
  */
 function getArguments(location: H.Location<any>): Arguments {
     const search = queryString.parse(location.search);
