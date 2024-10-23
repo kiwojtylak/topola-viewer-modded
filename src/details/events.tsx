@@ -11,7 +11,7 @@ import {
     getName,
 } from '../util/gedcom_util';
 import {GedcomEntry} from 'parse-gedcom';
-import {FormattedMessage, IntlShape, useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {Link, useLocation} from 'react-router-dom';
 import {pointerToId} from '../util/gedcom_util';
 import {TranslatedTag} from './translated-tag';
@@ -162,12 +162,11 @@ function toEvent(
     entry: GedcomEntry,
     gedcom: GedcomData,
     indi: string,
-    intl: IntlShape,
 ): EventData[] {
     if (entry.tag === 'FAMS') {
         return toFamilyEvents(entry, gedcom, indi);
     }
-    return toIndiEvent(entry, gedcom, indi, intl);
+    return toIndiEvent(entry, gedcom, indi);
 }
 
 function toIndiEvent(
@@ -180,7 +179,6 @@ function toIndiEvent(
         {
             date: date ? getDate(date.data) : undefined,
             type: entry.tag,
-
             place: eventPlace(entry),
             images: eventImages(entry, gedcom),
             notes: eventNotes(entry, gedcom),
@@ -237,11 +235,10 @@ function Event(props: { event: EventData }) {
 }
 
 export function Events(props: Props) {
-    const intl = useIntl();
     const events = flatMap(EVENT_TAGS, (tag) =>
         props.entries
             .filter((entry) => entry.tag === tag)
-            .map((eventEntry) => toEvent(eventEntry, props.gedcom, props.indi, intl))
+            .map((eventEntry) => toEvent(eventEntry, props.gedcom, props.indi))
             .flatMap((events) => events)
             .sort((event1, event2) => compareDates(event1.date, event2.date)),
     );
