@@ -5,6 +5,7 @@ Backlog:
 - [x] Prettify search box
 - [x] Fix language details css
 - [x] Fix i18n errors
+- [ ] Experiment Toggle button
 - [ ] Clan in card
 - [ ] Show/hide clan
 - [ ] Color by clan
