@@ -5,7 +5,7 @@ import {Details} from './details/details';
 import {EmbeddedDataSource, EmbeddedSourceSpec} from './datasource/embedded';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {getI18nMessage} from './util/error_i18n';
-import {IndiInfo} from 'topola';
+import {IndiInfo} from './lib/topola';
 import {Loader, Message, Portal, Tab} from 'semantic-ui-react';
 import {Media} from './util/media';
 import {Redirect, Route, Switch} from 'react-router-dom';

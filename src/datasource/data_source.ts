@@ -1,4 +1,4 @@
-import {IndiInfo} from 'topola';
+import {IndiInfo} from '../lib/topola';
 import {TopolaData} from '../util/gedcom_util';
 
 /** Supported data sources. */

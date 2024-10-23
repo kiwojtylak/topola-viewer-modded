@@ -25,7 +25,7 @@ export interface Config {
 }
 
 export const DEFAULT_CONFIG: Config = {
-    color: ChartColors.COLOR_BY_GENERATION,
+    color: ChartColors.COLOR_BY_SEX,
     id: Ids.SHOW,
     sex: Sex.SHOW,
 };

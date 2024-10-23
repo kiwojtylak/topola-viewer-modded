@@ -1,7 +1,7 @@
 import lunr, {PipelineFunction} from 'lunr';
 import naturalSort from 'javascript-natural-sort';
 import {idToFamMap, idToIndiMap} from '../util/gedcom_util';
-import {JsonFam, JsonGedcomData, JsonIndi} from 'topola';
+import {JsonFam, JsonGedcomData, JsonIndi} from '../lib/topola';
 
 require('lunr-languages/lunr.stemmer.support')(lunr);
 require('lunr-languages/lunr.de')(lunr);

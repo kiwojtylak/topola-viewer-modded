@@ -1,6 +1,6 @@
 import {convertGedcom, TopolaData} from '../util/gedcom_util';
 import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
-import {IndiInfo, JsonGedcomData} from 'topola';
+import {IndiInfo, JsonGedcomData} from '../lib/topola';
 import {TopolaError} from '../util/error';
 import AdmZip from 'adm-zip';
 

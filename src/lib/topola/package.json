@@ -1,0 +1,66 @@
+{
+  "name": "topola",
+  "version": "3.6.2",
+  "description": "Topola – online genealogy visualization",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build-demo": "browserify src/index.ts -p [ tsify ] -o demo/bundle.js --s topola",
+    "watch": "watchify src/index.ts -p [ tsify ] -o demo/bundle.js --s topola --debug",
+    "server": "browser-sync start --server demo --files demo",
+    "start": "concurrently \"npm run watch\" \"npm run server\"",
+    "test": "jasmine-ts \"tests/**/*.spec.ts\"",
+    "watch-test": "nodemon --ext ts --exec 'jasmine-ts \"tests/**/*.spec.ts\"'",
+    "predeploy": "npm run build-demo",
+    "deploy": "gh-pages -d demo",
+    "prettier": "prettier --single-quote --write src/**/*.ts && prettier --single-quote --write src/*.ts"
+  },
+  "author": "Przemek Wiech",
+  "license": "Apache 2.0",
+  "devDependencies": {
+    "@types/d3-array": "^2.9.0",
+    "@types/d3-hierarchy": "^2.0.0",
+    "@types/d3-selection": "^2.0.0",
+    "@types/d3-transition": "^2.0.0",
+    "@types/jasmine": "^3.6.9",
+    "browser-sync": "^2.26.14",
+    "browserify": "^17.0.0",
+    "concurrently": "^6.0.0",
+    "gh-pages": "^3.1.0",
+    "jasmine": "^3.9.0",
+    "jasmine-ts": "^0.4.0",
+    "jsdom": "^16.5.2",
+    "jsdom-global": "^3.0.2",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.4.1",
+    "ts-loader": "^8.1.0",
+    "ts-node": "^10.3.0",
+    "tsify": "^5.0.2",
+    "typescript": "^4.2.3",
+    "watchify": "^4.0.0"
+  },
+  "dependencies": {
+    "array-flat-polyfill": "^1.0.1",
+    "d3-array": "^2.12.1",
+    "d3-flextree": "^2.1.1",
+    "d3-hierarchy": "^2.0.0",
+    "d3-selection": "^2.0.0",
+    "d3-transition": "^2.0.0",
+    "parse-gedcom": "^1.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PeWu/topola.git"
+  },
+  "homepage": "https://github.com/PeWu/topola",
+  "bugs": {
+    "url": "https://github.com/PeWu/topola/issues"
+  },
+  "keywords": [
+    "gedcom",
+    "genealogy",
+    "visualization",
+    "family tree"
+  ]
+}

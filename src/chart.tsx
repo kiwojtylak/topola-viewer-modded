@@ -16,7 +16,7 @@ import {
     HourglassChart,
     IndiInfo,
     JsonGedcomData,
-} from 'topola';
+} from './lib/topola';
 
 
 /** How much to zoom when using the +/- buttons. */

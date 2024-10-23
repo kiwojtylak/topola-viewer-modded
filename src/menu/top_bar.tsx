@@ -1,12 +1,12 @@
 import {Dropdown, Icon, Menu} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
-import {IndiInfo, JsonGedcomData} from 'topola';
 import {Media} from '../util/media';
 import {MenuType} from './menu_item';
 import {SearchBar} from './search';
 import {UploadMenu} from './upload_menu';
 import {UrlMenu} from './url_menu';
 import {useHistory, useLocation} from 'react-router';
+import {IndiInfo, JsonGedcomData} from '../lib/topola';
 
 enum ScreenSize {
     LARGE,

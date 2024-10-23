@@ -1,18 +1,10 @@
 import {FormattedMessage, IntlShape, useIntl} from 'react-intl';
-import {
-    Icon,
-    Item,
-    List,
-    Menu,
-    MenuItemProps,
-    Popup,
-    Tab,
-} from 'semantic-ui-react';
+import {Icon, Item, List, Menu, MenuItemProps, Popup, Tab,} from 'semantic-ui-react';
+import * as React from 'react';
 import {useState} from 'react';
 import {WrappedImage} from './wrapped-image';
-import * as React from 'react';
 import {MultilineText} from './multiline-text';
-import {DateOrRange} from 'topola';
+import {DateOrRange} from '../lib/topola';
 import {formatDateOrRange} from '../util/date_util';
 import Linkify from 'react-linkify';
 
