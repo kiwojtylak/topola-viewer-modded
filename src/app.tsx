@@ -157,7 +157,7 @@ function getArguments(location: H.Location<any>): Arguments {
     const parsedGen = Number(getParam('gen'));
     const selection = indi
         ? {id: indi, generation: !isNaN(parsedGen) ? parsedGen : 0}
-        : undefined;
+        : undefined;  // TODO: {id: oldest ancestor, generation: minus distance to lowest ID}
 
     return {
         sourceSpec,
