@@ -1,4 +1,4 @@
-import {convertGedcom, getSoftware, TopolaData} from '../util/gedcom_util';
+import {convertGedcom, TopolaData} from '../util/gedcom_util';
 import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
 import {IndiInfo, JsonGedcomData} from 'topola';
 import {TopolaError} from '../util/error';
@@ -12,8 +12,7 @@ export function getSelection(
     data: JsonGedcomData,
     selection?: IndiInfo,
 ): IndiInfo {
-    // If ID is not given or it doesn't exist in the data, use the first ID in
-    // the data.
+    // If ID is not given, or it doesn't exist in the data, use the first ID in the data.
     const id =
         selection && data.indis.some((i) => i.id === selection.id)
             ? selection.id
@@ -41,7 +40,6 @@ async function loadGedzip(
 ): Promise<{ gedcom: string; images: Map<string, string> }> {
     const zip = new AdmZip(Buffer.from(await blob.arrayBuffer()));
     const entries = zip.getEntries();
-
     let gedcom = undefined;
     const images = new Map<string, string>();
     for (const entry of entries) {
@@ -65,9 +63,7 @@ async function loadGedzip(
     return {gedcom, images};
 }
 
-export async function loadFile(
-    blob: Blob,
-): Promise<{ gedcom: string; images: Map<string, string> }> {
+export async function loadFile(blob: Blob): Promise<{ gedcom: string; images: Map<string, string> }> {
     const fileHeader = await blob.slice(0, 2).text();
     if (fileHeader === 'PK') {
         return loadGedzip(blob);
@@ -88,27 +84,19 @@ export async function loadFromUrl(
     } catch (e) {
         console.warn('Failed to load data from session storage: ' + e);
     }
-
-    const driveUrlMatch1 = url.match(
-        /https:\/\/drive\.google\.com\/file\/d\/(.*)\/.*/,
-    );
+    const driveUrlMatch1 = url.match(/https:\/\/drive\.google\.com\/file\/d\/(.*)\/.*/);
     if (driveUrlMatch1) {
         url = `https://drive.google.com/uc?id=${driveUrlMatch1[1]}&export=download`;
     }
-    const driveUrlMatch2 = url.match(
-        /https:\/\/drive\.google\.com\/open\?id=([^&]*)&?.*/,
-    );
+    const driveUrlMatch2 = url.match(/https:\/\/drive\.google\.com\/open\?id=([^&]*)&?.*/);
     if (driveUrlMatch2) {
         url = `https://drive.google.com/uc?id=${driveUrlMatch2[1]}&export=download`;
     }
-
     const urlToFetch = handleCors ? 'https://topolaproxy.bieda.it/' + url : url;
-
     const response = await window.fetch(urlToFetch);
     if (response.status !== 200) {
         throw new Error(response.statusText);
     }
-
     const {gedcom, images} = await loadFile(await response.blob());
     return prepareData(gedcom, url, images);
 }
@@ -159,13 +147,11 @@ export class UploadedDataSource implements DataSource<UploadSourceSpec> {
         source: SourceSelection<UploadSourceSpec>,
     ): Promise<TopolaData> {
         try {
-            const data = await loadGedcom(
+            return await loadGedcom(
                 source.spec.hash,
                 source.spec.gedcom,
                 source.spec.images,
             );
-            const software = getSoftware(data.gedcom.head);
-            return data;
         } catch (error) {
             throw error;
         }
@@ -188,7 +174,6 @@ export class GedcomUrlDataSource implements DataSource<UrlSourceSpec> {
     ): boolean {
         return newSource.spec.url !== oldSource.spec.url;
     }
-
     async loadData(source: SourceSelection<UrlSourceSpec>): Promise<TopolaData> {
         try {
             return await loadFromUrl(source.spec.url, source.spec.handleCors);

@@ -45,9 +45,7 @@ export function WrappedImage(props: Props) {
                 alt={props.title || props.filename}
                 centered={true}
             />
-            <Placeholder
-                className={!imageLoaded ? 'image-placeholder' : 'hidden-image'}
-            >
+            <Placeholder className={!imageLoaded ? 'image-placeholder' : 'hidden-image'}>
                 <Placeholder.Image square/>
             </Placeholder>
             {imageFailed && (

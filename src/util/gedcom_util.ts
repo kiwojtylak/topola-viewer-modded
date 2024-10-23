@@ -105,7 +105,7 @@ function marriageDatesComparator(gedcom: JsonGedcomData) {
 }
 
 /**
- * Sorts children by birth date in the given family.
+ * Sorts children by birthdate in the given family.
  * Does not modify the input objects.
  */
 function sortFamilyChildren(
@@ -260,7 +260,6 @@ export function convertGedcom(
     ) {
         throw new TopolaError('GEDCOM_READ_FAILED', 'Failed to read GEDCOM file');
     }
-
     return {
         chartData: filterImages(normalizeGedcom(json), images),
         gedcom: prepareGedcom(entries),

@@ -7,24 +7,15 @@ import {saveAs} from 'file-saver';
 import {select, Selection} from 'd3-selection';
 import {useEffect, useRef} from 'react';
 import 'd3-transition';
+import {D3ZoomEvent, zoom, ZoomBehavior, ZoomedElementBaseType, zoomTransform,} from 'd3-zoom';
 import {
-    D3ZoomEvent,
-    zoom,
-    ZoomBehavior,
-    ZoomedElementBaseType,
-    zoomTransform,
-} from 'd3-zoom';
-import {
-    JsonGedcomData,
+    ChartColors as TopolaChartColors,
     ChartHandle,
-    IndiInfo,
     createChart,
     DetailedRenderer,
     HourglassChart,
-    RelativesChart,
-    FancyChart,
-    CircleRenderer,
-    ChartColors as TopolaChartColors,
+    IndiInfo,
+    JsonGedcomData,
 } from 'topola';
 
 /** How much to zoom when using the +/- buttons. */
@@ -34,6 +25,7 @@ const ZOOM_FACTOR = 1.3;
  * Called when the view is dragged with the mouse.
  *
  * @param size the size of the chart
+ * @param event
  */
 function zoomed(
     size: [number, number],
@@ -65,7 +57,7 @@ function scrolled() {
 function loadAsDataUrl(blob: Blob): Promise<string> {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve) => {
         reader.onload = (e) => resolve((e.target as FileReader).result as string);
     });
 }
@@ -78,8 +70,7 @@ async function inlineImage(image: SVGImageElement) {
     try {
         const response = await fetch(href);
         const blob = await response.blob();
-        const dataUrl = await loadAsDataUrl(blob);
-        image.href.baseVal = dataUrl;
+        image.href.baseVal = await loadAsDataUrl(blob);
     } catch (e) {
         console.warn('Failed to load image:', e);
     }
@@ -99,7 +90,7 @@ async function inlineImages(svg: Element): Promise<void> {
 function loadImage(blob: Blob): Promise<HTMLImageElement> {
     const image = new Image();
     image.src = URL.createObjectURL(blob);
-    return new Promise<HTMLImageElement>((resolve, reject) => {
+    return new Promise<HTMLImageElement>((resolve) => {
         image.addEventListener('load', () => resolve(image));
     });
 }
@@ -185,9 +176,7 @@ export async function downloadPdf() {
 
 /** Supported chart types. */
 export enum ChartType {
-    Hourglass,
-    Relatives,
-    Fancy,
+    Hourglass
 }
 
 const chartColors = new Map<ChartColors, TopolaChartColors>([
@@ -195,30 +184,6 @@ const chartColors = new Map<ChartColors, TopolaChartColors>([
     [ChartColors.COLOR_BY_GENERATION, TopolaChartColors.COLOR_BY_GENERATION],
     [ChartColors.COLOR_BY_SEX, TopolaChartColors.COLOR_BY_SEX],
 ]);
-
-function getChartType(chartType: ChartType) {
-    switch (chartType) {
-        case ChartType.Hourglass:
-            return HourglassChart;
-        case ChartType.Relatives:
-            return RelativesChart;
-        case ChartType.Fancy:
-            return FancyChart;
-        default:
-            // Fall back to hourglass chart.
-            return HourglassChart;
-    }
-}
-
-function getRendererType(chartType: ChartType) {
-    switch (chartType) {
-        case ChartType.Fancy:
-            return CircleRenderer;
-        default:
-            // Use DetailedRenderer by default.
-            return DetailedRenderer;
-    }
-}
 
 export interface ChartProps {
     data: JsonGedcomData;
@@ -278,8 +243,8 @@ class ChartWrapper {
             (select('#chart').node() as HTMLElement).innerHTML = '';
             this.chart = createChart({
                 json: props.data,
-                chartType: getChartType(props.chartType),
-                renderer: getRendererType(props.chartType),
+                chartType: HourglassChart,
+                renderer: DetailedRenderer,
                 svgSelector: '#chart',
                 indiCallback: (info) => props.onSelection(info),
                 colors: chartColors.get(props.colors!),

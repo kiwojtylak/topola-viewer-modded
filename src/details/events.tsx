@@ -41,12 +41,13 @@ interface Props {
 interface EventData {
     type: string;
     date?: DateOrRange;
-    age?: string;
     personLink?: GedcomEntry;
     place?: string[];
     images?: Image[];
     notes?: string[][];
     sources?: Source[];
+    tribe: string | undefined;
+    languages: string[];
     indi: string;
 }
 
@@ -59,6 +60,7 @@ const EVENT_TAGS = [
     'CENS',
     'DEAT',
     'BURI',
+    '_TRIB',
 ];
 
 const FAMILY_EVENT_TAGS = ['MARR', 'MARS', 'DIV'];
@@ -102,14 +104,12 @@ function eventImages(entry: GedcomEntry, gedcom: GedcomData): Image[] {
         )
         .map((objectEntry) => getImageFileEntry(objectEntry))
         .flatMap((imageFileEntry) =>
-            imageFileEntry
-                ? [
+            imageFileEntry ? [
                     {
                         url: imageFileEntry?.data || '',
                         filename: getFileName(imageFileEntry) || '',
                     },
-                ]
-                : [],
+                ] : [],
         );
 }
 
@@ -117,29 +117,13 @@ function eventSources(entry: GedcomEntry, gedcom: GedcomData): Source[] {
     return entry.tree
         .filter((subEntry) => 'SOUR' === subEntry.tag)
         .map((sourceEntryReference) => {
-            const sourceEntry = dereference(
-                sourceEntryReference,
-                gedcom,
-                (gedcom) => gedcom.other,
-            );
-            const title = sourceEntry.tree.find(
-                (subEntry) => 'TITL' === subEntry.tag,
-            );
-            const abbr = sourceEntry.tree.find(
-                (subEntry) => 'ABBR' === subEntry.tag,
-            );
-            const author = sourceEntry.tree.find(
-                (subEntry) => 'AUTH' === subEntry.tag,
-            );
-            const publicationInfo = sourceEntry.tree.find(
-                (subEntry) => 'PUBL' === subEntry.tag,
-            );
-            const page = sourceEntryReference.tree.find(
-                (subEntry) => 'PAGE' === subEntry.tag,
-            );
-            const sourceData = sourceEntryReference.tree.find(
-                (subEntry) => 'DATA' === subEntry.tag,
-            );
+            const sourceEntry = dereference(sourceEntryReference, gedcom, (gedcom) => gedcom.other);
+            const title = sourceEntry.tree.find((subEntry) => 'TITL' === subEntry.tag);
+            const abbr = sourceEntry.tree.find((subEntry) => 'ABBR' === subEntry.tag);
+            const author = sourceEntry.tree.find((subEntry) => 'AUTH' === subEntry.tag);
+            const publicationInfo = sourceEntry.tree.find((subEntry) => 'PUBL' === subEntry.tag);
+            const page = sourceEntryReference.tree.find((subEntry) => 'PAGE' === subEntry.tag);
+            const sourceData = sourceEntryReference.tree.find((subEntry) => 'DATA' === subEntry.tag);
             const date = sourceData ? resolveDate(sourceData) : undefined;
             return {
                 title: title?.data || abbr?.data,
@@ -163,10 +147,7 @@ function toEvent(
     gedcom: GedcomData,
     indi: string,
 ): EventData[] {
-    if (entry.tag === 'FAMS') {
-        return toFamilyEvents(entry, gedcom, indi);
-    }
-    return toIndiEvent(entry, gedcom, indi);
+    return entry.tag === 'FAMS' ? toFamilyEvents(entry, gedcom, indi) : toIndiEvent(entry, gedcom, indi);
 }
 
 function toIndiEvent(
@@ -183,6 +164,8 @@ function toIndiEvent(
             images: eventImages(entry, gedcom),
             notes: eventNotes(entry, gedcom),
             sources: eventSources(entry, gedcom),
+            tribe: entry.data,
+            languages: [],
             indi: indi,
         },
     ];
@@ -210,6 +193,8 @@ function toFamilyEvents(
             images: eventImages(familyMarriageEvent, gedcom),
             notes: eventNotes(familyMarriageEvent, gedcom),
             sources: eventSources(familyMarriageEvent, gedcom),
+            tribe: undefined,
+            languages: [],
             indi: indi,
         };
     });
@@ -220,9 +205,9 @@ function Event(props: { event: EventData }) {
         <Item>
             <Item.Content>
                 <EventHeader event={props.event}/>
-                {!!props.event.age && <Item.Meta>{props.event.age}</Item.Meta>}
                 {!!props.event.personLink && (<PersonLink person={props.event.personLink}/>)}
                 {!!props.event.place && (<Item.Description>{props.event.place}</Item.Description>)}
+                {!!props.event.tribe && (<Item.Description>{props.event.tribe}</Item.Description>)}
                 <EventExtras
                     images={props.event.images}
                     notes={props.event.notes}

@@ -122,11 +122,9 @@ function getParamFromSearch(name: string, search: queryString.ParsedQuery) {
 function getArguments(location: H.Location<any>): Arguments {
     const search = queryString.parse(location.search);
     const getParam = (name: string) => getParamFromSearch(name, search);
-
     const view = getParam('view');
     const chartTypes = new Map<string | undefined, ChartType>([
-        ['relatives', ChartType.Relatives],
-        ['fancy', ChartType.Fancy],
+        ['hourglass', ChartType.Hourglass],
     ]);
 
     const hash = getParam('file');
@@ -166,7 +164,7 @@ function getArguments(location: H.Location<any>): Arguments {
         sourceSpec,
         selection,
         // Hourglass is the default view.
-        chartType: chartTypes.get(view) || ChartType.Relatives,
+        chartType: chartTypes.get(view) || ChartType.Hourglass,
         showSidePanel: getParam('sidePanel') !== 'false', // True by default.
         standalone: getParam('standalone') !== 'false' && !embedded && !staticUrl,
         freezeAnimation: getParam('freeze') === 'true', // False by default
