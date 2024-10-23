@@ -141,22 +141,26 @@ function getOtherDetails(entries: GedcomEntry[]) {
         ));
 }
 
-function getMultilineDetails(entries: GedcomEntry[], tags: string[]) {
+function getMultilineDetails(
+    entries: GedcomEntry[],
+    tags: string[],
+    title: [string, string],
+) {
+    const lines= entries
+        .filter((entry) => tags.includes(entry.tag))
+        .filter(hasData)
+        .map((element) => element.data)
+    if (!lines.length) {
+        return null;
+    }
     return (
         <Item key="languages">
             <Item.Content>
-                <Header sub>
-                    <FormattedMessage id="gedcom.languages" defaultMessage="Languages"/>
+                <Header as="span">
+                    <FormattedMessage id={title[0]} defaultMessage={title[1]}/>
                 </Header>
                 <span>
-                    <MultilineText
-                        lines={
-                            entries
-                                .filter((entry) => tags.includes(entry.tag))
-                                .filter(hasData)
-                                .map((element) => element.data)
-                        }
-                    />
+                    <MultilineText lines={lines}/>
                 </span>
             </Item.Content>
         </Item>
@@ -180,8 +184,8 @@ export function Details(props: Props) {
                 {getDetails(entries, ['NAME'], nameDetails)}
                 {getDetails(entriesWithData, ['OBJE'], fileDetails)}
                 <Events gedcom={props.gedcom} entries={entries} indi={props.indi}/>
+                {getMultilineDetails(entriesWithData, ['LANG'], ['gedcom.languages', 'Languages'])}
                 {getOtherDetails(entriesWithData)}
-                {getMultilineDetails(entriesWithData, ['LANG'])}
                 {getDetails(entriesWithData, ['NOTE'], noteDetails)}
             </Item.Group>
         </div>

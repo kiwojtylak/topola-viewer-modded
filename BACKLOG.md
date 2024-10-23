@@ -2,8 +2,12 @@ Backlog:
 - [x] Consistent menus
 - [x] Recenter view
 - [x] Languages in details
-- [ ] Fix i18n errors
-- [ ] Languages in card
 - [x] Prettify search box
+- [x] Fix language details css
+- [x] Fix i18n errors
+- [ ] Clan in card
+- [ ] Show/hide clan
 - [ ] Color by clan
-- [ ] Languages dropdown
+- [ ] Languages in card
+- [ ] Show/hide languages
+- [ ] Color by languages

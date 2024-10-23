@@ -369,7 +369,6 @@ export function App() {
     }
 
     async function onDownloadPdf() {
-        // analyticsEvent('download_pdf');
         try {
             await downloadPdf();
         } catch (e) {
@@ -385,7 +384,6 @@ export function App() {
     }
 
     async function onDownloadPng() {
-        // analyticsEvent('download_png');
         try {
             await downloadPng();
         } catch (e) {

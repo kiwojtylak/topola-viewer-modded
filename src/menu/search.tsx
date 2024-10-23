@@ -66,7 +66,6 @@ export function SearchBar(props: Props) {
 
     /** On search result selected. */
     function handleResultSelect(id: string) {
-        // analyticsEvent('search_result_selected');
         props.onSelection({id, generation: 0});
         setSearchString('');
     }

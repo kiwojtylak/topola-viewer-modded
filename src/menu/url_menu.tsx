@@ -27,7 +27,6 @@ export function UrlMenu(props: Props) {
     function handleLoad() {
         setDialogOpen(false);
         if (url) {
-            // analyticsEvent('url_selected');
             history.push({
                 pathname: '/view',
                 search: queryString.stringify({url}),

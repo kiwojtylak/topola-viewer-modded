@@ -1,6 +1,5 @@
 import * as queryString from 'query-string';
 import flatMap from 'array.prototype.flatmap';
-import {calcAge} from '../util/age_util';
 import {compareDates, formatDateOrRange} from '../util/date_util';
 import {DateOrRange, getDate} from 'topola';
 import {
@@ -90,26 +89,6 @@ function getSpouse(indi: string, familyEntry: GedcomEntry, gedcom: GedcomData) {
     return dereference(spouseReference, gedcom, (gedcom) => gedcom.indis);
 }
 
-function getAge(
-    eventEntry: GedcomEntry,
-    indi: string,
-    gedcom: GedcomData,
-    intl: IntlShape,
-): string | undefined {
-    if (eventEntry.tag !== 'DEAT') {
-        return undefined;
-    }
-    const deathDate = resolveDate(eventEntry);
-    const birthDate = gedcom.indis[indi].tree
-        .filter((indiSubEntry) => indiSubEntry.tag === 'BIRT')
-        .map((birthEvent) => resolveDate(birthEvent))
-        .find((topolaDate) => topolaDate);
-    if (!birthDate || !deathDate) {
-        return undefined;
-    }
-    return calcAge(birthDate?.data, deathDate?.data, intl);
-}
-
 function eventPlace(entry: GedcomEntry) {
     const place = entry.tree.find((subEntry) => subEntry.tag === 'PLAC');
     return place?.data ? getData(place) : undefined;
@@ -195,14 +174,13 @@ function toIndiEvent(
     entry: GedcomEntry,
     gedcom: GedcomData,
     indi: string,
-    intl: IntlShape,
 ): EventData[] {
     const date = resolveDate(entry) || null;
     return [
         {
             date: date ? getDate(date.data) : undefined,
             type: entry.tag,
-            age: getAge(entry, indi, gedcom, intl),
+
             place: eventPlace(entry),
             images: eventImages(entry, gedcom),
             notes: eventNotes(entry, gedcom),
