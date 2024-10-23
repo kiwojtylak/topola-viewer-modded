@@ -201,11 +201,7 @@ export function App() {
 
     /** Sets the state with a new individual selection and chart type. */
     function updateDisplay(newSelection: IndiInfo) {
-        if (
-            !selection ||
-            selection.id !== newSelection.id ||
-            selection!.generation !== newSelection.generation
-        ) {
+        if (!selection || selection.id !== newSelection.id || selection!.generation !== newSelection.generation) {
             setSelection(newSelection);
         }
     }

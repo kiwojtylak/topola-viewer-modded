@@ -79,7 +79,6 @@ function strcmp(a: string, b: string) {
 /** Birthdate comparator for individuals. */
 function birthDatesComparator(gedcom: JsonGedcomData) {
     const indiMap = idToIndiMap(gedcom);
-
     return (indiId1: string, indiId2: string) => {
         const indi1: JsonIndi | undefined = indiMap.get(indiId1);
         const indi2: JsonIndi | undefined = indiMap.get(indiId2);
@@ -93,7 +92,6 @@ function birthDatesComparator(gedcom: JsonGedcomData) {
 /** Marriage date comparator for families. */
 function marriageDatesComparator(gedcom: JsonGedcomData) {
     const famMap = idToFamMap(gedcom);
-
     return (famId1: string, famId2: string) => {
         const fam1: JsonFam | undefined = famMap.get(famId1);
         const fam2: JsonFam | undefined = famMap.get(famId2);
@@ -120,7 +118,7 @@ function sortFamilyChildren(
 }
 
 /**
- * Sorts children by birth date.
+ * Sorts children by birthdate.
  * Does not modify the input object.
  */
 function sortChildren(gedcom: JsonGedcomData): JsonGedcomData {
@@ -153,8 +151,8 @@ function sortSpouses(gedcom: JsonGedcomData): JsonGedcomData {
 }
 
 /**
- * If the entry is a reference to a top-level entry, the referenced entry is
- * returned. Otherwise, returns the given entry unmodified.
+ * If the entry is a reference to a top-level entry, the referenced entry is returned.
+ * Otherwise, returns the given entry unmodified.
  */
 export function dereference(
     entry: GedcomEntry,
@@ -171,8 +169,8 @@ export function dereference(
 }
 
 /**
- * Returns the data for the given GEDCOM entry as an array of lines. Supports
- * continuations with CONT and CONC.
+ * Returns the data for the given GEDCOM entry as an array of lines.
+ * Supports continuations with CONT and CONC.
  */
 export function getData(entry: GedcomEntry) {
     const result = [entry.data];
@@ -266,14 +264,6 @@ export function convertGedcom(
     };
 }
 
-export function getSoftware(head: GedcomEntry): string | null {
-    const sour =
-        head && head.tree && head.tree.find((entry) => entry.tag === 'SOUR');
-    const name =
-        sour && sour.tree && sour.tree.find((entry) => entry.tag === 'NAME');
-    return (name && name.data) || null;
-}
-
 export function getName(person: GedcomEntry): string | undefined {
     const names = person.tree.filter((subEntry) => subEntry.tag === 'NAME');
     const notMarriedName = names.find(
@@ -288,10 +278,7 @@ export function getName(person: GedcomEntry): string | undefined {
 
 export function getFileName(fileEntry: GedcomEntry): string | undefined {
     const fileTitle = fileEntry?.tree.find((entry) => entry.tag === 'TITL')?.data;
-
-    const fileExtension = fileEntry?.tree.find((entry) => entry.tag === 'FORM')
-        ?.data;
-
+    const fileExtension = fileEntry?.tree.find((entry) => entry.tag === 'FORM')?.data;
     return fileTitle && fileExtension && fileTitle + '.' + fileExtension;
 }
 
