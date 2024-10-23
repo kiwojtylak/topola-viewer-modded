@@ -221,7 +221,7 @@ function createIndi(entry, objects) {
             .map(getFileTag)
             .filter(function (x) { return x !== undefined; });
     }
-    // Birth date and place.
+    // Birthdate and place.
     var birth = createEvent(findTag(entry.tree, 'BIRT'));
     if (birth) {
         indi.birth = birth;

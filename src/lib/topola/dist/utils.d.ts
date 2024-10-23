@@ -1,4 +1,3 @@
-export declare type Direction = -1 | 0 | 1;
 export interface Vec2 {
     x: number;
     y: number;

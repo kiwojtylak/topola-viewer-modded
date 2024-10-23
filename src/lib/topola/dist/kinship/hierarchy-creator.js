@@ -4,7 +4,7 @@ import {HierarchyFilter} from "./hierarchy-filter";
 import {IdGenerator} from "../id-generator";
 import {nonEmpty} from "../utils";
 
-/* Id of indi or fam */
+/* ID of indi or fam */
 const EntryId = /** @class */ (function () {
     class EntryId {
         constructor(indiId, famId) {
