@@ -2,10 +2,10 @@ import {GedcomEntry, parse as parseGedcom} from 'parse-gedcom';
 import {TopolaError} from './error';
 import {
     gedcomEntriesToJson,
-    JsonFam,
     JsonGedcomData,
-    JsonImage,
     JsonIndi,
+    JsonFam,
+    JsonImage,
 } from 'topola';
 import {compareDates} from './date_util';
 

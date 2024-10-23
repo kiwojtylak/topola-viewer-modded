@@ -46,8 +46,6 @@ interface EventData {
     images?: Image[];
     notes?: string[][];
     sources?: Source[];
-    tribe: string | undefined;
-    languages: string[];
     indi: string;
 }
 
@@ -60,7 +58,6 @@ const EVENT_TAGS = [
     'CENS',
     'DEAT',
     'BURI',
-    '_TRIB',
 ];
 
 const FAMILY_EVENT_TAGS = ['MARR', 'MARS', 'DIV'];
@@ -164,8 +161,6 @@ function toIndiEvent(
             images: eventImages(entry, gedcom),
             notes: eventNotes(entry, gedcom),
             sources: eventSources(entry, gedcom),
-            tribe: entry.data,
-            languages: [],
             indi: indi,
         },
     ];
@@ -193,8 +188,6 @@ function toFamilyEvents(
             images: eventImages(familyMarriageEvent, gedcom),
             notes: eventNotes(familyMarriageEvent, gedcom),
             sources: eventSources(familyMarriageEvent, gedcom),
-            tribe: undefined,
-            languages: [],
             indi: indi,
         };
     });
@@ -207,7 +200,6 @@ function Event(props: { event: EventData }) {
                 <EventHeader event={props.event}/>
                 {!!props.event.personLink && (<PersonLink person={props.event.personLink}/>)}
                 {!!props.event.place && (<Item.Description>{props.event.place}</Item.Description>)}
-                {!!props.event.tribe && (<Item.Description>{props.event.tribe}</Item.Description>)}
                 <EventExtras
                     images={props.event.images}
                     notes={props.event.notes}

@@ -28,7 +28,7 @@ const EXCLUDED_TAGS = [
     'FAMS',
     'NOTE',
     'SOUR',
-    'LANG'
+    'LANG',
 ];
 
 function dataDetails(entry: GedcomEntry) {

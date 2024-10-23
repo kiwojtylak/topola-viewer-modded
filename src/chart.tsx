@@ -18,6 +18,7 @@ import {
     JsonGedcomData,
 } from 'topola';
 
+
 /** How much to zoom when using the +/- buttons. */
 const ZOOM_FACTOR = 1.3;
 
