@@ -5,10 +5,11 @@ Backlog:
 - [x] Prettify search box
 - [x] Fix language details css
 - [x] Fix i18n errors
-- [ ] Experiment Toggle button
+- [x] Straight-forward indi focus
 - [ ] Clan in card
 - [ ] Show/hide clan
 - [ ] Color by clan
+- [ ] Experiment Toggle button
 - [ ] Languages in card
 - [ ] Show/hide languages
 - [ ] Color by languages

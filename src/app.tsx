@@ -115,17 +115,31 @@ function getParamFromSearch(name: string, search: queryString.ParsedQuery) {
     return typeof value === 'string' ? value : undefined;
 }
 
+function startIndi(data: TopolaData | undefined) {
+    const egoGen = getEgoGen(data)
+    return {
+        id: data?.chartData?.indis?.[0]?.id || 'I0',  // lowest ID on the chart
+        generation: egoGen !== undefined ? -parseInt(egoGen, 10) : 0
+    };
+}
+
+function getEgoGen(data: TopolaData | undefined) {
+    return Object.entries(data?.gedcom?.other || {})
+        .filter(([_, value]) => value.tag === "EGO")
+        .map(([_, value]) => value.tree.find(sub => sub.tag === "GEN")?.data)
+        .find(data => data !== undefined);
+}
+
 /**
  * Retrieve arguments passed into the application through the URL and uploaded data.
  */
 function getArguments(location: H.Location<any>): Arguments {
+    const chartTypes = new Map<string | undefined, ChartType>([
+        ['hourglass', ChartType.Hourglass]
+    ]);
     const search = queryString.parse(location.search);
     const getParam = (name: string) => getParamFromSearch(name, search);
     const view = getParam('view');
-    const chartTypes = new Map<string | undefined, ChartType>([
-        ['hourglass', ChartType.Hourglass],
-    ]);
-
     const hash = getParam('file');
     const url = getParam('url');
     const embedded = getParam('embedded') === 'true'; // False by default.
@@ -157,7 +171,7 @@ function getArguments(location: H.Location<any>): Arguments {
     const parsedGen = Number(getParam('gen'));
     const selection = indi
         ? {id: indi, generation: !isNaN(parsedGen) ? parsedGen : 0}
-        : undefined;  // TODO: {id: oldest ancestor, generation: minus distance to lowest ID}
+        : undefined
 
     return {
         sourceSpec,
@@ -297,29 +311,24 @@ export function App() {
                 }
                 return;
             }
-
             const args = getArguments(location);
             if (!args.sourceSpec) {
                 history.replace({pathname: '/'});
                 return;
             }
-
             if (
                 state === AppState.INITIAL || isNewData(args.sourceSpec, args.selection)
             ) {
-                // Set loading state.
                 setState(AppState.LOADING);
-                // Set state from URL parameters.
                 setSourceSpec(args.sourceSpec);
-                setSelection(args.selection);
                 setStandalone(args.standalone);
                 setChartType(args.chartType);
                 setFreezeAnimation(args.freezeAnimation);
                 setConfig(args.config);
                 try {
                     const data = await loadData(args.sourceSpec, args.selection);
-                    // Set state with data.
                     setData(data);
+                    setSelection(args.selection !== undefined ? args.selection : startIndi(data));
                     toggleDetails(args.config, data);
                     setShowSidePanel(args.showSidePanel);
                     setState(AppState.SHOWING_CHART);
@@ -332,7 +341,7 @@ export function App() {
                 // Update selection if it has changed in the URL.
                 setChartType(args.chartType);
                 setState(AppState.SHOWING_CHART);
-                updateDisplay(args.selection!);
+                updateDisplay(selection!);
             }
         })();
     });
@@ -394,11 +403,7 @@ export function App() {
     }
 
     function onCenterView() {
-        const startIndi: IndiInfo = {
-            id: data?.chartData?.indis?.[0]?.id || 'I0',
-            generation: 0,
-        };
-        onSelection(startIndi)
+        onSelection(startIndi(data))
     }
 
     function onDismissErrorPopup() {

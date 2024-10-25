@@ -8,8 +8,7 @@ export declare const H_SPACING = 15;
 /** Vertical distance between boxes. */
 export declare const V_SPACING = 30;
 /**
- * Additional layout options intended to be used internally by layout
- * implementations.
+ * Additional layout options intended to be used internally by layout implementations.
  */
 export interface LayoutOptions {
     flipVertically?: boolean;

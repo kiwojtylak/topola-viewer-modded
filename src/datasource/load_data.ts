@@ -13,10 +13,9 @@ export function getSelection(
     selection?: IndiInfo,
 ): IndiInfo {
     // If ID is not given, or it doesn't exist in the data, use the first ID in the data.
-    const id =
-        selection && data.indis.some((i) => i.id === selection.id)
-            ? selection.id
-            : data.indis[0].id;
+    const id = selection && data.indis.some((i) => i.id === selection.id)
+        ? selection.id
+        : data.indis[0].id;
     return {id, generation: selection?.generation || 0};
 }
 
@@ -35,9 +34,7 @@ function prepareData(
     return data;
 }
 
-async function loadGedzip(
-    blob: Blob,
-): Promise<{ gedcom: string; images: Map<string, string> }> {
+async function loadGedzip(blob: Blob): Promise<{ gedcom: string; images: Map<string, string> }> {
     const zip = new AdmZip(Buffer.from(await blob.arrayBuffer()));
     const entries = zip.getEntries();
     let gedcom = undefined;
@@ -134,7 +131,6 @@ export interface UploadSourceSpec {
 
 /** Files opened from the local computer. */
 export class UploadedDataSource implements DataSource<UploadSourceSpec> {
-    // isNewData(args: Arguments, state: State): boolean {
     isNewData(
         newSource: SourceSelection<UploadSourceSpec>,
         oldSource: SourceSelection<UploadSourceSpec>,

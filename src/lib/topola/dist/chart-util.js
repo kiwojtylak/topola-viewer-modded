@@ -5,6 +5,7 @@ const d3_selection_1 = require("d3-selection");
 const d3_flextree_1 = require("d3-flextree");
 const d3_array_1 = require("d3-array");
 require("d3-transition");
+
 /** Horizontal distance between boxes. */
 exports.H_SPACING = 15;
 /** Vertical distance between boxes. */
