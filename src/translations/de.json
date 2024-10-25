@@ -56,6 +56,7 @@
   "config.colors.NO_COLOR": "keiner",
   "config.colors.COLOR_BY_GENERATION": "nach Generation",
   "config.colors.COLOR_BY_SEX": "nach Geschlecht",
+  "config.colors.COLOR_BY_TRIBE": "nach Stamm",
   "config.ids": "IDs",
   "config.ids.SHOW": "anzeigen",
   "config.ids.HIDE": "verbergen",

@@ -6,6 +6,7 @@ export enum ChartColors {
     NO_COLOR,
     COLOR_BY_SEX,
     COLOR_BY_GENERATION,
+    COLOR_BY_TRIBE,
 }
 
 export enum Ids {
@@ -18,22 +19,30 @@ export enum Sex {
     SHOW,
 }
 
+export enum Tribe {
+    HIDE,
+    SHOW,
+}
+
 export interface Config {
     color: ChartColors;
     id: Ids;
     sex: Sex;
+    tribe: Tribe;
 }
 
 export const DEFAULT_CONFIG: Config = {
     color: ChartColors.COLOR_BY_GENERATION,
     id: Ids.SHOW,
     sex: Sex.SHOW,
+    tribe: Tribe.SHOW,
 };
 
 const COLOR_ARG = new Map<string, ChartColors>([
     ['n', ChartColors.NO_COLOR],
     ['g', ChartColors.COLOR_BY_GENERATION],
     ['s', ChartColors.COLOR_BY_SEX],
+    ['t', ChartColors.COLOR_BY_TRIBE],
 ]);
 const COLOR_ARG_INVERSE = new Map<ChartColors, string>();
 COLOR_ARG.forEach((v, k) => COLOR_ARG_INVERSE.set(v, k));
@@ -52,16 +61,23 @@ const SEX_ARG = new Map<string, Sex>([
 const SEX_ARG_INVERSE = new Map<Sex, string>();
 SEX_ARG.forEach((v, k) => SEX_ARG_INVERSE.set(v, k));
 
+const TRIBE_ARG = new Map<string, Tribe>([
+    ['h', Tribe.HIDE],
+    ['s', Tribe.SHOW],
+]);
+const TRIBE_ARG_INVERSE = new Map<Tribe, string>();
+TRIBE_ARG.forEach((v, k) => TRIBE_ARG_INVERSE.set(v, k));
+
 export function argsToConfig(args: ParsedQuery<any>): Config {
     const getParam = (name: string) => {
         const value = args[name];
         return typeof value === 'string' ? value : undefined;
     };
-
     return {
         color: COLOR_ARG.get(getParam('c') ?? '') ?? DEFAULT_CONFIG.color,
         id: ID_ARG.get(getParam('i') ?? '') ?? DEFAULT_CONFIG.id,
         sex: SEX_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.sex,
+        tribe: TRIBE_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.tribe,
     };
 }
 
@@ -70,6 +86,7 @@ export function configToArgs(config: Config): ParsedQuery<any> {
         c: COLOR_ARG_INVERSE.get(config.color),
         i: ID_ARG_INVERSE.get(config.id),
         s: SEX_ARG_INVERSE.get(config.sex),
+        t: TRIBE_ARG_INVERSE.get(config.tribe),
     };
 }
 
@@ -89,7 +106,8 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.NO_COLOR" defaultMessage="none"/>
+                                    <FormattedMessage tagName="label" id="config.colors.NO_COLOR"
+                                                      defaultMessage="none"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="none"
@@ -103,7 +121,8 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_GENERATION" defaultMessage="by generation"/>
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_GENERATION"
+                                                      defaultMessage="by generation"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="generation"
@@ -117,7 +136,8 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_SEX" defaultMessage="by sex"/>
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_SEX"
+                                                      defaultMessage="by sex"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="gender"
@@ -127,13 +147,32 @@ export function ConfigPanel(props: {
                                 }
                             />
                         </Form.Field>
+                        <Form.Field className="no-margin">
+                            <Checkbox
+                                radio
+                                label={
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_TRIBE"
+                                                      defaultMessage="by tribe"/>
+                                }
+                                name="checkboxRadioGroup"
+                                value="tribe"
+                                checked={props.config.color === ChartColors.COLOR_BY_TRIBE}
+                                onClick={() =>
+                                    props.onChange({...props.config, color: ChartColors.COLOR_BY_TRIBE})
+                                }
+                            />
+                        </Form.Field>
                     </Item.Content>
                 </Item>
+
+                <button className="ui toggle button" aria-pressed="false">ID's</button>
+
                 <Item>
                     <Item.Content>
                         <Header sub>
                             <FormattedMessage id="config.ids" defaultMessage="IDs"/>
                         </Header>
+                        <button className="ui toggle button" aria-pressed="false">ID's</button>
                         <Form.Field className="no-margin">
                             <Checkbox
                                 radio
@@ -166,7 +205,7 @@ export function ConfigPanel(props: {
                 </Item>
                 <Item>
                     <Item.Content>
-                        <Header sub>
+                    <Header sub>
                             <FormattedMessage id="config.sex" defaultMessage="Sex"/>
                         </Header>
                         <Form.Field className="no-margin">
@@ -199,6 +238,7 @@ export function ConfigPanel(props: {
                         </Form.Field>
                     </Item.Content>
                 </Item>
+
             </Item.Group>
         </Form>
     );
