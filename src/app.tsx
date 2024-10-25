@@ -341,7 +341,7 @@ export function App() {
                 // Update selection if it has changed in the URL.
                 setChartType(args.chartType);
                 setState(AppState.SHOWING_CHART);
-                updateDisplay(selection!);
+                updateDisplay(args.selection !== undefined ? args.selection : startIndi(data));
             }
         })();
     });

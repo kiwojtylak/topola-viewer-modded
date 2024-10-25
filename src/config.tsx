@@ -165,14 +165,11 @@ export function ConfigPanel(props: {
                     </Item.Content>
                 </Item>
 
-                <button className="ui toggle button" aria-pressed="false">ID's</button>
-
                 <Item>
                     <Item.Content>
                         <Header sub>
                             <FormattedMessage id="config.ids" defaultMessage="IDs"/>
                         </Header>
-                        <button className="ui toggle button" aria-pressed="false">ID's</button>
                         <Form.Field className="no-margin">
                             <Checkbox
                                 radio
