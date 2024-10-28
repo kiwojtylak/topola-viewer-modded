@@ -1,4 +1,5 @@
 var __extends = (this && this.__extends) || (function () {
+
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -217,8 +218,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
     };
 
     DetailedRenderer.prototype.getCss = function () {
-        // TODO: load from .css resource
-        return "\n.detailed text {\n  font-family: verdana, arial, sans-serif;\n  font-size: 12px;\n}\n\n.detailed .name {\n  font-weight: bold;\n}\n\n.link {\n  fill: none;\n  stroke: #000;\n  stroke-width: 1px;\n}\n\n.additional-marriage {\n  stroke-dasharray: 2;\n}\n\n.detailed rect {\n  stroke: black;\n}\n\n.detailed {\n  stroke-width: 2px;\n}\n\n.detailed .details {\n  font-size: 10px;\n}\n\n.detailed .id {\n  font-size: 10px;\n  font-style: italic;\n}\n\n.detailed rect.nocolor {\n  fill: #ffffff;\n}\n\n.detailed rect.bysex {\n  fill: #eeeeee;\n}\n\n.detailed rect.bysex.male {\n  fill: #dbffff;\n}\n\n.detailed rect.bysex.female {\n  fill: #ffdbed;\n}\n\n.detailed rect.bygeneration {\n  fill: #ffffdd;\n}\n\n.generation-11 .detailed rect.bygeneration, .generation1 .detailed rect.bygeneration {\n  fill: #edffdb;\n}\n\n.generation-10 .detailed rect.bygeneration, .generation2 .detailed rect.bygeneration {\n  fill: #dbffdb;\n}\n\n.generation-9 .detailed rect.bygeneration, .generation3 .detailed rect.bygeneration {\n  fill: #dbffed;\n}\n\n.generation-8 .detailed rect.bygeneration, .generation4 .detailed rect.bygeneration {\n  fill: #dbffff;\n}\n\n.generation-7 .detailed rect.bygeneration, .generation5 .detailed rect.bygeneration {\n  fill: #dbedff;\n}\n\n.generation-6 .detailed rect.bygeneration, .generation6 .detailed rect.bygeneration {\n  fill: #dbdbff;\n}\n\n.generation-5 .detailed rect.bygeneration, .generation7 .detailed rect.bygeneration {\n  fill: #eddbff;\n}\n\n.generation-4 .detailed rect.bygeneration, .generation8 .detailed rect.bygeneration {\n  fill: #ffdbff;\n}\n\n.generation-3 .detailed rect.bygeneration, .generation9 .detailed rect.bygeneration {\n  fill: #ffdbed;\n}\n\n.generation-2 .detailed rect.bygeneration, .generation10 .detailed rect.bygeneration {\n  fill: #ffdbdb;\n}\n\n.generation-1 .detailed rect.bygeneration, .generation11 .detailed rect.bygeneration {\n  fill: #ffeddb;\n}";
+        return null  // moved to external file
     };
 
     DetailedRenderer.prototype.transition = function (selection) {
@@ -310,7 +310,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
             .text(function (node) { return getIndi(node).getLastName(); });
         // Extract details.
-        var details = new Map();
+        const details = new Map();
         enter.each(function (node) {
             const indi = getIndi(node);
             const detailsList = _this.getIndiDetails(indi);
