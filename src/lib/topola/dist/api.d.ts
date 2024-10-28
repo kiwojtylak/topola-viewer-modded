@@ -66,7 +66,8 @@ export interface FamInfo {
 export declare enum ChartColors {
     NO_COLOR = 0,
     COLOR_BY_GENERATION = 1,
-    COLOR_BY_SEX = 2
+    COLOR_BY_SEX = 2,
+    COLOR_BY_TRIBE = 3
 }
 export interface RendererOptions<IndiT extends Indi, FamT extends Fam> {
     indiHrefFunc?: (id: string) => string;

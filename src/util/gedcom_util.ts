@@ -1,6 +1,6 @@
 import {GedcomEntry, parse as parseGedcom} from 'parse-gedcom';
 import {TopolaError} from './error';
-import {gedcomEntriesToJson, JsonFam, JsonGedcomData, JsonImage, JsonIndi,} from '../lib/topola';
+import {gedcomEntriesToJson, JsonFam, JsonGedcomData, JsonImage, JsonIndi} from '../lib/topola';
 import {compareDates} from './date_util';
 
 export interface GedcomData {

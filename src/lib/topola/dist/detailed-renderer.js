@@ -261,12 +261,14 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
     DetailedRenderer.prototype.renderIndi = function (enter, update) {
         const _this = this;
+
         if (this.options.indiHrefFunc) {
             enter = enter
                 .append('a')
                 .attr('href', function (data) { return _this.options.indiHrefFunc(data.indi.id); });
             update = update.select('a');
         }
+
         if (this.options.indiCallback) {
             enter.on('click', function (event, data) {
                 return _this.options.indiCallback({
@@ -275,6 +277,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 });
             });
         }
+
         // Background.
         const background = enter
             .append('rect')
@@ -287,6 +290,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         this.transition(background)
             .attr('width', function (node) { return node.indi.width; })
             .attr('height', function (node) { return node.indi.height; });
+
         // Clip path.
         const getClipId = function (id) {
             return "clip-" + id;
@@ -305,6 +309,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const getDetailsWidth = function (data) {
             return data.indi.width - (getIndi(data).getImageUrl() ? IMAGE_WIDTH : 0);
         };
+
         // Name
         enter
             .append('text')
@@ -318,13 +323,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('class', 'name')
             .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
             .text(function (node) { return getIndi(node).getLastName(); })
-        // Tribe
-        enter
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('class', 'details')
-            .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 17)"; })
-            .text(function (node) { return getIndi(node).getTribe(); });
+
         // Extract details
         const details = new Map();
         enter.each(function (node) {
@@ -335,6 +334,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const maxDetails = d3_array_1.max(Array.from(details.values(), function (v) {
             return v.length;
         }));
+
         const _loop_1 = function (i) {
             const lineGroup = enter.filter(function (data) {
                 return details.get(data.indi.id).length > i;
@@ -359,6 +359,18 @@ var DetailedRenderer = /** @class */ (function (_super) {
         for (let i = 0; i < maxDetails; ++i) {
             _loop_1(i);
         }
+
+        // Tribe
+        const tribe = enter
+            .append('text')
+            .attr('text-anchor', 'middle')
+            .attr('class', 'tribe')
+            .text(function (data) {
+                console.log('show tribe: '+getIndi(data).showTribe())
+                return getIndi(data).showTribe() ? data.indi.tribe : ''
+            });
+        this.transition(tribe).attr('transform', function (data) { return "translate(9, " + (data.indi.height - 5) + ")"; });
+
         // Render id
         const id = enter
             .append('text')
@@ -368,6 +380,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             })
             .merge(update.select('text.id'));
         this.transition(id).attr('transform', function (data) { return "translate(9, " + (data.indi.height - 5) + ")"; });
+
         // Render sex
         const sex = enter
             .append('text')
@@ -381,6 +394,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         this.transition(sex).attr('transform', function (data) {
             return "translate(" + (getDetailsWidth(data) - 5) + ", " + (data.indi.height - 5) + ")";
         });
+
         // Image
         enter.filter(function (data) { return !!getIndi(data).getImageUrl(); })
             .append('image')
@@ -390,6 +404,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('transform', function (data) { return "translate(" + (data.indi.width - IMAGE_WIDTH) + ", 0)"; })
             .attr('clip-path', function (data) { return "url(#" + getClipId(data.indi.id) + ")"; })
             .attr('href', function (data) { return getIndi(data).getImageUrl(); });
+
         // Border on top
         const border = enter
             .append('rect')

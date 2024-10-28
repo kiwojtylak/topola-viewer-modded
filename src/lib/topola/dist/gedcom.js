@@ -1,14 +1,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.gedcomEntriesToJson = exports.gedcomToJson = exports.getDate = void 0;
+
 var parse_gedcom_1 = require("parse-gedcom");
+
 /** Returns the first entry with the given tag or undefined if not found. */
 function findTag(tree, tag) {
     return tree.find(function (entry) { return entry.tag === tag; });
 }
+
 /** Returns all entries with the given tag. */
 function findTags(tree, tag) {
     return tree.filter(function (entry) { return entry.tag === tag; });
 }
+
 /**
  * Returns the identifier extracted from a pointer string.
  * E.g. '@I123@' -> 'I123'
@@ -16,16 +20,18 @@ function findTags(tree, tag) {
 function pointerToId(pointer) {
     return pointer.substring(1, pointer.length - 1);
 }
+
 /** Extracts the first and last name from a GEDCOM name field. */
 function extractName(name) {
-    var arr = name.split('/');
+    const arr = name.split('/');
     if (arr.length === 1) {
         return { firstName: arr[0].trim() };
     }
     return { firstName: arr[0].trim(), lastName: arr[1].trim() };
 }
+
 /** Maps month abbreviations used in GEDCOM to month numbers. */
-var MONTHS = new Map([
+const MONTHS = new Map([
     ['jan', 1],
     ['feb', 2],
     ['mar', 3],
@@ -39,21 +45,22 @@ var MONTHS = new Map([
     ['nov', 11],
     ['dec', 12],
 ]);
+
 /** Parses the GEDCOM date into the Date structure. */
 function parseDate(parts) {
     let lastPart;
     if (!parts || !parts.length) {
         return undefined;
     }
-    var result = {};
-    // Remove parentheses if they surround the text.
+    const result = {};
+    // Remove parentheses if they surround the text
     if (parts[0].startsWith('(') && parts[parts.length - 1].endsWith(')')) {
         parts[0] = parts[0].substring(1);
         lastPart = parts[parts.length - 1];
         parts[parts.length - 1] = lastPart.substring(0, lastPart.length - 1);
     }
-    var fullText = parts.join(' ');
-    var firstPart = parts[0].toLowerCase();
+    const fullText = parts.join(' ');
+    const firstPart = parts[0].toLowerCase();
     if (firstPart === 'cal' || firstPart === 'abt' || firstPart === 'est') {
         result.qualifier = firstPart;
         parts = parts.slice(1);
@@ -79,32 +86,36 @@ function parseDate(parts) {
     }
     return result;
 }
+
 /** Parses a GEDCOM date or date range. */
 function getDate(gedcomDate) {
-    var parts = gedcomDate.replace(/@.*@/, '').trim().split(' ');
-    var firstPart = parts[0].toLowerCase();
+    const parts = gedcomDate.replace(/@.*@/, '').trim().split(' ');
+    const firstPart = parts[0].toLowerCase();
     if (firstPart.startsWith('bet')) {
-        var i = parts.findIndex(function (x) { return x.toLowerCase() === 'and'; });
-        var from = parseDate(parts.slice(1, i));
-        var to = parseDate(parts.slice(i + 1));
+        const i = parts.findIndex(function (x) {
+            return x.toLowerCase() === 'and';
+        });
+        const from = parseDate(parts.slice(1, i));
+        const to = parseDate(parts.slice(i + 1));
         return { dateRange: { from: from, to: to } };
     }
     if (firstPart.startsWith('bef') || firstPart.startsWith('aft')) {
-        var date_1 = parseDate(parts.slice(1));
+        const date_1 = parseDate(parts.slice(1));
         if (firstPart.startsWith('bef')) {
             return { dateRange: { to: date_1 } };
         }
         return { dateRange: { from: date_1 } };
     }
-    var date = parseDate(parts);
+    const date = parseDate(parts);
     if (date) {
         return { date: date };
     }
     return undefined;
 }
 exports.getDate = getDate;
+
 /**
- * tries to treat an input tag as NOTE and parsse all lines of notes
+ * Tries to treat an input tag as NOTE and parse all lines of notes
  */
 function createNotes(notesTag) {
     if (!notesTag || notesTag.tag !== 'NOTE')
@@ -113,6 +124,7 @@ function createNotes(notesTag) {
         .filter(function (x) { return x.data; })
         .reduce(function (a, i) { return a.concat(i.data); }, [notesTag.data]);
 }
+
 /**
  * Creates a JsonEvent object from a GEDCOM entry.
  * Used for BIRT, DEAT and MARR tags.
@@ -121,13 +133,13 @@ function createEvent(entry) {
     if (!entry) {
         return undefined;
     }
-    var typeTag = findTag(entry.tree, 'TYPE');
-    var dateTag = findTag(entry.tree, 'DATE');
-    var placeTag = findTag(entry.tree, 'PLAC');
-    var date = dateTag && dateTag.data && getDate(dateTag.data);
-    var place = placeTag && placeTag.data;
+    const typeTag = findTag(entry.tree, 'TYPE');
+    const dateTag = findTag(entry.tree, 'DATE');
+    const placeTag = findTag(entry.tree, 'PLAC');
+    const date = dateTag && dateTag.data && getDate(dateTag.data);
+    const place = placeTag && placeTag.data;
     if (date || place) {
-        var result = date || {};
+        const result = date || {};
         if (place) {
             result.place = place;
         }
@@ -141,25 +153,28 @@ function createEvent(entry) {
     }
     return undefined;
 }
+
 /** Creates a JsonIndi object from an INDI entry in GEDCOM. */
 function createIndi(entry, objects) {
     let firstName;
     let lastName;
-    var id = pointerToId(entry.pointer);
-    var fams = findTags(entry.tree, 'FAMS').map(function (entry) {
+    const id = pointerToId(entry.pointer);
+    const fams = findTags(entry.tree, 'FAMS').map(function (entry) {
         return pointerToId(entry.data);
     });
-    var indi = { id: id, fams: fams };
-    // Name.
-    var nameTags = findTags(entry.tree, 'NAME');
-    var isMaiden = function (nameTag) {
-        var type = findTag(nameTag.tree, 'TYPE');
+    const indi = {id: id, fams: fams};
+    // Name
+    const nameTags = findTags(entry.tree, 'NAME');
+    const isMaiden = function (nameTag) {
+        const type = findTag(nameTag.tree, 'TYPE');
         return type !== undefined && type.data === 'maiden';
     };
-    var main = nameTags.find(function (x) { return !isMaiden(x); });
-    var maiden = nameTags.find(isMaiden);
+    const main = nameTags.find(function (x) {
+        return !isMaiden(x);
+    });
+    const maiden = nameTags.find(isMaiden);
     if (main) {
-        var _a = extractName(main.data);
+        const _a = extractName(main.data);
         firstName = _a.firstName;
         lastName = _a.lastName;
         if (firstName) {
@@ -180,36 +195,41 @@ function createIndi(entry, objects) {
             indi.firstName = firstName;
         }
     }
-    // Number of children.
-    var nchiTag = findTag(entry.tree, 'NCHI');
+    // Number of children
+    const nchiTag = findTag(entry.tree, 'NCHI');
     if (nchiTag) {
         indi.numberOfChildren = +nchiTag.data;
     }
-    // Number of marriages.
-    var nmrTag = findTag(entry.tree, 'NMR');
+    // Number of marriages
+    const nmrTag = findTag(entry.tree, 'NMR');
     if (nmrTag) {
         indi.numberOfMarriages = +nmrTag.data;
     }
-    // Sex.
-    var sexTag = findTag(entry.tree, 'SEX');
+    // Sex
+    const sexTag = findTag(entry.tree, 'SEX');
     if (sexTag) {
         indi.sex = sexTag.data;
     }
-    // Family with parents.
-    var famcTag = findTag(entry.tree, 'FAMC');
+    // Tribe
+    const tribeTag = findTag(entry.tree, '_TRIB');
+    if (tribeTag) {
+        indi.tribe = tribeTag.data;
+    }
+    // Family with parents
+    const famcTag = findTag(entry.tree, 'FAMC');
     if (famcTag) {
         indi.famc = pointerToId(famcTag.data);
     }
-    // Image URL.
-    var objeTags = findTags(entry.tree, 'OBJE');
+    // Image URL
+    const objeTags = findTags(entry.tree, 'OBJE');
     if (objeTags.length > 0) {
-        // Dereference OBJEct if needed.
-        var getFileTag = function (tag) {
-            var realObjeTag = tag.data ? objects.get(pointerToId(tag.data)) : tag;
+        // Dereference OBJEct if needed
+        const getFileTag = function (tag) {
+            const realObjeTag = tag.data ? objects.get(pointerToId(tag.data)) : tag;
             if (!realObjeTag)
                 return undefined;
-            var file = findTag(realObjeTag.tree, 'FILE');
-            var title = findTag(realObjeTag.tree, 'TITL');
+            const file = findTag(realObjeTag.tree, 'FILE');
+            const title = findTag(realObjeTag.tree, 'TITL');
             if (!file)
                 return undefined;
             return {
@@ -221,17 +241,17 @@ function createIndi(entry, objects) {
             .map(getFileTag)
             .filter(function (x) { return x !== undefined; });
     }
-    // Birthdate and place.
-    var birth = createEvent(findTag(entry.tree, 'BIRT'));
+    // Birthdate and place
+    const birth = createEvent(findTag(entry.tree, 'BIRT'));
     if (birth) {
         indi.birth = birth;
     }
-    // Death date and place.
-    var death = createEvent(findTag(entry.tree, 'DEAT'));
+    // Death date and place
+    const death = createEvent(findTag(entry.tree, 'DEAT'));
     if (death) {
         indi.death = death;
     }
-    // Notes.
+    // Notes
     indi.notes = createNotes(findTag(entry.tree, 'NOTE'));
     // Events
     indi.events = findTags(entry.tree, 'EVEN')
@@ -239,46 +259,50 @@ function createIndi(entry, objects) {
         .filter(function (x) { return x !== null; });
     return indi;
 }
+
 /** Creates a JsonFam object from an FAM entry in GEDCOM. */
 function createFam(entry) {
-    var id = pointerToId(entry.pointer);
-    var children = findTags(entry.tree, 'CHIL').map(function (entry) {
+    const id = pointerToId(entry.pointer);
+    const children = findTags(entry.tree, 'CHIL').map(function (entry) {
         return pointerToId(entry.data);
     });
-    var fam = { id: id, children: children };
+    const fam = {id: id, children: children};
     // Husband.
-    var husbTag = findTag(entry.tree, 'HUSB');
+    const husbTag = findTag(entry.tree, 'HUSB');
     if (husbTag) {
         fam.husb = pointerToId(husbTag.data);
     }
     // Wife.
-    var wifeTag = findTag(entry.tree, 'WIFE');
+    const wifeTag = findTag(entry.tree, 'WIFE');
     if (wifeTag) {
         fam.wife = pointerToId(wifeTag.data);
     }
     // Marriage
-    var marriage = createEvent(findTag(entry.tree, 'MARR'));
+    const marriage = createEvent(findTag(entry.tree, 'MARR'));
     if (marriage) {
         fam.marriage = marriage;
     }
     return fam;
 }
+
 /** Creates a map from ID to entry from an array of entries. */
 function createMap(entries) {
     return new Map(entries.map(function (entry) { return [pointerToId(entry.pointer), entry]; }));
 }
+
 /** Parses a GEDCOM file into a JsonGedcomData structure. */
 function gedcomToJson(gedcomContents) {
     return gedcomEntriesToJson(parse_gedcom_1.parse(gedcomContents));
 }
 exports.gedcomToJson = gedcomToJson;
+
 /** Converts parsed GEDCOM entries into a JsonGedcomData structure. */
 function gedcomEntriesToJson(gedcom) {
-    var objects = createMap(findTags(gedcom, 'OBJE'));
-    var indis = findTags(gedcom, 'INDI').map(function (entry) {
+    const objects = createMap(findTags(gedcom, 'OBJE'));
+    const indis = findTags(gedcom, 'INDI').map(function (entry) {
         return createIndi(entry, objects);
     });
-    var fams = findTags(gedcom, 'FAM').map(createFam);
+    const fams = findTags(gedcom, 'FAM').map(createFam);
     return { indis: indis, fams: fams };
 }
 exports.gedcomEntriesToJson = gedcomEntriesToJson;
