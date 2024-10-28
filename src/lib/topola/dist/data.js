@@ -47,6 +47,9 @@ var JsonIndiDetails = /** @class */ (function () {
     JsonIndiDetails.prototype.getSex = function () {
         return this.json.sex || null;
     };
+    JsonIndiDetails.prototype.getTribe = function () {
+        return this.json.tribe || null;
+    };
     JsonIndiDetails.prototype.getImageUrl = function () {
         return ((this.json.images &&
             this.json.images.length > 0 &&
@@ -61,6 +64,9 @@ var JsonIndiDetails = /** @class */ (function () {
     };
     JsonIndiDetails.prototype.getEvents = function () {
         return this.json.events || null;
+    };
+    JsonIndiDetails.prototype.showTribe = function () {
+        return !this.json.hideTribe;
     };
     JsonIndiDetails.prototype.showId = function () {
         return !this.json.hideId;

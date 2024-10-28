@@ -1,9 +1,12 @@
 var __extends = (this && this.__extends) || (function () {
-
-    var extendStatics = function (d, b) {
+    let extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            ({__proto__: []} instanceof Array && function (d, b) {
+                d.__proto__ = b;
+            }) ||
+            function (d, b) {
+                for (const p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+            };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -21,25 +24,26 @@ var __extends = (this && this.__extends) || (function () {
 })();
 
 Object.defineProperty(exports, "__esModule", { value: true });
-
 exports.DetailedRenderer = exports.getLength = void 0;
-var d3_selection_1 = require("d3-selection");
-var _1 = require("./index");
-var date_format_1 = require("./date-format");
-var d3_array_1 = require("d3-array");
+
+const d3_selection_1 = require("d3-selection");
+const _1 = require("./index");
+const date_format_1 = require("./date-format");
+const d3_array_1 = require("d3-array");
 require("d3-transition");
-var composite_renderer_1 = require("./composite-renderer");
-var INDI_MIN_HEIGHT = 44;
-var INDI_MIN_WIDTH = 64;
-var FAM_MIN_HEIGHT = 10;
-var FAM_MIN_WIDTH = 15;
-var IMAGE_WIDTH = 70;
+const composite_renderer_1 = require("./composite-renderer");
+const INDI_MIN_HEIGHT = 44;
+const INDI_MIN_WIDTH = 64;
+const FAM_MIN_HEIGHT = 10;
+const FAM_MIN_WIDTH = 15;
+const IMAGE_WIDTH = 70;
+
 /** Minimum box height when an image is present. */
-var IMAGE_HEIGHT = 90;
-var DETAILS_HEIGHT = 14;
-var ANIMATION_DELAY_MS = 200;
-var ANIMATION_DURATION_MS = 500;
-var textLengthCache = new Map();
+const IMAGE_HEIGHT = 90;
+const DETAILS_HEIGHT = 14;
+const ANIMATION_DELAY_MS = 200;
+const ANIMATION_DURATION_MS = 500;
+const textLengthCache = new Map();
 
 /** Calculates the length of the given text in pixels when rendered. */
 function getLength(text, textClass) {
@@ -55,21 +59,25 @@ function getLength(text, textClass) {
     return length;
 }
 exports.getLength = getLength;
+
 const SEX_SYMBOLS = new Map([
     ['F', '\u2640'],
     ['M', '\u2642'],
 ]);
+
 /**
  * Renders some details about a person such as date and place of birth
  * and death.
  */
 var DetailedRenderer = /** @class */ (function (_super) {
     __extends(DetailedRenderer, _super);
+
     function DetailedRenderer(options) {
         var _this = _super.call(this, options) || this;
         _this.options = options;
         return _this;
     }
+
     DetailedRenderer.prototype.getColoringClass = function () {
         switch (this.options.colors) {
             case _1.ChartColors.NO_COLOR:
@@ -82,6 +90,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return 'bygeneration';
         }
     };
+
     /** Extracts lines of details for a person. */
     DetailedRenderer.prototype.getIndiDetails = function (indi) {
         const detailsList = [];
@@ -114,24 +123,6 @@ var DetailedRenderer = /** @class */ (function (_super) {
         return detailsList;
     };
 
-    /** Extracts lines of details for a family. */
-    DetailedRenderer.prototype.getFamDetails = function (fam) {
-        const detailsList = [];
-        const marriageDate = fam.getMarriageDate() &&
-            date_format_1.formatDateOrRange(fam.getMarriageDate(), this.options.locale);
-        const marriagePlace = fam.getMarriagePlace();
-        if (marriageDate) {
-            detailsList.push({ symbol: '', text: marriageDate });
-        }
-        if (marriagePlace) {
-            detailsList.push({ symbol: '', text: marriagePlace });
-        }
-        if (marriageDate || marriagePlace) {
-            detailsList[0].symbol = '\u26AD';
-        }
-        return detailsList;
-    };
-
     DetailedRenderer.prototype.getPreferredIndiSize = function (id) {
         const indi = this.options.data.getIndi(id);
         const details = this.getIndiDetails(indi);
@@ -149,6 +140,24 @@ var DetailedRenderer = /** @class */ (function (_super) {
             INDI_MIN_WIDTH,
         ]) + (indi.getImageUrl() ? IMAGE_WIDTH : 0);
         return [width, height];
+    };
+
+    /** Extracts lines of details for a family. */
+    DetailedRenderer.prototype.getFamDetails = function (fam) {
+        const detailsList = [];
+        const marriageDate = fam.getMarriageDate() &&
+            date_format_1.formatDateOrRange(fam.getMarriageDate(), this.options.locale);
+        const marriagePlace = fam.getMarriagePlace();
+        if (marriageDate) {
+            detailsList.push({ symbol: '', text: marriageDate });
+        }
+        if (marriagePlace) {
+            detailsList.push({ symbol: '', text: marriagePlace });
+        }
+        if (marriageDate || marriagePlace) {
+            detailsList[0].symbol = '\u26AD';
+        }
+        return detailsList;
     };
 
     DetailedRenderer.prototype.getPreferredFamSize = function (id) {
@@ -296,7 +305,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const getDetailsWidth = function (data) {
             return data.indi.width - (getIndi(data).getImageUrl() ? IMAGE_WIDTH : 0);
         };
-        // Name.
+        // Name
         enter
             .append('text')
             .attr('text-anchor', 'middle')
@@ -308,8 +317,15 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('text-anchor', 'middle')
             .attr('class', 'name')
             .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
-            .text(function (node) { return getIndi(node).getLastName(); });
-        // Extract details.
+            .text(function (node) { return getIndi(node).getLastName(); })
+        // Tribe
+        enter
+            .append('text')
+            .attr('text-anchor', 'middle')
+            .attr('class', 'details')
+            .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 17)"; })
+            .text(function (node) { return getIndi(node).getTribe(); });
+        // Extract details
         const details = new Map();
         enter.each(function (node) {
             const indi = getIndi(node);
@@ -320,7 +336,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             return v.length;
         }));
         const _loop_1 = function (i) {
-            var lineGroup = enter.filter(function (data) {
+            const lineGroup = enter.filter(function (data) {
                 return details.get(data.indi.id).length > i;
             });
             lineGroup
@@ -339,11 +355,11 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     return details.get(data.indi.id)[i].text;
                 });
         };
-        // Render details.
+        // Render details
         for (let i = 0; i < maxDetails; ++i) {
             _loop_1(i);
         }
-        // Render id.
+        // Render id
         const id = enter
             .append('text')
             .attr('class', 'id')
@@ -352,20 +368,20 @@ var DetailedRenderer = /** @class */ (function (_super) {
             })
             .merge(update.select('text.id'));
         this.transition(id).attr('transform', function (data) { return "translate(9, " + (data.indi.height - 5) + ")"; });
-        // Render sex.
+        // Render sex
         const sex = enter
             .append('text')
             .attr('class', 'details sex')
             .attr('text-anchor', 'end')
             .text(function (data) {
-                var sexSymbol = SEX_SYMBOLS.get(getIndi(data).getSex() || '') || '';
+                const sexSymbol = SEX_SYMBOLS.get(getIndi(data).getSex() || '') || '';
                 return getIndi(data).showSex() ? sexSymbol : '';
             })
             .merge(update.select('text.sex'));
         this.transition(sex).attr('transform', function (data) {
             return "translate(" + (getDetailsWidth(data) - 5) + ", " + (data.indi.height - 5) + ")";
         });
-        // Image.
+        // Image
         enter.filter(function (data) { return !!getIndi(data).getImageUrl(); })
             .append('image')
             .attr('width', IMAGE_WIDTH)
@@ -374,7 +390,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('transform', function (data) { return "translate(" + (data.indi.width - IMAGE_WIDTH) + ", 0)"; })
             .attr('clip-path', function (data) { return "url(#" + getClipId(data.indi.id) + ")"; })
             .attr('href', function (data) { return getIndi(data).getImageUrl(); });
-        // Border on top.
+        // Border on top
         const border = enter
             .append('rect')
             .attr('rx', 5)
@@ -450,6 +466,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             _loop_2(i);
         }
     };
+
     return DetailedRenderer;
 }(composite_renderer_1.CompositeRenderer));
 exports.DetailedRenderer = DetailedRenderer;

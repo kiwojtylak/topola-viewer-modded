@@ -37,9 +37,11 @@ export interface JsonIndi {
     birth?: JsonEvent;
     death?: JsonEvent;
     sex?: string;
+    tribe?: string;
     images?: JsonImage[];
     notes?: string[];
     events?: JsonEvent[];
+    hideTribe?: boolean;
     hideId?: boolean;
     hideSex?: boolean;
 }
@@ -69,11 +71,13 @@ export interface IndiDetails extends Indi {
     getDeathDate(): DateOrRange | null;
     getDeathPlace(): string | null;
     isConfirmedDeath(): boolean;
+    getTribe(): string | null;
     getSex(): string | null;
     getImageUrl(): string | null;
     getImages(): JsonImage[] | null;
     getNotes(): string[] | null;
     getEvents(): JsonEvent[] | null;
+    showTribe(): boolean;
     showId(): boolean;
     showSex(): boolean;
 }

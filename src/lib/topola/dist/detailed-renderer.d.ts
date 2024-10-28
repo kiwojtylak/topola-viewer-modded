@@ -2,8 +2,10 @@ import { FamDetails, IndiDetails } from './data';
 import 'd3-transition';
 import { Renderer, RendererOptions, TreeNodeSelection } from './api';
 import { CompositeRenderer } from './composite-renderer';
+
 /** Calculates the length of the given text in pixels when rendered. */
 export declare function getLength(text: string, textClass: string): number;
+
 /**
  * Renders some details about a person such as date and place of birth
  * and death.

@@ -1,4 +1,4 @@
-import {ChartColors, Ids, Sex} from './config';
+import {ChartColors, Tribe, Ids, Sex} from './config';
 import {interpolateNumber} from 'd3-interpolate';
 import {IntlShape, useIntl} from 'react-intl';
 import {max, min} from 'd3-array';
@@ -193,6 +193,7 @@ export interface ChartProps {
     onSelection: (indiInfo: IndiInfo) => void;
     freezeAnimation?: boolean;
     colors?: ChartColors;
+    hideTribe?: Tribe;
     hideIds?: Ids;
     hideSex?: Sex;
 }
@@ -357,6 +358,7 @@ export function Chart(props: ChartProps) {
             const initialRender =
                 props.chartType !== prevProps?.chartType ||
                 props.colors !== prevProps?.colors ||
+                props.hideTribe !== prevProps?.hideTribe ||
                 props.hideIds !== prevProps?.hideIds ||
                 props.hideSex !== prevProps?.hideSex;
             const resetPosition =

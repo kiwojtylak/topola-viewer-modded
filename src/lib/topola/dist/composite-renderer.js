@@ -1,10 +1,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFamPositionHorizontal = exports.getFamPositionVertical = exports.CompositeRenderer = void 0;
+
 const d3_array_1 = require("d3-array");
+
 /**
  * Common code for tree nodes that are composed of individual and family boxes.
  */
 let CompositeRenderer = /** @class */ (function () {
+
     function CompositeRenderer(options) {
         this.options = options;
     }
@@ -13,6 +16,7 @@ let CompositeRenderer = /** @class */ (function () {
         // No family box in the simple renderer.
         return [0, 0];
     };
+
     CompositeRenderer.prototype.setPreferredIndiSize = function (indi) {
         let _a;
         if (!indi) {
@@ -22,6 +26,7 @@ let CompositeRenderer = /** @class */ (function () {
         indi.width = _a[0];
         indi.height = _a[1];
     };
+
     CompositeRenderer.prototype.updateNodes = function (nodes) {
         const _this = this;
         // Calculate individual vertical size per depth.
@@ -68,6 +73,7 @@ let CompositeRenderer = /** @class */ (function () {
             node.data.height = _a[1];
         });
     };
+
     CompositeRenderer.prototype.getFamilyAnchor = function (node) {
         if (this.options.horizontal) {
             const x_1 = -node.width / 2 + getIndiVSize(node, this.options.horizontal) / 2;
@@ -86,6 +92,7 @@ let CompositeRenderer = /** @class */ (function () {
         const y = -node.height / 2 + getIndiVSize(node, this.options.horizontal) / 2;
         return [x, y];
     };
+
     CompositeRenderer.prototype.getSpouseAnchor = function (node) {
         if (this.options.horizontal) {
             const x_2 = -node.width / 2 + getIndiVSize(node, this.options.horizontal) / 2;
@@ -96,6 +103,7 @@ let CompositeRenderer = /** @class */ (function () {
         const y = -node.height / 2 + getIndiVSize(node, !!this.options.horizontal) / 2;
         return [x, y];
     };
+
     CompositeRenderer.prototype.getIndiAnchor = function (node) {
         if (this.options.horizontal) {
             const x_3 = -node.width / 2 + getIndiVSize(node, this.options.horizontal) / 2;
@@ -106,9 +114,11 @@ let CompositeRenderer = /** @class */ (function () {
         const y = -node.height / 2 + getIndiVSize(node, !!this.options.horizontal) / 2;
         return [x, y];
     };
+
     return CompositeRenderer;
 }());
 exports.CompositeRenderer = CompositeRenderer;
+
 /**
  * Returns the relative position of the family box for the vertical layout.
  */
@@ -128,6 +138,7 @@ function getFamPositionVertical(node) {
     return indiWidth - familyWidth / 2;
 }
 exports.getFamPositionVertical = getFamPositionVertical;
+
 /**
  * Returns the relative position of the family box for the horizontal layout.
  */
@@ -141,6 +152,7 @@ function getFamPositionHorizontal(node) {
     return indiHeight - familyHeight / 2;
 }
 exports.getFamPositionHorizontal = getFamPositionHorizontal;
+
 /** Returns the horizontal size. */
 function getHSize(node, horizontal) {
     if (horizontal) {
@@ -150,12 +162,14 @@ function getHSize(node, horizontal) {
     const indiHSize = (node.indi ? node.indi.width : 0) + (node.spouse ? node.spouse.width : 0);
     return d3_array_1.max([indiHSize, node.family ? node.family.width : 0]);
 }
+
 function getFamVSize(node, horizontal) {
     if (horizontal) {
         return node.family ? node.family.width : 0;
     }
     return node.family ? node.family.height : 0;
 }
+
 /** Returns the vertical size of individual boxes. */
 function getIndiVSize(node, horizontal) {
     if (horizontal) {
@@ -169,6 +183,7 @@ function getIndiVSize(node, horizontal) {
         node.spouse ? node.spouse.height : 0,
     ]);
 }
+
 /** Returns the vertical size. */
 function getVSize(node, horizontal) {
     return getIndiVSize(node, horizontal) + getFamVSize(node, horizontal);

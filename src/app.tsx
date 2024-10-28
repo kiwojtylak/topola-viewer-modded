@@ -27,6 +27,7 @@ import {
     ConfigPanel,
     configToArgs,
     DEFAULT_CONFIG,
+    Tribe,
     Ids,
     Sex,
 } from './config';
@@ -223,10 +224,12 @@ export function App() {
         if (data === undefined) {
             return;
         }
+        let shouldHideTribe = config.tribe === Tribe.HIDE;
         let shouldHideIds = config.id === Ids.HIDE;
         let shouldHideSex = config.sex === Sex.HIDE;
         let indiMap = idToIndiMap(data.chartData);
         indiMap.forEach((indi) => {
+            indi.hideTribe = shouldHideTribe
             indi.hideId = shouldHideIds;
             indi.hideSex = shouldHideSex;
         });
@@ -459,6 +462,7 @@ export function App() {
                             onSelection={onSelection}
                             freezeAnimation={freezeAnimation}
                             colors={config.color}
+                            hideTribe={config.tribe}
                             hideIds={config.id}
                             hideSex={config.sex}
                         />
