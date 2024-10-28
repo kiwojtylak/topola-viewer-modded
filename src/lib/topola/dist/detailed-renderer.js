@@ -126,16 +126,23 @@ var DetailedRenderer = /** @class */ (function (_super) {
     DetailedRenderer.prototype.getPreferredIndiSize = function (id) {
         const indi = this.options.data.getIndi(id);
         const details = this.getIndiDetails(indi);
+        const tribeHeight = indi.showTribe() ? DETAILS_HEIGHT : 0;
         const idAndSexHeight = indi.showId() || indi.showSex() ? DETAILS_HEIGHT : 0;
         const height = d3_array_1.max([
-            INDI_MIN_HEIGHT + details.length * DETAILS_HEIGHT + idAndSexHeight,
+            INDI_MIN_HEIGHT + tribeHeight + details.length * DETAILS_HEIGHT + idAndSexHeight,
             indi.getImageUrl() ? IMAGE_HEIGHT : 0,
         ]);
-        const maxDetailsWidth = d3_array_1.max(details.map(function (x) { return getLength(x.text, 'details'); }));
+        const maxDetailsWidth = d3_array_1.max(
+            details.map(function (detail) {
+                return getLength(detail.text, 'details');
+            })
+        );
+        // TODO: fixme
         const width = d3_array_1.max([
             maxDetailsWidth + 22,
             getLength(indi.getFirstName() || '', 'name') + 8,
             getLength(indi.getLastName() || '', 'name') + 8,
+            getLength(indi.getTribe() || '', 'details') + 8,
             getLength(id, 'id') + 32,
             INDI_MIN_WIDTH,
         ]) + (indi.getImageUrl() ? IMAGE_WIDTH : 0);
@@ -324,6 +331,19 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
             .text(function (node) { return getIndi(node).getLastName(); })
 
+        // Tribe
+        const tribe = enter
+            .append('text')
+            .attr('class', 'tribe')
+            .text(function (data) {
+                return getIndi(data).showTribe() && getIndi(data).getTribe() != null ? ('¤ ' + getIndi(data).getTribe()) : ''
+            });
+        this.transition(tribe).attr('transform', function (data) {
+            // TODO: after the name/surname, if exists
+            const calculate_tribe_height = 0
+            return "translate(9, " + calculate_tribe_height + ")";
+        });
+
         // Extract details
         const details = new Map();
         enter.each(function (node) {
@@ -359,17 +379,6 @@ var DetailedRenderer = /** @class */ (function (_super) {
         for (let i = 0; i < maxDetails; ++i) {
             _loop_1(i);
         }
-
-        // Tribe
-        const tribe = enter
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('class', 'tribe')
-            .text(function (data) {
-                console.log('show tribe: '+getIndi(data).showTribe())
-                return getIndi(data).showTribe() ? data.indi.tribe : ''
-            });
-        this.transition(tribe).attr('transform', function (data) { return "translate(9, " + (data.indi.height - 5) + ")"; });
 
         // Render id
         const id = enter

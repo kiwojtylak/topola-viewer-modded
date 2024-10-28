@@ -6,8 +6,11 @@ Backlog:
 - [x] Fix language details css
 - [x] Fix i18n errors
 - [x] Straight-forward indi focus
-- [ ] Clan in card
-- [ ] Show/hide clan
+- [x] Clan in card
+- [x] Show/hide clan
+- [ ] Fix clan dynamic height
+- [ ] Fix clan max width
+- [ ] Display ethnic, clan
 - [ ] Color by clan
 - [ ] Experiment Toggle button
 - [ ] Languages in card
