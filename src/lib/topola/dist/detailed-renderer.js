@@ -179,17 +179,11 @@ var DetailedRenderer = /** @class */ (function (_super) {
     };
 
     const tribes_css = new Set();
-
-    DetailedRenderer.prototype.clearTribesCss = function () {
-        tribes_css.clear()
-    }
-
     DetailedRenderer.prototype.render = function (enter, update) {
         const _this = this;
         enter = enter.append('g').attr('class', 'detailed');
         update = update.select('g');
-        _this.clearTribesCss()
-
+        tribes_css.clear()
         const indiUpdate = enter
             .merge(update)
             .selectAll('g.indi')
@@ -284,13 +278,14 @@ var DetailedRenderer = /** @class */ (function (_super) {
             if (!tribes_css.has(tribe)) {
                 tribes_css.add(tribe);
             }
-            if (indi.isEgo()) {
-                // Reorder so that all individuals of the same tribe as Ego have color tribe0
-                const all_except_ego = Array.from(tribes_css).filter(t => t !== tribe)
-                tribes_css.clear();
-                tribes_css.add(tribe);
-                all_except_ego.forEach(t => tribes_css.add(t));
-            }
+            // TODO
+            // if (indi.isEgo()) {
+            //     // Reorder so that all individuals of the same tribe as Ego have color tribe0
+            //     const all_except_ego = Array.from(tribes_css).filter(t => t !== tribe)
+            //     tribes_css.clear();
+            //     tribes_css.add(tribe);
+            //     all_except_ego.forEach(t => tribes_css.add(t));
+            // }
             // Get the tribe index
             const tribe_index = Array.from(tribes_css).indexOf(tribe)
             return 'tribe' + tribe_index;
@@ -317,7 +312,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             });
         }
 
-        // Background.
+        // Background
         const background = enter
             .append('rect')
             .attr('rx', 5)
@@ -333,7 +328,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('width', function (node) { return node.indi.width; })
             .attr('height', function (node) { return node.indi.height; });
 
-        // Clip path.
+        // Clip path
         const getClipId = function (id) {
             return "clip-" + id;
         };
@@ -475,6 +470,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
     DetailedRenderer.prototype.renderFamily = function (enter) {
         const _this = this;
+
         if (this.options.famHrefFunc) {
             enter = enter
                 .append('a')
@@ -482,6 +478,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return _this.options.famHrefFunc(node.data.family.id);
             });
         }
+
         if (this.options.famCallback) {
             enter.on('click', function (event, node) {
                 return _this.options.famCallback({
@@ -490,7 +487,8 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 });
             });
         }
-        // Extract details.
+
+        // Extract details
         const details = new Map();
         enter.each(function (node) {
             const famId = node.data.family.id;
@@ -501,7 +499,8 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const maxDetails = d3_array_1.max(Array.from(details.values(), function (v) {
             return v.length;
         }));
-        // Box.
+
+        // Box
         enter.filter(function (node) {
                 const detail = details.get(node.data.family.id);
                 return 0 < detail.length;
@@ -532,7 +531,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     return details.get(node.data.family.id)[i].text;
                 });
         };
-        // Render details.
+        // Render details
         for (let i = 0; i < maxDetails; ++i) {
             _loop_2(i);
         }
