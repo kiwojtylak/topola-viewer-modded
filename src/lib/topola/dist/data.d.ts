@@ -27,6 +27,7 @@ export interface JsonImage {
 /** Json representation of an individual. */
 export interface JsonIndi {
     id: string;
+    isEgo: boolean;
     firstName?: string;
     lastName?: string;
     maidenName?: string;

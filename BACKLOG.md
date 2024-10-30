@@ -8,11 +8,12 @@ Backlog:
 - [x] Straight-forward indi focus
 - [x] Clan in card
 - [x] Show/hide clan
-- [ ] Fix clan dynamic height
-- [ ] Fix clan max width
-- [ ] Display ethnic, clan
-- [ ] Color by clan
-- [ ] Experiment Toggle button
+- [x] Fix clan dynamic height
+- [x] Fix clan max width
+- [x] Color by clan
+- [ ] Fix 1st time color by tribe bug
+- [ ] Don't show by tribe if no tribes
 - [ ] Languages in card
 - [ ] Show/hide languages
 - [ ] Color by languages
+- [ ] Experiment Toggle button

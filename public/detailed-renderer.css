@@ -110,3 +110,45 @@
 .generation11 .detailed rect.bygeneration {
     fill: #ffeddb;
 }
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+.detailed rect.bytribe {
+    fill: #ffffff;
+}
+
+.detailed rect.bytribe.tribe0 {
+    fill: #ffffdd;
+}
+
+.detailed rect.bytribe.tribe1 {
+    fill: #edffdb;
+}
+
+.detailed rect.bytribe.tribe2 {
+    fill: #ffdbdb;
+}
+
+.detailed rect.bytribe.tribe3 {
+    fill: #dbedff;
+}
+
+
+.detailed rect.bytribe.tribe4 {
+    fill: #ffdbff;
+}
+
+.detailed rect.bytribe.tribe5 {
+    fill: #eddbff;
+}
+
+.detailed rect.bytribe.tribe6 {
+    fill: #dbffff;
+}
+
+.detailed rect.bytribe.tribe7 {
+    fill: #dbdbff;
+}
+
+.detailed rect.bytribe.tribe8 {
+    fill: #dbffdb;
+}

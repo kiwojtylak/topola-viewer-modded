@@ -8,6 +8,9 @@ var JsonIndiDetails = /** @class */ (function () {
     JsonIndiDetails.prototype.getId = function () {
         return this.json.id;
     };
+    JsonIndiDetails.prototype.isEgo = function () {
+        return this.json.isEgo;
+    };
     JsonIndiDetails.prototype.getFamiliesAsSpouse = function () {
         return this.json.fams || [];
     };

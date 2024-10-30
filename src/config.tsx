@@ -111,7 +111,12 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="none"
                                 checked={props.config.color === ChartColors.NO_COLOR}
-                                onClick={() => props.onChange({...props.config, color: ChartColors.NO_COLOR})}
+                                onClick={() => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.NO_COLOR,
+                                        tribe: Tribe.HIDE
+                                    })
+                                }
                             />
                         </Form.Field>
                         <Form.Field className="no-margin">
@@ -123,7 +128,12 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="generation"
                                 checked={props.config.color === ChartColors.COLOR_BY_GENERATION}
-                                onClick={() => props.onChange({...props.config, color: ChartColors.COLOR_BY_GENERATION})}
+                                onClick={() => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.COLOR_BY_GENERATION,
+                                        tribe: Tribe.HIDE
+                                    })
+                                }
                             />
                         </Form.Field>
                         <Form.Field className="no-margin">
@@ -135,7 +145,12 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="gender"
                                 checked={props.config.color === ChartColors.COLOR_BY_SEX}
-                                onClick={() => props.onChange({...props.config, color: ChartColors.COLOR_BY_SEX})}
+                                onClick={() => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.COLOR_BY_SEX,
+                                        tribe: Tribe.HIDE
+                                    })
+                                }
                             />
                         </Form.Field>
                         <Form.Field className="no-margin">
@@ -147,7 +162,12 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="tribe"
                                 checked={props.config.color === ChartColors.COLOR_BY_TRIBE}
-                                onClick={() => props.onChange({...props.config, color: ChartColors.COLOR_BY_TRIBE})}
+                                onClick={() => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.COLOR_BY_TRIBE,
+                                        tribe: Tribe.SHOW
+                                    })
+                                }
                             />
                         </Form.Field>
                     </Item.Content>

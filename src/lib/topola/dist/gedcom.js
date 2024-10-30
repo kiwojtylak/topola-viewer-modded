@@ -155,7 +155,7 @@ function createEvent(entry) {
 }
 
 /** Creates a JsonIndi object from an INDI entry in GEDCOM. */
-function createIndi(entry, objects) {
+function createIndi(entry, objects, ego) {
     let firstName;
     let lastName;
     const id = pointerToId(entry.pointer);
@@ -163,6 +163,12 @@ function createIndi(entry, objects) {
         return pointerToId(entry.data);
     });
     const indi = {id: id, fams: fams};
+
+    // is Ego?
+    if (ego) {
+        indi.isEgo = pointerToId(ego.pointer) === id
+    }
+
     // Name
     const nameTags = findTags(entry.tree, 'NAME');
     const isMaiden = function (nameTag) {
@@ -223,7 +229,7 @@ function createIndi(entry, objects) {
     // Image URL
     const objeTags = findTags(entry.tree, 'OBJE');
     if (objeTags.length > 0) {
-        // Dereference OBJEct if needed
+        // Dereference OBJECT if needed
         const getFileTag = function (tag) {
             const realObjeTag = tag.data ? objects.get(pointerToId(tag.data)) : tag;
             if (!realObjeTag)
@@ -299,8 +305,9 @@ exports.gedcomToJson = gedcomToJson;
 /** Converts parsed GEDCOM entries into a JsonGedcomData structure. */
 function gedcomEntriesToJson(gedcom) {
     const objects = createMap(findTags(gedcom, 'OBJE'));
+    const ego = findTags(gedcom, 'EGO')
     const indis = findTags(gedcom, 'INDI').map(function (entry) {
-        return createIndi(entry, objects);
+        return createIndi(entry, objects, ego.length > 0 ? ego[0]: undefined);
     });
     const fams = findTags(gedcom, 'FAM').map(createFam);
     return { indis: indis, fams: fams };

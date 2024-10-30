@@ -227,6 +227,7 @@ export function App() {
         let shouldHideTribe = config.tribe === Tribe.HIDE;
         let shouldHideIds = config.id === Ids.HIDE;
         let shouldHideSex = config.sex === Sex.HIDE;
+
         let indiMap = idToIndiMap(data.chartData);
         indiMap.forEach((indi) => {
             indi.hideTribe = shouldHideTribe

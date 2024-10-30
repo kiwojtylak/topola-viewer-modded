@@ -40,6 +40,7 @@ const IMAGE_WIDTH = 70;
 
 /** Minimum box height when an image is present. */
 const IMAGE_HEIGHT = 90;
+const TRIBE_HEIGHT = 14;
 const DETAILS_HEIGHT = 14;
 const ANIMATION_DELAY_MS = 200;
 const ANIMATION_DURATION_MS = 500;
@@ -86,6 +87,8 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return 'bygeneration';
             case _1.ChartColors.COLOR_BY_SEX:
                 return 'bysex';
+            case _1.ChartColors.COLOR_BY_TRIBE:
+                return 'bytribe';
             default:
                 return 'bygeneration';
         }
@@ -126,7 +129,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
     DetailedRenderer.prototype.getPreferredIndiSize = function (id) {
         const indi = this.options.data.getIndi(id);
         const details = this.getIndiDetails(indi);
-        const tribeHeight = indi.showTribe() ? DETAILS_HEIGHT : 0;
+        const tribeHeight = indi.showTribe() && indi.getTribe() != null ? DETAILS_HEIGHT : 0;
         const idAndSexHeight = indi.showId() || indi.showSex() ? DETAILS_HEIGHT : 0;
         const height = d3_array_1.max([
             INDI_MIN_HEIGHT + tribeHeight + details.length * DETAILS_HEIGHT + idAndSexHeight,
@@ -137,12 +140,11 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return getLength(detail.text, 'details');
             })
         );
-        // TODO: fixme
         const width = d3_array_1.max([
             maxDetailsWidth + 22,
             getLength(indi.getFirstName() || '', 'name') + 8,
             getLength(indi.getLastName() || '', 'name') + 8,
-            getLength(indi.getTribe() || '', 'details') + 8,
+            indi.showTribe() && indi.getTribe() != null ? (getLength(indi.getTribe(), 'tribe') + 28) : 0,
             getLength(id, 'id') + 32,
             INDI_MIN_WIDTH,
         ]) + (indi.getImageUrl() ? IMAGE_WIDTH : 0);
@@ -176,10 +178,18 @@ var DetailedRenderer = /** @class */ (function (_super) {
         return [width, height];
     };
 
+    const tribes_css = new Set();
+
+    DetailedRenderer.prototype.clearTribesCss = function () {
+        tribes_css.clear()
+    }
+
     DetailedRenderer.prototype.render = function (enter, update) {
         const _this = this;
         enter = enter.append('g').attr('class', 'detailed');
         update = update.select('g');
+        _this.clearTribesCss()
+
         const indiUpdate = enter
             .merge(update)
             .selectAll('g.indi')
@@ -266,6 +276,28 @@ var DetailedRenderer = /** @class */ (function (_super) {
         }
     };
 
+    DetailedRenderer.prototype.getTribeClass = function (indiId) {
+        let _a;
+        const indi = this.options.data.getIndi(indiId)
+        const tribe = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getTribe();
+        if (tribe) {
+            if (!tribes_css.has(tribe)) {
+                tribes_css.add(tribe);
+            }
+            if (indi.isEgo()) {
+                // Reorder so that all individuals of the same tribe as Ego have color tribe0
+                const all_except_ego = Array.from(tribes_css).filter(t => t !== tribe)
+                tribes_css.clear();
+                tribes_css.add(tribe);
+                all_except_ego.forEach(t => tribes_css.add(t));
+            }
+            // Get the tribe index
+            const tribe_index = Array.from(tribes_css).indexOf(tribe)
+            return 'tribe' + tribe_index;
+        }
+        return ''  // Blank if not tribe
+    };
+
     DetailedRenderer.prototype.renderIndi = function (enter, update) {
         const _this = this;
 
@@ -291,7 +323,10 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('rx', 5)
             .attr('stroke-width', 0)
             .attr('class', function (node) {
-                return "background " + _this.getColoringClass() + " " + _this.getSexClass(node.indi.id);
+                return "background "
+                    +_this.getColoringClass() + " "
+                    + _this.getSexClass(node.indi.id) + " "
+                    + _this.getTribeClass(node.indi.id);
             })
             .merge(update.select('rect.background'));
         this.transition(background)
@@ -331,19 +366,6 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
             .text(function (node) { return getIndi(node).getLastName(); })
 
-        // Tribe
-        const tribe = enter
-            .append('text')
-            .attr('class', 'tribe')
-            .text(function (data) {
-                return getIndi(data).showTribe() && getIndi(data).getTribe() != null ? ('¤ ' + getIndi(data).getTribe()) : ''
-            });
-        this.transition(tribe).attr('transform', function (data) {
-            // TODO: after the name/surname, if exists
-            const calculate_tribe_height = 0
-            return "translate(9, " + calculate_tribe_height + ")";
-        });
-
         // Extract details
         const details = new Map();
         enter.each(function (node) {
@@ -355,22 +377,31 @@ var DetailedRenderer = /** @class */ (function (_super) {
             return v.length;
         }));
 
+        function details_height_start(data) {
+            return 49 + ((getIndi(data).showTribe() && getIndi(data).getTribe() != null) ? TRIBE_HEIGHT : 0)
+        }
+
         const _loop_1 = function (i) {
             const lineGroup = enter.filter(function (data) {
                 return details.get(data.indi.id).length > i;
             });
+
             lineGroup
                 .append('text')
                 .attr('text-anchor', 'middle')
                 .attr('class', 'details')
-                .attr('transform', "translate(9, " + (49 + i * DETAILS_HEIGHT) + ")")
+                .attr('transform', function (data) {
+                    return "translate(9, " + (details_height_start(data) + i * DETAILS_HEIGHT) + ")"
+                })
                 .text(function (data) {
                     return details.get(data.indi.id)[i].symbol;
                 });
             lineGroup
                 .append('text')
                 .attr('class', 'details')
-                .attr('transform', "translate(15, " + (49 + i * DETAILS_HEIGHT) + ")")
+                .attr('transform', function (data) {
+                    return "translate(15, " + (details_height_start(data) + i * DETAILS_HEIGHT) + ")"
+                })
                 .text(function (data) {
                     return details.get(data.indi.id)[i].text;
                 });
@@ -379,6 +410,22 @@ var DetailedRenderer = /** @class */ (function (_super) {
         for (let i = 0; i < maxDetails; ++i) {
             _loop_1(i);
         }
+
+        // Tribe
+        const tribe = enter
+            .filter(function (data) {
+                return getIndi(data).showTribe() && getIndi(data).getTribe() != null
+            })
+            .append('text')
+            .attr('class', 'tribe')
+            .text(function (data) {
+                return '¤ ' + getIndi(data).getTribe()
+            });
+        this.transition(tribe).attr('transform', function (data) {
+            // if the indi does not have tribe to show, the height start does not apply
+            const tribe_height_start =  getIndi(data).showTribe() && getIndi(data).getTribe() != null ? 49 : null
+            return "translate(5, " + tribe_height_start + ")";
+        });
 
         // Render id
         const id = enter
