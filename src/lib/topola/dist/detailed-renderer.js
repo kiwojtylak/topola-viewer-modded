@@ -178,12 +178,11 @@ var DetailedRenderer = /** @class */ (function (_super) {
         return [width, height];
     };
 
-    const tribes_css = new Set();
+    const tribes_css = new Map();
     DetailedRenderer.prototype.render = function (enter, update) {
         const _this = this;
         enter = enter.append('g').attr('class', 'detailed');
         update = update.select('g');
-        tribes_css.clear()
         const indiUpdate = enter
             .merge(update)
             .selectAll('g.indi')
@@ -275,20 +274,15 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const indi = this.options.data.getIndi(indiId)
         const tribe = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getTribe();
         if (tribe) {
-            if (!tribes_css.has(tribe)) {
-                tribes_css.add(tribe);
+            if (indi.isEgo()) {
+                tribes_css.set(tribe, "tribe0")
+            } else {
+                if (!tribes_css.has(tribe)) {
+                    const startIndex = tribes_css.size + 1
+                    tribes_css.set(tribe, "tribe" + startIndex)
+                }
             }
-            // TODO
-            // if (indi.isEgo()) {
-            //     // Reorder so that all individuals of the same tribe as Ego have color tribe0
-            //     const all_except_ego = Array.from(tribes_css).filter(t => t !== tribe)
-            //     tribes_css.clear();
-            //     tribes_css.add(tribe);
-            //     all_except_ego.forEach(t => tribes_css.add(t));
-            // }
-            // Get the tribe index
-            const tribe_index = Array.from(tribes_css).indexOf(tribe)
-            return 'tribe' + tribe_index;
+            return tribes_css.get(tribe);
         }
         return ''  // Blank if not tribe
     };
