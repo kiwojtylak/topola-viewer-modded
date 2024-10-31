@@ -50,7 +50,7 @@ div.ui.icon.input {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 p.comment {

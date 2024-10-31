@@ -11,8 +11,8 @@ Backlog:
 - [x] Fix clan dynamic height
 - [x] Fix clan max width
 - [x] Color by clan
-- [ ] Fix 1st time color by tribe bug
-- [ ] Don't show by tribe if no tribes
+- [x] Fix 1st time color by tribe bug
+- [x] Don't show by tribe if no tribes
 - [ ] Languages in card
 - [ ] Show/hide languages
 - [ ] Color by languages

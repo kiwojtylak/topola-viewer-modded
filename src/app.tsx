@@ -124,9 +124,13 @@ function startIndi(data: TopolaData | undefined) {
     };
 }
 
-function getEgoGen(data: TopolaData | undefined) {
+function getEgoIndi(data: TopolaData | undefined) {
     return Object.entries(data?.gedcom?.other || {})
         .filter(([_, value]) => value.tag === "EGO")
+}
+
+function getEgoGen(data: TopolaData | undefined) {
+    return getEgoIndi(data)
         .map(([_, value]) => value.tree.find(sub => sub.tag === "GEN")?.data)
         .find(data => data !== undefined);
 }
@@ -224,15 +228,14 @@ export function App() {
         if (data === undefined) {
             return;
         }
-        let shouldHideTribe = config.tribe === Tribe.HIDE;
-        let shouldHideIds = config.id === Ids.HIDE;
-        let shouldHideSex = config.sex === Sex.HIDE;
-
-        let indiMap = idToIndiMap(data.chartData);
-        indiMap.forEach((indi) => {
-            indi.hideTribe = shouldHideTribe
-            indi.hideId = shouldHideIds;
-            indi.hideSex = shouldHideSex;
+        // If no ego indi, no need to render the tribe/languages options
+        const egoIndi = getEgoIndi(data)
+        config.renderTribeOption = egoIndi.length > 0
+        config.renderLanguagesOption = egoIndi.length > 0
+        idToIndiMap(data.chartData).forEach((indi) => {
+            indi.hideTribe = config.tribe === Tribe.HIDE;
+            indi.hideId = config.id === Ids.HIDE;
+            indi.hideSex = config.sex === Sex.HIDE;
         });
     }
 
@@ -248,7 +251,7 @@ export function App() {
 
     function isNewData(newSourceSpec: DataSourceSpec, newSelection?: IndiInfo) {
         if (!sourceSpec || sourceSpec.source !== newSourceSpec.source) {
-            // New data source means new data.
+            // New data source means new data
             return true;
         }
         const newSource = {spec: newSourceSpec, selection: newSelection};

@@ -7,6 +7,7 @@ export enum ChartColors {
     COLOR_BY_SEX,
     COLOR_BY_GENERATION,
     COLOR_BY_TRIBE,
+    COLOR_BY_LANGUAGES = 4,
 }
 
 export enum Ids {
@@ -24,18 +25,29 @@ export enum Tribe {
     SHOW,
 }
 
+export enum Languages {
+    HIDE,
+    SHOW,
+}
+
 export interface Config {
     color: ChartColors;
     id: Ids;
     sex: Sex;
+    renderTribeOption: boolean
     tribe: Tribe;
+    renderLanguagesOption: boolean
+    languages: Languages;
 }
 
 export const DEFAULT_CONFIG: Config = {
     color: ChartColors.COLOR_BY_GENERATION,
     id: Ids.SHOW,
     sex: Sex.SHOW,
+    renderTribeOption: false,
     tribe: Tribe.HIDE,
+    renderLanguagesOption: false,
+    languages: Languages.HIDE,
 };
 
 const COLOR_ARG = new Map<string, ChartColors>([
@@ -43,6 +55,7 @@ const COLOR_ARG = new Map<string, ChartColors>([
     ['g', ChartColors.COLOR_BY_GENERATION],
     ['s', ChartColors.COLOR_BY_SEX],
     ['t', ChartColors.COLOR_BY_TRIBE],
+    ['l', ChartColors.COLOR_BY_LANGUAGES],
 ]);
 const COLOR_ARG_INVERSE = new Map<ChartColors, string>();
 COLOR_ARG.forEach((v, k) => COLOR_ARG_INVERSE.set(v, k));
@@ -68,6 +81,16 @@ const TRIBE_ARG = new Map<string, Tribe>([
 const TRIBE_ARG_INVERSE = new Map<Tribe, string>();
 TRIBE_ARG.forEach((v, k) => TRIBE_ARG_INVERSE.set(v, k));
 
+const LANGUAGES_ARG = new Map<string, Languages>([
+    ['h', Languages.HIDE],
+    ['s', Languages.SHOW],
+]);
+const LANGUAGES_ARG_INVERSE = new Map<Languages, string>();
+LANGUAGES_ARG.forEach((v, k) => LANGUAGES_ARG_INVERSE.set(v, k));
+
+const RENDER_TRIBE_OPTION_ARG: boolean = false;
+const RENDER_LANGUAGES_OPTION_ARG: boolean = false;
+
 export function argsToConfig(args: ParsedQuery<any>): Config {
     const getParam = (name: string) => {
         const value = args[name];
@@ -77,7 +100,10 @@ export function argsToConfig(args: ParsedQuery<any>): Config {
         color: COLOR_ARG.get(getParam('c') ?? '') ?? DEFAULT_CONFIG.color,
         id: ID_ARG.get(getParam('i') ?? '') ?? DEFAULT_CONFIG.id,
         sex: SEX_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.sex,
+        renderTribeOption: RENDER_TRIBE_OPTION_ARG,
         tribe: TRIBE_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.tribe,
+        renderLanguagesOption: RENDER_LANGUAGES_OPTION_ARG,
+        languages: LANGUAGES_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.languages,
     };
 }
 
@@ -153,7 +179,7 @@ export function ConfigPanel(props: {
                                 }
                             />
                         </Form.Field>
-                        <Form.Field className="no-margin">
+                        <Form.Field className={!props.config.renderTribeOption ? 'hidden' : 'no-margin'}>
                             <Checkbox
                                 radio
                                 label={
@@ -170,10 +196,59 @@ export function ConfigPanel(props: {
                                 }
                             />
                         </Form.Field>
+                        <Form.Field className={!props.config.renderLanguagesOption ? 'hidden' : 'no-margin'}>
+                            <Checkbox
+                                radio
+                                label={
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_LANGUAGES" defaultMessage="by languages"/>
+                                }
+                                name="checkboxRadioGroup"
+                                value="languages"
+                                checked={props.config.color === ChartColors.COLOR_BY_LANGUAGES}
+                                onClick={() => props.onChange({
+                                    ...props.config,
+                                    color: ChartColors.COLOR_BY_LANGUAGES,
+                                    languages: Languages.SHOW
+                                })
+                                }
+                            />
+                        </Form.Field>
                     </Item.Content>
                 </Item>
 
-                <Item>
+                <Item className={!props.config.renderLanguagesOption ? 'hidden' : ''}>
+                    <Item.Content>
+                        <Header sub>
+                            <FormattedMessage id="config.languages" defaultMessage="Languages"/>
+                        </Header>
+                        <Form.Field className="no-margin">
+                            <Checkbox
+                                radio
+                                label={
+                                    <FormattedMessage tagName="label" id="config.languages.HIDE" defaultMessage="hide"/>
+                                }
+                                name="checkboxRadioGroup"
+                                value="hide"
+                                checked={props.config.languages === Languages.HIDE}
+                                onClick={() => props.onChange({...props.config, languages: Languages.HIDE})}
+                            />
+                        </Form.Field>
+                        <Form.Field className="no-margin">
+                            <Checkbox
+                                radio
+                                label={
+                                    <FormattedMessage tagName="label" id="config.languages.SHOW" defaultMessage="show"/>
+                                }
+                                name="checkboxRadioGroup"
+                                value="show"
+                                checked={props.config.languages === Languages.SHOW}
+                                onClick={() => props.onChange({...props.config, languages: Languages.SHOW})}
+                            />
+                        </Form.Field>
+                    </Item.Content>
+                </Item>
+
+                <Item className={!props.config.renderTribeOption ? 'hidden' : ''}>
                     <Item.Content>
                         <Header sub>
                             <FormattedMessage id="config.tribe" defaultMessage="Tribe"/>
@@ -204,6 +279,7 @@ export function ConfigPanel(props: {
                         </Form.Field>
                     </Item.Content>
                 </Item>
+
                 <Item>
                     <Item.Content>
                         <Header sub>
@@ -235,6 +311,7 @@ export function ConfigPanel(props: {
                         </Form.Field>
                     </Item.Content>
                 </Item>
+
                 <Item>
                     <Item.Content>
                     <Header sub>
