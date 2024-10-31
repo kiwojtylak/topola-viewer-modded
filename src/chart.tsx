@@ -184,7 +184,8 @@ const chartColors = new Map<ChartColors, TopolaChartColors>([
     [ChartColors.NO_COLOR, TopolaChartColors.NO_COLOR],
     [ChartColors.COLOR_BY_GENERATION, TopolaChartColors.COLOR_BY_GENERATION],
     [ChartColors.COLOR_BY_SEX, TopolaChartColors.COLOR_BY_SEX],
-    [ChartColors.COLOR_BY_TRIBE, TopolaChartColors.COLOR_BY_TRIBE]
+    [ChartColors.COLOR_BY_TRIBE, TopolaChartColors.COLOR_BY_TRIBE],
+    [ChartColors.COLOR_BY_LANGUAGES, TopolaChartColors.COLOR_BY_LANGUAGES]
 ]);
 
 export interface ChartProps {

@@ -216,6 +216,12 @@ function createIndi(entry, objects, ego) {
     if (sexTag) {
         indi.sex = sexTag.data;
     }
+    // Languages
+    const languageTags = findTags(entry.tree, 'LANG')
+    if (languageTags) {
+        indi.languages = findTags(entry.tree, 'LANG').map(lang => lang.data)
+    }
+
     // Tribe
     const tribeTag = findTag(entry.tree, '_TRIB');
     if (tribeTag) {

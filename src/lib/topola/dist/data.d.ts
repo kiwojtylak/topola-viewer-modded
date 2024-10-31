@@ -38,10 +38,12 @@ export interface JsonIndi {
     birth?: JsonEvent;
     death?: JsonEvent;
     sex?: string;
+    languages?: string[];
     tribe?: string;
     images?: JsonImage[];
     notes?: string[];
     events?: JsonEvent[];
+    hideLanguages?: boolean;
     hideTribe?: boolean;
     hideId?: boolean;
     hideSex?: boolean;
@@ -72,12 +74,14 @@ export interface IndiDetails extends Indi {
     getDeathDate(): DateOrRange | null;
     getDeathPlace(): string | null;
     isConfirmedDeath(): boolean;
+    getLanguages(): string[] | null;
     getTribe(): string | null;
     getSex(): string | null;
     getImageUrl(): string | null;
     getImages(): JsonImage[] | null;
     getNotes(): string[] | null;
     getEvents(): JsonEvent[] | null;
+    showLanguages(): boolean;
     showTribe(): boolean;
     showId(): boolean;
     showSex(): boolean;

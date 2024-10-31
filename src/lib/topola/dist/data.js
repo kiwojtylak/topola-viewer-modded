@@ -50,6 +50,9 @@ var JsonIndiDetails = /** @class */ (function () {
     JsonIndiDetails.prototype.getSex = function () {
         return this.json.sex || null;
     };
+    JsonIndiDetails.prototype.getLanguages = function () {
+        return this.json.languages || null;
+    };
     JsonIndiDetails.prototype.getTribe = function () {
         return this.json.tribe || null;
     };
@@ -67,6 +70,9 @@ var JsonIndiDetails = /** @class */ (function () {
     };
     JsonIndiDetails.prototype.getEvents = function () {
         return this.json.events || null;
+    };
+    JsonIndiDetails.prototype.showLanguages = function () {
+        return !this.json.hideLanguages;
     };
     JsonIndiDetails.prototype.showTribe = function () {
         return !this.json.hideTribe;

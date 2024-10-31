@@ -29,7 +29,7 @@ import {
     DEFAULT_CONFIG,
     Tribe,
     Ids,
-    Sex,
+    Sex, Languages,
 } from './config';
 import {
     getSelection,
@@ -233,6 +233,7 @@ export function App() {
         config.renderTribeOption = egoIndi.length > 0
         config.renderLanguagesOption = egoIndi.length > 0
         idToIndiMap(data.chartData).forEach((indi) => {
+            indi.hideLanguages = config.languages === Languages.HIDE;
             indi.hideTribe = config.tribe === Tribe.HIDE;
             indi.hideId = config.id === Ids.HIDE;
             indi.hideSex = config.sex === Sex.HIDE;

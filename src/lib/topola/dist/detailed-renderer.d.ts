@@ -14,17 +14,11 @@ export declare class DetailedRenderer extends CompositeRenderer implements Rende
     readonly options: RendererOptions<IndiDetails, FamDetails>;
     constructor(options: RendererOptions<IndiDetails, FamDetails>);
     private getColoringClass;
-    /** Extracts lines of details for a person. */
-    private getIndiDetails;
-    /** Extracts lines of details for a family. */
-    private getFamDetails;
     getPreferredIndiSize(id: string): [number, number];
     getPreferredFamSize(id: string): [number, number];
     render(enter: TreeNodeSelection, update: TreeNodeSelection): void;
     getCss(): string;
     private transition;
-    private getFamTransform;
-    private getSexClass;
     private renderIndi;
     private renderFamily;
 }
