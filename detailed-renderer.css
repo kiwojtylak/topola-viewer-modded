@@ -158,30 +158,30 @@
     fill: #eeeeee;
 }
 
-.detailed rect.bylanguages.l1 {
+.detailed rect.bylanguages.n1 {
     fill: #ffffdd;
 }
 
-.detailed rect.bylanguages.l2 {
-    fill: #edffdb;
-}
-
-.detailed rect.bylanguages.l3 {
+.detailed rect.bylanguages.n2 {
     fill: #dbffdb;
 }
 
-.detailed rect.bylanguages.l4 {
+.detailed rect.bylanguages.n3 {
     fill: #ffeddb;
 }
 
-.detailed rect.bylanguages.l5 {
+.detailed rect.bylanguages.n4 {
     fill: #ffdbdb;
 }
 
-.detailed rect.bylanguages.l6 {
+.detailed rect.bylanguages.n5 {
     fill: #ffdbff;
 }
 
-.detailed rect.bylanguages.l7 {
+.detailed rect.bylanguages.n6 {
     fill: #dbdbff;
+}
+
+.detailed rect.bylanguages.n7 {
+    fill: #dbedff;
 }
