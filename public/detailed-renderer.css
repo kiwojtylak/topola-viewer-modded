@@ -152,3 +152,36 @@
 .detailed rect.bytribe.tribe8 {
     fill: #dbffdb;
 }
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+.detailed rect.bylanguages {
+    fill: #eeeeee;
+}
+
+.detailed rect.bylanguages.l1 {
+    fill: #ffffdd;
+}
+
+.detailed rect.bylanguages.l2 {
+    fill: #edffdb;
+}
+
+.detailed rect.bylanguages.l3 {
+    fill: #dbffdb;
+}
+
+.detailed rect.bylanguages.l4 {
+    fill: #ffeddb;
+}
+
+.detailed rect.bylanguages.l5 {
+    fill: #ffdbdb;
+}
+
+.detailed rect.bylanguages.l6 {
+    fill: #ffdbff;
+}
+
+.detailed rect.bylanguages.l7 {
+    fill: #dbdbff;
+}
