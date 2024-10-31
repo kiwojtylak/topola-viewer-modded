@@ -289,10 +289,10 @@ var DetailedRenderer = /** @class */ (function (_super) {
         return ''  // Blank if not tribe
     };
 
-    const nLanguages_css = new Map();
+    // const nLanguages_css = new Map();
     DetailedRenderer.prototype.getLanguagesClass = function (indiId) {
         let _a;
-        const indi = this.options.data.getIndi(indiId)
+        // const indi = this.options.data.getIndi(indiId)
         const languages = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getLanguages();
         // TODO: improve, if > 7 then 7, etc
         return languages.length > 0 ? 'n' + languages.length : '';
