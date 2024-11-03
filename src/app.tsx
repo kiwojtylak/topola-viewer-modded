@@ -136,13 +136,14 @@ function getEgoGen(data: TopolaData | undefined) {
 }
 
 function getLanguageOptions(data: TopolaData | undefined) {
-    const languageOptions = Object.entries(data?.gedcom?.indis || {})
+    return Object.entries(data?.gedcom?.indis || {})
         .reduce<Set<string>>((acc, [_, value]) => {
-            const langData = value.tree.find((sub: any) => sub.tag === "LANG")?.data;
-            if (langData) acc.add(langData);
+            const langDataArray = value.tree.filter((sub: any) => sub.tag === "LANG");
+            langDataArray.forEach(lang => {
+                if (lang.data) acc.add(lang.data);
+            });
             return acc;
         }, new Set<string>());
-    return Array.from(languageOptions)
 }
 
 /**
@@ -243,7 +244,7 @@ export function App() {
         config.renderTribeOption = egoIndi.length > 0
         config.renderLanguagesOption = egoIndi.length > 0
         // Find all the existing languages
-        config.languageOptions = getLanguageOptions(data)
+        config.languageOptions = Array.from(getLanguageOptions(data)).sort()
         idToIndiMap(data.chartData).forEach((indi) => {
             indi.hideLanguages = config.languages === Languages.HIDE;
             indi.hideTribe = config.tribe === Tribe.HIDE;
