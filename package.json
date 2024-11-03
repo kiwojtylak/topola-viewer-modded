@@ -76,7 +76,7 @@
     "build": "run-script-os",
     "build:default": "react-scripts build",
     "build:windows": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --passWithNoTests --env=jsdom",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "cy:run": "cypress run",
