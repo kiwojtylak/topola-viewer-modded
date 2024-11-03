@@ -38,6 +38,7 @@ export interface Config {
     tribe: Tribe;
     renderLanguagesOption: boolean
     languages: Languages;
+    languageOptions: string[]
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -48,6 +49,7 @@ export const DEFAULT_CONFIG: Config = {
     tribe: Tribe.HIDE,
     renderLanguagesOption: false,
     languages: Languages.HIDE,
+    languageOptions: []
 };
 
 const COLOR_ARG = new Map<string, ChartColors>([
@@ -104,6 +106,7 @@ export function argsToConfig(args: ParsedQuery<any>): Config {
         tribe: TRIBE_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.tribe,
         renderLanguagesOption: RENDER_LANGUAGES_OPTION_ARG,
         languages: LANGUAGES_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.languages,
+        languageOptions: DEFAULT_CONFIG.languageOptions,
     };
 }
 
@@ -120,6 +123,16 @@ export function ConfigPanel(props: {
     config: Config;
     onChange: (config: Config) => void;
 }) {
+    const languageOptions = props.config.languageOptions.map(language => (
+        <Form.Field className={!props.config.renderLanguagesOption ? 'hidden' : 'no-margin suboption'}>
+            <Checkbox
+                radio
+                label={language}
+                name="checkboxRadioGroup"
+
+            />
+        </Form.Field>
+    ));
     return (
         <Form className="details">
             <Item.Group>
@@ -213,6 +226,7 @@ export function ConfigPanel(props: {
                                 }
                             />
                         </Form.Field>
+                        {languageOptions}
                     </Item.Content>
                 </Item>
 

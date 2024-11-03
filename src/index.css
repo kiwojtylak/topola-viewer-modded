@@ -53,6 +53,10 @@ div.ui.icon.input {
     display: none !important;
 }
 
+.suboption {
+    margin-left: 15px !important;
+}
+
 p.comment {
     margin-top: 16px;
 }

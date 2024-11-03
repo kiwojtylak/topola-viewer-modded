@@ -57,6 +57,7 @@
   "config.colors.COLOR_BY_GENERATION": "per generazione",
   "config.colors.COLOR_BY_SEX": "por sesso",
   "config.colors.COLOR_BY_TRIBE": "por clan",
+  "config.colors.COLOR_BY_LANGUAGES": "por Lingue",
   "config.tribe": "Clan",
   "config.tribe.SHOW": "mostrare",
   "config.tribe.HIDE": "nascondere",
