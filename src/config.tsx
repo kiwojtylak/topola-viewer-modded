@@ -7,7 +7,18 @@ export enum ChartColors {
     COLOR_BY_SEX,
     COLOR_BY_GENERATION,
     COLOR_BY_TRIBE,
-    COLOR_BY_LANGUAGES = 4,
+    COLOR_BY_NR_LANGUAGES = 4,
+    COLOR_BY_LANGUAGE = 5,
+}
+
+export enum Languages {
+    HIDE,
+    SHOW,
+}
+
+export enum Tribe {
+    HIDE,
+    SHOW,
 }
 
 export enum Ids {
@@ -20,35 +31,25 @@ export enum Sex {
     SHOW,
 }
 
-export enum Tribe {
-    HIDE,
-    SHOW,
-}
-
-export enum Languages {
-    HIDE,
-    SHOW,
-}
-
 export interface Config {
     color: ChartColors;
+    languages: Languages;
+    tribe: Tribe;
     id: Ids;
     sex: Sex;
-    renderTribeOption: boolean
-    tribe: Tribe;
     renderLanguagesOption: boolean
-    languages: Languages;
+    renderTribeOption: boolean
     languageOptions: string[]
 }
 
 export const DEFAULT_CONFIG: Config = {
     color: ChartColors.COLOR_BY_GENERATION,
+    languages: Languages.HIDE,
+    tribe: Tribe.HIDE,
     id: Ids.SHOW,
     sex: Sex.SHOW,
-    renderTribeOption: false,
-    tribe: Tribe.HIDE,
     renderLanguagesOption: false,
-    languages: Languages.HIDE,
+    renderTribeOption: false,
     languageOptions: []
 };
 
@@ -57,10 +58,25 @@ const COLOR_ARG = new Map<string, ChartColors>([
     ['g', ChartColors.COLOR_BY_GENERATION],
     ['s', ChartColors.COLOR_BY_SEX],
     ['t', ChartColors.COLOR_BY_TRIBE],
-    ['l', ChartColors.COLOR_BY_LANGUAGES],
+    ['nl', ChartColors.COLOR_BY_NR_LANGUAGES],
+    ['l', ChartColors.COLOR_BY_LANGUAGE],
 ]);
 const COLOR_ARG_INVERSE = new Map<ChartColors, string>();
 COLOR_ARG.forEach((v, k) => COLOR_ARG_INVERSE.set(v, k));
+
+const LANGUAGES_ARG = new Map<string, Languages>([
+    ['h', Languages.HIDE],
+    ['s', Languages.SHOW],
+]);
+const LANGUAGES_ARG_INVERSE = new Map<Languages, string>();
+LANGUAGES_ARG.forEach((v, k) => LANGUAGES_ARG_INVERSE.set(v, k));
+
+const TRIBE_ARG = new Map<string, Tribe>([
+    ['h', Tribe.HIDE],
+    ['s', Tribe.SHOW],
+]);
+const TRIBE_ARG_INVERSE = new Map<Tribe, string>();
+TRIBE_ARG.forEach((v, k) => TRIBE_ARG_INVERSE.set(v, k));
 
 const ID_ARG = new Map<string, Ids>([
     ['h', Ids.HIDE],
@@ -76,36 +92,21 @@ const SEX_ARG = new Map<string, Sex>([
 const SEX_ARG_INVERSE = new Map<Sex, string>();
 SEX_ARG.forEach((v, k) => SEX_ARG_INVERSE.set(v, k));
 
-const TRIBE_ARG = new Map<string, Tribe>([
-    ['h', Tribe.HIDE],
-    ['s', Tribe.SHOW],
-]);
-const TRIBE_ARG_INVERSE = new Map<Tribe, string>();
-TRIBE_ARG.forEach((v, k) => TRIBE_ARG_INVERSE.set(v, k));
-
-const LANGUAGES_ARG = new Map<string, Languages>([
-    ['h', Languages.HIDE],
-    ['s', Languages.SHOW],
-]);
-const LANGUAGES_ARG_INVERSE = new Map<Languages, string>();
-LANGUAGES_ARG.forEach((v, k) => LANGUAGES_ARG_INVERSE.set(v, k));
-
 const RENDER_TRIBE_OPTION_ARG: boolean = false;
 const RENDER_LANGUAGES_OPTION_ARG: boolean = false;
 
 export function argsToConfig(args: ParsedQuery<any>): Config {
     const getParam = (name: string) => {
-        const value = args[name];
-        return typeof value === 'string' ? value : undefined;
+        return typeof args[name] === 'string' ? args[name] : undefined;
     };
     return {
         color: COLOR_ARG.get(getParam('c') ?? '') ?? DEFAULT_CONFIG.color,
+        languages: LANGUAGES_ARG.get(getParam('l') ?? '') ?? DEFAULT_CONFIG.languages,
+        tribe: TRIBE_ARG.get(getParam('t') ?? '') ?? DEFAULT_CONFIG.tribe,
         id: ID_ARG.get(getParam('i') ?? '') ?? DEFAULT_CONFIG.id,
         sex: SEX_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.sex,
         renderTribeOption: RENDER_TRIBE_OPTION_ARG,
-        tribe: TRIBE_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.tribe,
         renderLanguagesOption: RENDER_LANGUAGES_OPTION_ARG,
-        languages: LANGUAGES_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.languages,
         languageOptions: DEFAULT_CONFIG.languageOptions,
     };
 }
@@ -113,9 +114,10 @@ export function argsToConfig(args: ParsedQuery<any>): Config {
 export function configToArgs(config: Config): ParsedQuery<any> {
     return {
         c: COLOR_ARG_INVERSE.get(config.color),
+        l: LANGUAGES_ARG_INVERSE.get(config.languages),
+        t: TRIBE_ARG_INVERSE.get(config.tribe),
         i: ID_ARG_INVERSE.get(config.id),
         s: SEX_ARG_INVERSE.get(config.sex),
-        t: TRIBE_ARG_INVERSE.get(config.tribe),
     };
 }
 
@@ -123,16 +125,20 @@ export function ConfigPanel(props: {
     config: Config;
     onChange: (config: Config) => void;
 }) {
-    const languageOptions = props.config.languageOptions.map(language => (
-        <Form.Field className={!props.config.renderLanguagesOption ? 'hidden' : 'no-margin suboption'}>
-            <Checkbox
-                radio
-                label={language}
-                name="checkboxRadioGroup"
-
-            />
-        </Form.Field>
-    ));
+    const languageOptions = [];
+    for (let i = 0; i < props.config.languageOptions.length; i++) {
+        const language = props.config.languageOptions[i];
+        languageOptions.push(
+            <Form.Field key={i} className={!props.config.renderLanguagesOption ? 'hidden' : 'no-margin suboption'}>
+                <Checkbox
+                    radio
+                    label={language}
+                    name="checkboxRadioGroup"
+                    value={"l"+i}
+                />
+            </Form.Field>
+        );
+    }
     return (
         <Form className="details">
             <Item.Group>
@@ -153,6 +159,7 @@ export function ConfigPanel(props: {
                                 onClick={() => props.onChange({
                                         ...props.config,
                                         color: ChartColors.NO_COLOR,
+                                        languages: Languages.HIDE,
                                         tribe: Tribe.HIDE
                                     })
                                 }
@@ -170,6 +177,7 @@ export function ConfigPanel(props: {
                                 onClick={() => props.onChange({
                                         ...props.config,
                                         color: ChartColors.COLOR_BY_GENERATION,
+                                        languages: Languages.HIDE,
                                         tribe: Tribe.HIDE
                                     })
                                 }
@@ -187,6 +195,7 @@ export function ConfigPanel(props: {
                                 onClick={() => props.onChange({
                                         ...props.config,
                                         color: ChartColors.COLOR_BY_SEX,
+                                        languages: Languages.HIDE,
                                         tribe: Tribe.HIDE
                                     })
                                 }
@@ -204,6 +213,7 @@ export function ConfigPanel(props: {
                                 onClick={() => props.onChange({
                                         ...props.config,
                                         color: ChartColors.COLOR_BY_TRIBE,
+                                        languages: Languages.HIDE,
                                         tribe: Tribe.SHOW
                                     })
                                 }
@@ -217,11 +227,12 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="languages"
-                                checked={props.config.color === ChartColors.COLOR_BY_LANGUAGES}
+                                checked={props.config.color === ChartColors.COLOR_BY_NR_LANGUAGES}
                                 onClick={() => props.onChange({
                                     ...props.config,
-                                    color: ChartColors.COLOR_BY_LANGUAGES,
-                                    languages: Languages.SHOW
+                                    color: ChartColors.COLOR_BY_NR_LANGUAGES,
+                                    languages: Languages.SHOW,
+                                    tribe: Tribe.HIDE
                                 })
                                 }
                             />

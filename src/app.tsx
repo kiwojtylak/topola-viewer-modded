@@ -27,9 +27,10 @@ import {
     ConfigPanel,
     configToArgs,
     DEFAULT_CONFIG,
+    Languages,
     Tribe,
     Ids,
-    Sex, Languages,
+    Sex,
 } from './config';
 import {
     getSelection,
@@ -146,6 +147,17 @@ function getLanguageOptions(data: TopolaData | undefined) {
         }, new Set<string>());
 }
 
+function getTribes(data: TopolaData | undefined) {
+    return Object.entries(data?.gedcom?.indis || {})
+        .reduce<Set<string>>((acc, [_, value]) => {
+            const langDataArray = value.tree.filter((sub: any) => sub.tag === "_TRIB");
+            langDataArray.forEach(lang => {
+                if (lang.data) acc.add(lang.data);
+            });
+            return acc;
+        }, new Set<string>());
+}
+
 /**
  * Retrieve arguments passed into the application through the URL and uploaded data.
  */
@@ -241,10 +253,11 @@ export function App() {
         }
         // If no ego indi, no need to render the tribe/languages options
         const egoIndi = getEgoIndi(data)
-        config.renderTribeOption = egoIndi.length > 0
-        config.renderLanguagesOption = egoIndi.length > 0
-        // Find all the existing languages
+        // Find if there are languages
         config.languageOptions = Array.from(getLanguageOptions(data)).sort()
+        config.renderLanguagesOption = config.languageOptions.length > 0
+        // Find if there are tribes
+        config.renderTribeOption = Array.from(getLanguageOptions(data)).length > 0
         idToIndiMap(data.chartData).forEach((indi) => {
             indi.hideLanguages = config.languages === Languages.HIDE;
             indi.hideTribe = config.tribe === Tribe.HIDE;
@@ -480,6 +493,7 @@ export function App() {
                             onSelection={onSelection}
                             freezeAnimation={freezeAnimation}
                             colors={config.color}
+                            hideLanguages={config.languages}
                             hideTribe={config.tribe}
                             hideIds={config.id}
                             hideSex={config.sex}

@@ -1,4 +1,4 @@
-import {ChartColors, Tribe, Ids, Sex} from './config';
+import {ChartColors, Languages, Tribe, Ids, Sex} from './config';
 import {interpolateNumber} from 'd3-interpolate';
 import {IntlShape, useIntl} from 'react-intl';
 import {max, min} from 'd3-array';
@@ -185,7 +185,7 @@ const chartColors = new Map<ChartColors, TopolaChartColors>([
     [ChartColors.COLOR_BY_GENERATION, TopolaChartColors.COLOR_BY_GENERATION],
     [ChartColors.COLOR_BY_SEX, TopolaChartColors.COLOR_BY_SEX],
     [ChartColors.COLOR_BY_TRIBE, TopolaChartColors.COLOR_BY_TRIBE],
-    [ChartColors.COLOR_BY_LANGUAGES, TopolaChartColors.COLOR_BY_LANGUAGES]
+    [ChartColors.COLOR_BY_NR_LANGUAGES, TopolaChartColors.COLOR_BY_LANGUAGES]
 ]);
 
 export interface ChartProps {
@@ -195,6 +195,7 @@ export interface ChartProps {
     onSelection: (indiInfo: IndiInfo) => void;
     freezeAnimation?: boolean;
     colors?: ChartColors;
+    hideLanguages?: Languages;
     hideTribe?: Tribe;
     hideIds?: Ids;
     hideSex?: Sex;
@@ -219,8 +220,7 @@ class ChartWrapper {
 
     /**
      * Renders the chart or performs a transition animation to a new state.
-     * If indiInfo is not given, it means that it is the initial render and no
-     * animation is performed.
+     * If indiInfo is not given, it means that it is the initial render and no animation is performed.
      */
     renderChart(
         props: ChartProps,
@@ -289,6 +289,7 @@ class ChartWrapper {
                 };
             };
         };
+
         const scrollLeftTween = (scrollLeft: number) => {
             return () => {
                 const i = interpolateNumber(parent.scrollLeft, scrollLeft);
@@ -360,6 +361,7 @@ export function Chart(props: ChartProps) {
             const initialRender =
                 props.chartType !== prevProps?.chartType ||
                 props.colors !== prevProps?.colors ||
+                props.hideLanguages !== prevProps?.hideLanguages ||
                 props.hideTribe !== prevProps?.hideTribe ||
                 props.hideIds !== prevProps?.hideIds ||
                 props.hideSex !== prevProps?.hideSex;

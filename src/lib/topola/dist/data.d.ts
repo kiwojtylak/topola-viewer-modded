@@ -39,6 +39,7 @@ export interface JsonIndi {
     death?: JsonEvent;
     sex?: string;
     languages?: string[];
+    languagesLabel?: string;
     tribe?: string;
     images?: JsonImage[];
     notes?: string[];
@@ -75,6 +76,7 @@ export interface IndiDetails extends Indi {
     getDeathPlace(): string | null;
     isConfirmedDeath(): boolean;
     getLanguages(): string[] | null;
+    getLanguagesLabel(): string[] | null;
     getTribe(): string | null;
     getSex(): string | null;
     getImageUrl(): string | null;

@@ -14,6 +14,7 @@ Backlog:
 - [x] Fix 1st time color by tribe bug
 - [x] Don't show by tribe if no tribes
 - [x] Show/hide languages
-- [ ] Languages in card
+- [x] Languages in card
+- [ ] Add config reset button
 - [ ] Color by languages
 - [ ] Experiment Toggle button

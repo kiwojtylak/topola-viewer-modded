@@ -40,8 +40,9 @@ const IMAGE_WIDTH = 70;
 
 /** Minimum box height when an image is present. */
 const IMAGE_HEIGHT = 90;
-const TRIBE_HEIGHT = 14;
-const DETAILS_HEIGHT = 14;
+const TRIBE_HEIGHT = 17;
+const LANGUAGES_HEIGHT = 17;
+const DETAILS_HEIGHT = 17;
 const ANIMATION_DELAY_MS = 200;
 const ANIMATION_DURATION_MS = 500;
 const textLengthCache = new Map();
@@ -129,23 +130,23 @@ var DetailedRenderer = /** @class */ (function (_super) {
     };
 
     DetailedRenderer.prototype.getPreferredIndiSize = function (id) {
+        // Height
         const indi = this.options.data.getIndi(id);
         const details = this.getIndiDetails(indi);
-        const tribeHeight = indi.showTribe() && indi.getTribe() != null ? DETAILS_HEIGHT : 0;
+        const tribeHeight = indi.showTribe() && indi.getTribe() != null ? TRIBE_HEIGHT : 0;
+        const languagesHeight = indi.showLanguages() && indi.getLanguages() != null ? LANGUAGES_HEIGHT : 0;
         const idAndSexHeight = indi.showId() || indi.showSex() ? DETAILS_HEIGHT : 0;
         const height = d3_array_1.max([
-            INDI_MIN_HEIGHT + tribeHeight + details.length * DETAILS_HEIGHT + idAndSexHeight,
+            INDI_MIN_HEIGHT + languagesHeight + tribeHeight + (details.length * DETAILS_HEIGHT) + idAndSexHeight,
             indi.getImageUrl() ? IMAGE_HEIGHT : 0,
         ]);
-        const maxDetailsWidth = d3_array_1.max(
-            details.map(function (detail) {
-                return getLength(detail.text, 'details');
-            })
-        );
+        // Width
+        const maxDetailsWidth = d3_array_1.max(details.map(detail => getLength(detail.text, 'details')));
         const width = d3_array_1.max([
             maxDetailsWidth + 22,
             getLength(indi.getFirstName() || '', 'name') + 8,
             getLength(indi.getLastName() || '', 'name') + 8,
+            indi.showLanguages() && indi.getLanguages() != null ? (getLength(indi.getLanguagesLabel(), 'languages') + 28) : 0,
             indi.showTribe() && indi.getTribe() != null ? (getLength(indi.getTribe(), 'tribe') + 28) : 0,
             getLength(id, 'id') + 32,
             INDI_MIN_WIDTH,
@@ -367,54 +368,40 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
             .text(function (node) { return getIndi(node).getLastName(); })
 
-        // Extract languages
-        const languages = new Map();
-        enter.each(function (node) {
-            const indi = getIndi(node);
-            const languagesList = indi.getLanguages();
-            languages.set(node.indi.id, languagesList);
-        });
-        const maxLanguages = d3_array_1.max(Array.from(languages.values(), function (v) {
-            return v.length;
-        }));
-
-        const _loop_1 = function (i) {
-            const lineGroup = enter.filter(function (data) {
-                return languages.get(data.indi.id).length > i;
+        // Languages
+        const languages = enter
+            .filter(function (node) {
+                return getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0
+            })
+            .append('text')
+            .attr('text-anchor', 'middle')
+            .attr('class', 'languages')
+            .text(function (node) {
+                return getIndi(node).getLanguagesLabel()
             });
-
-            lineGroup
-                .filter(function (data) {
-                    return getIndi(data).showLanguages() && getIndi(data).getLanguages().length > 0
-                })
-                .append('text')
-                .attr('class', 'languages')
-                .attr('transform', function (data) {
-                    return "translate(15, " + (details_height_start(data) + i * DETAILS_HEIGHT) + ")"
-                })
-                .text(function (data) {
-                    return languages.get(data.indi.id)[i].text;
-                });
-        };
-        // Render languages
-        for (let i = 0; i < maxLanguages; ++i) {
-            _loop_1(i);
-        }
-
+        this.transition(languages).attr('transform', function (node) {
+            // if the indi does not have tribe to show, the height start does not apply
+            const languages_height_start =  getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0 ? 52 : null
+            return "translate(" + getDetailsWidth(node) / 2 + ", " + languages_height_start + ")";
+        });
 
         // Tribe
         const tribe = enter
-            .filter(function (data) {
-                return getIndi(data).showTribe() && getIndi(data).getTribe() != null
+            .filter(function (node) {
+                return getIndi(node).showTribe() && getIndi(node).getTribe() != null
             })
             .append('text')
             .attr('class', 'tribe')
-            .text(function (data) {
-                return '¤ ' + getIndi(data).getTribe()
+            .text(function (node) {
+                return '¤ ' + getIndi(node).getTribe()
             });
-        this.transition(tribe).attr('transform', function (data) {
-            // if the indi does not have tribe to show, the height start does not apply
-            const tribe_height_start =  getIndi(data).showTribe() && getIndi(data).getTribe() != null ? 49 : null
+        this.transition(tribe).attr('transform', function (node) {
+            let tribe_height_start =  null
+            if (getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0) {
+                tribe_height_start = 71
+            } else if (getIndi(node).showTribe() && getIndi(node).getTribe() != null) {
+                tribe_height_start = 55
+            }
             return "translate(5, " + tribe_height_start + ")";
         });
 
@@ -429,33 +416,35 @@ var DetailedRenderer = /** @class */ (function (_super) {
             return v.length;
         }));
 
-        function details_height_start(data) {
-            return 49 + ((getIndi(data).showTribe() && getIndi(data).getTribe() != null) ? TRIBE_HEIGHT : 0)
+        function details_height_start(node) {
+            return 55
+                + ((getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0) ? LANGUAGES_HEIGHT : 0)
+                + ((getIndi(node).showTribe() && getIndi(node).getTribe() != null) ? TRIBE_HEIGHT : 0)
         }
 
         const _loop_2 = function (i) {
-            const lineGroup = enter.filter(function (data) {
-                return details.get(data.indi.id).length > i;
+            const lineGroup = enter.filter(function (node) {
+                return details.get(node.indi.id).length > i;
             });
 
             lineGroup
                 .append('text')
                 .attr('text-anchor', 'middle')
                 .attr('class', 'details')
-                .attr('transform', function (data) {
-                    return "translate(9, " + (details_height_start(data) + i * DETAILS_HEIGHT) + ")"
+                .attr('transform', function (node) {
+                    return "translate(9, " + (details_height_start(node) + i * DETAILS_HEIGHT) + ")"
                 })
-                .text(function (data) {
-                    return details.get(data.indi.id)[i].symbol;
+                .text(function (node) {
+                    return details.get(node.indi.id)[i].symbol;
                 });
             lineGroup
                 .append('text')
                 .attr('class', 'details')
-                .attr('transform', function (data) {
-                    return "translate(15, " + (details_height_start(data) + i * DETAILS_HEIGHT) + ")"
+                .attr('transform', function (node) {
+                    return "translate(15, " + (details_height_start(node) + i * DETAILS_HEIGHT) + ")"
                 })
-                .text(function (data) {
-                    return details.get(data.indi.id)[i].text;
+                .text(function (node) {
+                    return details.get(node.indi.id)[i].text;
                 });
         };
         // Render details
@@ -467,35 +456,35 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const id = enter
             .append('text')
             .attr('class', 'id')
-            .text(function (data) {
-                return (getIndi(data).showId() ? data.indi.id : '');
+            .text(function (node) {
+                return (getIndi(node).showId() ? node.indi.id : '');
             })
             .merge(update.select('text.id'));
-        this.transition(id).attr('transform', function (data) { return "translate(9, " + (data.indi.height - 5) + ")"; });
+        this.transition(id).attr('transform', function (node) { return "translate(9, " + (node.indi.height - 5) + ")"; });
 
         // Render sex
         const sex = enter
             .append('text')
             .attr('class', 'details sex')
             .attr('text-anchor', 'end')
-            .text(function (data) {
-                const sexSymbol = SEX_SYMBOLS.get(getIndi(data).getSex() || '') || '';
-                return getIndi(data).showSex() ? sexSymbol : '';
+            .text(function (node) {
+                const sexSymbol = SEX_SYMBOLS.get(getIndi(node).getSex() || '') || '';
+                return getIndi(node).showSex() ? sexSymbol : '';
             })
             .merge(update.select('text.sex'));
-        this.transition(sex).attr('transform', function (data) {
-            return "translate(" + (getDetailsWidth(data) - 5) + ", " + (data.indi.height - 5) + ")";
+        this.transition(sex).attr('transform', function (node) {
+            return "translate(" + (getDetailsWidth(node) - 5) + ", " + (node.indi.height - 5) + ")";
         });
 
         // Image
-        enter.filter(function (data) { return !!getIndi(data).getImageUrl(); })
+        enter.filter(function (node) { return !!getIndi(node).getImageUrl(); })
             .append('image')
             .attr('width', IMAGE_WIDTH)
-            .attr('height', function (data) { return data.indi.height; })
+            .attr('height', function (node) { return node.indi.height; })
             .attr('preserveAspectRatio', 'xMidYMin')
-            .attr('transform', function (data) { return "translate(" + (data.indi.width - IMAGE_WIDTH) + ", 0)"; })
-            .attr('clip-path', function (data) { return "url(#" + getClipId(data.indi.id) + ")"; })
-            .attr('href', function (data) { return getIndi(data).getImageUrl(); });
+            .attr('transform', function (node) { return "translate(" + (node.indi.width - IMAGE_WIDTH) + ", 0)"; })
+            .attr('clip-path', function (node) { return "url(#" + getClipId(node.indi.id) + ")"; })
+            .attr('href', function (node) { return getIndi(node).getImageUrl(); });
 
         // Border on top
         const border = enter
@@ -505,8 +494,8 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('class', 'border')
             .merge(update.select('rect.border'));
         this.transition(border)
-            .attr('width', function (data) { return data.indi.width; })
-            .attr('height', function (data) { return data.indi.height; });
+            .attr('width', function (node) { return node.indi.width; })
+            .attr('height', function (node) { return node.indi.height; });
     };
 
     DetailedRenderer.prototype.renderFamily = function (enter) {
