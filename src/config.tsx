@@ -39,7 +39,8 @@ export interface Config {
     sex: Sex;
     renderLanguagesOption: boolean
     renderTribeOption: boolean
-    languageOptions: string[]
+    languageOptions: string[],
+    selectedLanguage: number | null
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -50,7 +51,8 @@ export const DEFAULT_CONFIG: Config = {
     sex: Sex.SHOW,
     renderLanguagesOption: false,
     renderTribeOption: false,
-    languageOptions: []
+    languageOptions: [],
+    selectedLanguage: null,
 };
 
 const COLOR_ARG = new Map<string, ChartColors>([
@@ -92,22 +94,20 @@ const SEX_ARG = new Map<string, Sex>([
 const SEX_ARG_INVERSE = new Map<Sex, string>();
 SEX_ARG.forEach((v, k) => SEX_ARG_INVERSE.set(v, k));
 
-const RENDER_TRIBE_OPTION_ARG: boolean = false;
-const RENDER_LANGUAGES_OPTION_ARG: boolean = false;
-
 export function argsToConfig(args: ParsedQuery<any>): Config {
     const getParam = (name: string) => {
-        return typeof args[name] === 'string' ? args[name] : undefined;
+        return typeof args[name] === 'string' || typeof args[name] === 'number' ? args[name] : undefined;
     };
     return {
         color: COLOR_ARG.get(getParam('c') ?? '') ?? DEFAULT_CONFIG.color,
         languages: LANGUAGES_ARG.get(getParam('l') ?? '') ?? DEFAULT_CONFIG.languages,
+        selectedLanguage: getParam('n') ?? DEFAULT_CONFIG.selectedLanguage,
         tribe: TRIBE_ARG.get(getParam('t') ?? '') ?? DEFAULT_CONFIG.tribe,
         id: ID_ARG.get(getParam('i') ?? '') ?? DEFAULT_CONFIG.id,
         sex: SEX_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.sex,
-        renderTribeOption: RENDER_TRIBE_OPTION_ARG,
-        renderLanguagesOption: RENDER_LANGUAGES_OPTION_ARG,
-        languageOptions: DEFAULT_CONFIG.languageOptions,
+        renderTribeOption: DEFAULT_CONFIG.renderTribeOption,
+        renderLanguagesOption: DEFAULT_CONFIG.renderLanguagesOption,
+        languageOptions: DEFAULT_CONFIG.languageOptions
     };
 }
 
@@ -118,6 +118,7 @@ export function configToArgs(config: Config): ParsedQuery<any> {
         t: TRIBE_ARG_INVERSE.get(config.tribe),
         i: ID_ARG_INVERSE.get(config.id),
         s: SEX_ARG_INVERSE.get(config.sex),
+        n: config.selectedLanguage
     };
 }
 
@@ -134,7 +135,15 @@ export function ConfigPanel(props: {
                     radio
                     label={language}
                     name="checkboxRadioGroup"
-                    value={"l"+i}
+                    value={i}
+                    checked={props.config.selectedLanguage == i}
+                    onClick={
+                        () => props.onChange({
+                            ...props.config,
+                            selectedLanguage: i,
+                            color: ChartColors.COLOR_BY_LANGUAGE,
+                        })
+                    }
                 />
             </Form.Field>
         );
@@ -156,12 +165,14 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="none"
                                 checked={props.config.color === ChartColors.NO_COLOR}
-                                onClick={() => props.onChange({
-                                    ...props.config,
-                                    color: ChartColors.NO_COLOR,
-                                    languages: Languages.HIDE,
-                                    tribe: Tribe.HIDE
-                                })
+                                onClick={
+                                    () => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.NO_COLOR,
+                                        languages: Languages.HIDE,
+                                        tribe: Tribe.HIDE,
+                                        selectedLanguage: null
+                                    })
                                 }
                             />
                         </Form.Field>
@@ -174,12 +185,14 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="generation"
                                 checked={props.config.color === ChartColors.COLOR_BY_GENERATION}
-                                onClick={() => props.onChange({
-                                    ...props.config,
-                                    color: ChartColors.COLOR_BY_GENERATION,
-                                    languages: Languages.HIDE,
-                                    tribe: Tribe.HIDE
-                                })
+                                onClick={
+                                    () => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.COLOR_BY_GENERATION,
+                                        languages: Languages.HIDE,
+                                        tribe: Tribe.HIDE,
+                                        selectedLanguage: null,
+                                    })
                                 }
                             />
                         </Form.Field>
@@ -192,12 +205,14 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="gender"
                                 checked={props.config.color === ChartColors.COLOR_BY_SEX}
-                                onClick={() => props.onChange({
-                                    ...props.config,
-                                    color: ChartColors.COLOR_BY_SEX,
-                                    languages: Languages.HIDE,
-                                    tribe: Tribe.HIDE
-                                })
+                                onClick={
+                                    () => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.COLOR_BY_SEX,
+                                        languages: Languages.HIDE,
+                                        tribe: Tribe.HIDE,
+                                        selectedLanguage: null,
+                                    })
                                 }
                             />
                         </Form.Field>
@@ -210,12 +225,14 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="tribe"
                                 checked={props.config.color === ChartColors.COLOR_BY_TRIBE}
-                                onClick={() => props.onChange({
-                                    ...props.config,
-                                    color: ChartColors.COLOR_BY_TRIBE,
-                                    languages: Languages.HIDE,
-                                    tribe: Tribe.SHOW
-                                })
+                                onClick={
+                                    () => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.COLOR_BY_TRIBE,
+                                        languages: Languages.HIDE,
+                                        tribe: Tribe.SHOW,
+                                        selectedLanguage: null,
+                                    })
                                 }
                             />
                         </Form.Field>
@@ -228,12 +245,14 @@ export function ConfigPanel(props: {
                                 name="checkboxRadioGroup"
                                 value="languages"
                                 checked={props.config.color === ChartColors.COLOR_BY_NR_LANGUAGES}
-                                onClick={() => props.onChange({
-                                    ...props.config,
-                                    color: ChartColors.COLOR_BY_NR_LANGUAGES,
-                                    languages: Languages.SHOW,
-                                    tribe: Tribe.HIDE
-                                })
+                                onClick={
+                                    () => props.onChange({
+                                        ...props.config,
+                                        color: ChartColors.COLOR_BY_NR_LANGUAGES,
+                                        languages: Languages.SHOW,
+                                        tribe: Tribe.HIDE,
+                                        selectedLanguage: null,
+                                    })
                                 }
                             />
                         </Form.Field>
@@ -250,7 +269,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.languages.HIDE" defaultMessage="hide"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
@@ -262,7 +281,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.languages.SHOW" defaultMessage="show"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"
@@ -282,7 +301,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.tribe.HIDE" defaultMessage="hide"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
@@ -294,7 +313,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.tribe.SHOW" defaultMessage="show"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"
@@ -314,7 +333,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.ids.HIDE" defaultMessage="hide"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
@@ -326,7 +345,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.ids.SHOW" defaultMessage="show"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"
@@ -346,7 +365,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.sex.HIDE" defaultMessage="hide"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
@@ -358,7 +377,7 @@ export function ConfigPanel(props: {
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.sex.SHOW" defaultMessage="show"/>
+                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"

@@ -16,5 +16,5 @@ Backlog:
 - [x] Show/hide languages
 - [x] Languages in card
 - [x] Add config reset button
+- [x] Experiment Toggle button
 - [ ] Color by languages
-- [ ] Experiment Toggle button

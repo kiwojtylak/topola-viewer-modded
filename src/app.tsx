@@ -257,7 +257,7 @@ export function App() {
         config.languageOptions = Array.from(getLanguageOptions(data)).sort()
         config.renderLanguagesOption = config.languageOptions.length > 0
         // Find if there are tribes
-        config.renderTribeOption = Array.from(getLanguageOptions(data)).length > 0
+        config.renderTribeOption = Array.from(getTribes(data)).length > 0
         idToIndiMap(data.chartData).forEach((indi) => {
             indi.hideLanguages = config.languages === Languages.HIDE;
             indi.hideTribe = config.tribe === Tribe.HIDE;
