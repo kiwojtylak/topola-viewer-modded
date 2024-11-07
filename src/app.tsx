@@ -251,8 +251,6 @@ export function App() {
         if (data === undefined) {
             return;
         }
-        // If no ego indi, no need to render the tribe/languages options
-        const egoIndi = getEgoIndi(data)
         // Find if there are languages
         config.languageOptions = Array.from(getLanguageOptions(data)).sort()
         config.renderLanguagesOption = config.languageOptions.length > 0
@@ -493,6 +491,7 @@ export function App() {
                             onSelection={onSelection}
                             freezeAnimation={freezeAnimation}
                             colors={config.color}
+                            selectedLanguage={config.selectedLanguage}
                             hideLanguages={config.languages}
                             hideTribe={config.tribe}
                             hideIds={config.id}

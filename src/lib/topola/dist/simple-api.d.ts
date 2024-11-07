@@ -25,6 +25,7 @@ export interface SimpleChartOptions {
     renderer: RendererType;
     horizontal?: boolean;
     colors?: ChartColors;
+    selectedLanguage?: number | null;
     animate?: boolean;
     updateSvgSize?: boolean;
     locale?: string;

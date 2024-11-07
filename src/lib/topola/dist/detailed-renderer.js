@@ -90,7 +90,9 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return 'bysex';
             case _1.ChartColors.COLOR_BY_TRIBE:
                 return 'bytribe';
-            case _1.ChartColors.COLOR_BY_LANGUAGES:
+            case _1.ChartColors.COLOR_BY_NR_LANGUAGES:
+                return 'bylanguages';
+            case _1.ChartColors.COLOR_BY_LANGUAGE:
                 return 'bylanguages';
             default:
                 return 'bygeneration';
@@ -267,7 +269,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             case 'F':
                 return 'female';
             default:
-                return '';
+                break;
         }
     };
 
@@ -287,16 +289,16 @@ var DetailedRenderer = /** @class */ (function (_super) {
             }
             return tribes_css.get(tribe);
         }
-        return ''  // Blank if not tribe
+        return ''  // Blank if no tribe
     };
 
-    // const nLanguages_css = new Map();
-    DetailedRenderer.prototype.getLanguagesClass = function (indiId) {
+    DetailedRenderer.prototype.getLanguagesClass = function (indiId, selectedLanguage) {
         let _a;
-        // const indi = this.options.data.getIndi(indiId)
         const languages = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getLanguages();
-        // TODO: improve, if > 7 then 7, etc
-        return languages.length > 0 ? 'n' + languages.length : '';
+        if (selectedLanguage != null) {
+            // TODO: find selected in the indi languages
+        }
+        return languages.length > 0 ? 'n' + Math.min(languages.length, 7) : '';
     }
 
     DetailedRenderer.prototype.renderIndi = function (enter, update) {
@@ -328,7 +330,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     +_this.getColoringClass() + " "
                     + _this.getSexClass(node.indi.id) + " "
                     + _this.getTribeClass(node.indi.id) + " "
-                    + _this.getLanguagesClass(node.indi.id) + " ";
+                    + _this.getLanguagesClass(node.indi.id, _this.options.selectedLanguage) + " ";
             })
             .merge(update.select('rect.background'));
         this.transition(background)

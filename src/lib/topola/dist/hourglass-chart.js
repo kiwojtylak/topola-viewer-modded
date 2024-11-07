@@ -13,15 +13,15 @@ var HourglassChart = /** @class */ (function () {
         this.util = new chart_util_1.ChartUtil(options);
     }
     HourglassChart.prototype.render = function () {
-        var ancestorsRoot = ancestor_chart_1.getAncestorsTree(this.options);
-        var ancestorNodes = this.util.layOutChart(ancestorsRoot, {
+        const ancestorsRoot = ancestor_chart_1.getAncestorsTree(this.options);
+        const ancestorNodes = this.util.layOutChart(ancestorsRoot, {
             flipVertically: true,
         });
-        var descendantNodes = descendant_chart_1.layOutDescendants(this.options);
+        const descendantNodes = descendant_chart_1.layOutDescendants(this.options);
         // slice(1) removes the duplicated start node.
-        var nodes = ancestorNodes.slice(1).concat(descendantNodes);
-        var animationPromise = this.util.renderChart(nodes);
-        var info = chart_util_1.getChartInfo(nodes);
+        const nodes = ancestorNodes.slice(1).concat(descendantNodes);
+        const animationPromise = this.util.renderChart(nodes);
+        const info = chart_util_1.getChartInfo(nodes);
         this.util.updateSvgDimensions(info);
         return Object.assign(info, { animationPromise: animationPromise });
     };

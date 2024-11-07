@@ -136,6 +136,7 @@ export function ConfigPanel(props: {
                     label={language}
                     name="checkboxRadioGroup"
                     value={i}
+                    /* eslint eqeqeq: 0 */
                     checked={props.config.selectedLanguage == i}
                     onClick={
                         () => props.onChange({

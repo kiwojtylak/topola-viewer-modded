@@ -185,7 +185,8 @@ const chartColors = new Map<ChartColors, TopolaChartColors>([
     [ChartColors.COLOR_BY_GENERATION, TopolaChartColors.COLOR_BY_GENERATION],
     [ChartColors.COLOR_BY_SEX, TopolaChartColors.COLOR_BY_SEX],
     [ChartColors.COLOR_BY_TRIBE, TopolaChartColors.COLOR_BY_TRIBE],
-    [ChartColors.COLOR_BY_NR_LANGUAGES, TopolaChartColors.COLOR_BY_LANGUAGES]
+    [ChartColors.COLOR_BY_NR_LANGUAGES, TopolaChartColors.COLOR_BY_NR_LANGUAGES],
+    [ChartColors.COLOR_BY_LANGUAGE, TopolaChartColors.COLOR_BY_LANGUAGE]
 ]);
 
 export interface ChartProps {
@@ -195,6 +196,7 @@ export interface ChartProps {
     onSelection: (indiInfo: IndiInfo) => void;
     freezeAnimation?: boolean;
     colors?: ChartColors;
+    selectedLanguage?: number | null;
     hideLanguages?: Languages;
     hideTribe?: Tribe;
     hideIds?: Ids;
@@ -252,6 +254,7 @@ class ChartWrapper {
                 svgSelector: '#chart',
                 indiCallback: (info) => props.onSelection(info),
                 colors: chartColors.get(props.colors!),
+                selectedLanguage: props.selectedLanguage,
                 animate: true,
                 updateSvgSize: false,
                 locale: intl.locale,

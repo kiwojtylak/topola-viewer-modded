@@ -4,17 +4,13 @@ var d3_selection_1 = require("d3-selection");
 var data_1 = require("./data");
 var DEFAULT_SVG_SELECTOR = 'svg';
 function createChartOptions(chartOptions, renderOptions, options) {
-    var data = new data_1.JsonDataProvider(chartOptions.json);
-    const indiHrefFunc = chartOptions.indiUrl
-        ? function (id) {
+    const data = new data_1.JsonDataProvider(chartOptions.json);
+    const indiHrefFunc = chartOptions.indiUrl ? function (id) {
             return chartOptions.indiUrl.replace(`${id}`, id);
-        }
-        : undefined;
-    const famHrefFunc = chartOptions.famUrl
-        ? function (id) {
+        } : undefined;
+    const famHrefFunc = chartOptions.famUrl ? function (id) {
             return chartOptions.famUrl.replace(`${id}`, id);
-        }
-        : undefined;
+        } : undefined;
     // If startIndi nor startFam is provided, select the first indi in the data.
     if (!renderOptions.startIndi && !renderOptions.startFam) {
         renderOptions.startIndi = chartOptions.json.indis[0].id;
@@ -30,6 +26,7 @@ function createChartOptions(chartOptions, renderOptions, options) {
             famCallback: chartOptions.famCallback,
             horizontal: chartOptions.horizontal,
             colors: chartOptions.colors,
+            selectedLanguage: chartOptions.selectedLanguage,
             animate: animate,
             locale: chartOptions.locale,
         }),
@@ -41,19 +38,23 @@ function createChartOptions(chartOptions, renderOptions, options) {
         animate: animate,
     };
 }
-var SimpleChartHandle = /** @class */ (function () {
+
+const SimpleChartHandle = /** @class */ (function () {
     function SimpleChartHandle(options) {
         this.options = options;
         this.initialRender = true;
     }
+
     SimpleChartHandle.prototype.render = function (renderOptions) {
-        if (renderOptions === void 0) { renderOptions = {}; }
-        var chartOptions = createChartOptions(this.options, renderOptions, {
+        if (renderOptions === void 0) {
+            renderOptions = {};
+        }
+        const chartOptions = createChartOptions(this.options, renderOptions, {
             initialRender: this.initialRender,
         });
         this.initialRender = false;
-        var chart = new this.options.chartType(chartOptions);
-        var info = chart.render();
+        const chart = new this.options.chartType(chartOptions);
+        const info = chart.render();
         if (this.options.updateSvgSize !== false) {
             d3_selection_1.select(chartOptions.svgSelector)
                 .attr('width', info.size[0])
@@ -71,6 +72,7 @@ var SimpleChartHandle = /** @class */ (function () {
     };
     return SimpleChartHandle;
 }());
+
 function createChart(options) {
     return new SimpleChartHandle(options);
 }
