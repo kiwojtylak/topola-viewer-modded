@@ -140,7 +140,7 @@ export function ConfigPanel(props: {
         );
     }
     return (
-        <Form className="details">
+        <Form className="details no-border-bottom">
             <Item.Group>
                 <Item>
                     <Item.Content>
@@ -157,11 +157,11 @@ export function ConfigPanel(props: {
                                 value="none"
                                 checked={props.config.color === ChartColors.NO_COLOR}
                                 onClick={() => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.NO_COLOR,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.HIDE
-                                    })
+                                    ...props.config,
+                                    color: ChartColors.NO_COLOR,
+                                    languages: Languages.HIDE,
+                                    tribe: Tribe.HIDE
+                                })
                                 }
                             />
                         </Form.Field>
@@ -175,11 +175,11 @@ export function ConfigPanel(props: {
                                 value="generation"
                                 checked={props.config.color === ChartColors.COLOR_BY_GENERATION}
                                 onClick={() => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.COLOR_BY_GENERATION,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.HIDE
-                                    })
+                                    ...props.config,
+                                    color: ChartColors.COLOR_BY_GENERATION,
+                                    languages: Languages.HIDE,
+                                    tribe: Tribe.HIDE
+                                })
                                 }
                             />
                         </Form.Field>
@@ -193,11 +193,11 @@ export function ConfigPanel(props: {
                                 value="gender"
                                 checked={props.config.color === ChartColors.COLOR_BY_SEX}
                                 onClick={() => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.COLOR_BY_SEX,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.HIDE
-                                    })
+                                    ...props.config,
+                                    color: ChartColors.COLOR_BY_SEX,
+                                    languages: Languages.HIDE,
+                                    tribe: Tribe.HIDE
+                                })
                                 }
                             />
                         </Form.Field>
@@ -211,11 +211,11 @@ export function ConfigPanel(props: {
                                 value="tribe"
                                 checked={props.config.color === ChartColors.COLOR_BY_TRIBE}
                                 onClick={() => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.COLOR_BY_TRIBE,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.SHOW
-                                    })
+                                    ...props.config,
+                                    color: ChartColors.COLOR_BY_TRIBE,
+                                    languages: Languages.HIDE,
+                                    tribe: Tribe.SHOW
+                                })
                                 }
                             />
                         </Form.Field>
@@ -339,7 +339,7 @@ export function ConfigPanel(props: {
 
                 <Item>
                     <Item.Content>
-                    <Header sub>
+                        <Header sub>
                             <FormattedMessage id="config.sex" defaultMessage="Sex"/>
                         </Header>
                         <Form.Field className="no-margin">
@@ -368,8 +368,13 @@ export function ConfigPanel(props: {
                         </Form.Field>
                     </Item.Content>
                 </Item>
-
             </Item.Group>
+            <div style={{textAlign: "center"}}>
+                <Form.Button primary onClick={() => props.onChange(DEFAULT_CONFIG)}>
+                    <FormattedMessage id="config.reset" defaultMessage="Reset"/>
+                </Form.Button>
+            </div>
         </Form>
-    );
+
+);
 }

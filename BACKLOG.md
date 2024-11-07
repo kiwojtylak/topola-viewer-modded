@@ -15,6 +15,6 @@ Backlog:
 - [x] Don't show by tribe if no tribes
 - [x] Show/hide languages
 - [x] Languages in card
-- [ ] Add config reset button
+- [x] Add config reset button
 - [ ] Color by languages
 - [ ] Experiment Toggle button

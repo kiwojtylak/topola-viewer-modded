@@ -70,6 +70,7 @@
   "config.sex": "Sexo",
   "config.sex.SHOW": "mostrar",
   "config.sex.HIDE": "ocultar",
+  "config.reset": "Reset",
   "name.unknown_name": "N.N.",
   "extras.notes": "Notas",
   "extras.images": "Imágenes",

@@ -55,7 +55,7 @@ var JsonIndiDetails = /** @class */ (function () {
     };
     JsonIndiDetails.prototype.getLanguagesLabel = function () {
         const abbreviations = this.json.languages.map(lang => lang.slice(0, 3).toUpperCase());
-        return abbreviations.length > 0 ? `[${abbreviations.join(', ')}]` : null;
+        return abbreviations.length > 0 ? `${abbreviations.join(', ')}` : null;
     };
     JsonIndiDetails.prototype.getTribe = function () {
         return this.json.tribe || null;
