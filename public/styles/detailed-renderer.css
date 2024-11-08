@@ -58,14 +58,16 @@
 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe0,
 .detailed rect.bylanguages.n1,
-.detailed rect.bylanguages.l1 {
+.detailed rect.bylanguages.l1,
+.detailed rect.bylanguages.l13 {
     fill: #ffffdd;
 }
 
 .generation-11 .detailed rect.bygeneration,
 .generation1 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe6,
-.detailed rect.bylanguages.l2 {
+.detailed rect.bylanguages.l2,
+.detailed rect.bylanguages.l14 {
     fill: #edffdb;
 }
 
@@ -73,14 +75,16 @@
 .generation2 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe1,
 .detailed rect.bylanguages.n2,
-.detailed rect.bylanguages.l2 {
+.detailed rect.bylanguages.l3,
+.detailed rect.bylanguages.l15 {
     fill: #dbffdb;
 }
 
 .generation-9 .detailed rect.bygeneration,
 .generation3 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe7,
-.detailed rect.bylanguages.l3 {
+.detailed rect.bylanguages.l4,
+.detailed rect.bylanguages.l16 {
     fill: #dbffed;
 }
 
@@ -88,7 +92,8 @@
 .generation4 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe2,
 .detailed rect.bylanguages.n4,
-.detailed rect.bylanguages.l4 {
+.detailed rect.bylanguages.l5,
+.detailed rect.bylanguages.l17 {
     fill: #dbffff;
 }
 
@@ -96,7 +101,8 @@
 .generation5 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe8,
 .detailed rect.bylanguages.n7,
-.detailed rect.bylanguages.l5 {
+.detailed rect.bylanguages.l6,
+.detailed rect.bylanguages.l18 {
     fill: #dbedff;
 }
 
@@ -104,7 +110,8 @@
 .generation6 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe3,
 .detailed rect.bylanguages.n6,
-.detailed rect.bylanguages.l6 {
+.detailed rect.bylanguages.l7,
+.detailed rect.bylanguages.l19 {
     fill: #dbdbff;
 }
 
@@ -112,14 +119,16 @@
 .generation7 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe9,
 .detailed rect.bylanguages.n5,
-.detailed rect.bylanguages.l7 {
+.detailed rect.bylanguages.l8,
+.detailed rect.bylanguages.l20 {
     fill: #eddbff;
 }
 
 .generation-4 .detailed rect.bygeneration,
 .generation8 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe4,
-.detailed rect.bylanguages.l8 {
+.detailed rect.bylanguages.l9,
+.detailed rect.bylanguages.l21 {
     fill: #ffdbff;
 }
 
@@ -127,20 +136,23 @@
 .generation9 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe10,
 .detailed rect.bylanguages.n3,
-.detailed rect.bylanguages.l9 {
+.detailed rect.bylanguages.l10,
+.detailed rect.bylanguages.l22 {
     fill: #ffdbed;
 }
 
 .generation-2 .detailed rect.bygeneration,
 .generation10 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe5,
-.detailed rect.bylanguages.l10 {
+.detailed rect.bylanguages.l11,
+.detailed rect.bylanguages.l23 {
     fill: #ffdbdb;
 }
 
 .generation-1 .detailed rect.bygeneration,
 .generation11 .detailed rect.bygeneration,
 .detailed rect.bytribe.tribe11,
-.detailed rect.bylanguages.l11 {
+.detailed rect.bylanguages.l12,
+.detailed rect.bylanguages.l24 {
     fill: #ffeddb;
 }

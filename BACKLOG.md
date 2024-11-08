@@ -19,7 +19,6 @@ Backlog:
 - [x] Experiment Toggle button
 - [x] Css for tribe0 calculated late, indis already have class
 - [x] Color by languages
-- [x] Sometimes allLanguages does not load the first time
 - [x] Change on language option does not trigger change of color
-- [ ] Consistency assigning color to language across different loads
-
+- [x] Consistency assigning color to language across different loads
+- [ ] Sometimes allLanguages does not load the first time

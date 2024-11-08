@@ -273,47 +273,48 @@ var DetailedRenderer = /** @class */ (function (_super) {
         }
     };
 
-    const tribes_css = new Map();
+    const tribesCss = new Map();
     DetailedRenderer.prototype.getTribeClass = function (indiId) {
+        if (tribesCss.size === 0) {
+            this.buildTribesMap()
+        }
         let _a;
         const tribe = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getTribe();
-        // Assign the tribe of the ego as tribe0
-        if (!tribes_css.has("tribe0")) {
-            const egoTribe = Array.from(this.options.data.indis?.values() || []).find(indi => indi.isEgo())?.json.tribe
-            if (egoTribe) {
-                tribes_css.set(egoTribe, "tribe0")
-            }
-        }
         if (tribe) {
-            if (!tribes_css.has(tribe)) {
-                tribes_css.set(tribe, "tribe" + tribes_css.size)
-            }
-            if (tribes_css.size > 9) {
-                throw new Error('No CSS for more than 9 different tribes')
-            }
-            return tribes_css.get(tribe);
+            return tribesCss.get(tribe);
         }
         return ''  // Blank if no tribe
     };
 
-    const languages_css = new Map();
+    DetailedRenderer.prototype.buildTribesMap = function () {
+        // Assign the tribe of the ego as tribe0
+        if (!tribesCss.has("tribe0")) {
+            const egoTribe = Array.from(this.options.data.indis?.values() || []).find(indi => indi.isEgo())?.json.tribe
+            if (egoTribe) {
+                tribesCss.set(egoTribe, "tribe0")
+            }
+        }
+        Array.from(this.options.data.indis?.values() || [])
+            .filter(indi => indi.getTribe() != null)
+            .forEach(indi => {
+                const tribe = indi.getTribe()
+                if (!tribesCss.has(tribe)) {
+                    tribesCss.set(tribe, "tribe" + tribesCss.size)
+                }
+                if (tribesCss.size > 9) {
+                    throw new Error('No CSS for more than 9 different tribes')
+                }
+            })
+    }
+
     DetailedRenderer.prototype.getLanguagesClass = function (indiId, selectedLanguageId) {
         let _a;
         const languages = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getLanguages();
-        languages.forEach(language => {
-            if (!languages_css.has(language.id)) {
-                const startIndex = languages_css.size + 1
-                languages_css.set(language.id, "l" + startIndex);
-            }
-            if (languages_css.size > 10) {
-                throw new Error('No CSS for more than 9 different languages')
-            }
-        })
         if (selectedLanguageId != null) {
             // By specific language
             const hasSelectedLanguage = languages.some(language => language.id === selectedLanguageId);
             if (hasSelectedLanguage) {
-                return languages_css.get(selectedLanguageId);
+                return "l" + selectedLanguageId;
             }
         } else {
             // By nr. languages
@@ -323,8 +324,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
     }
 
     DetailedRenderer.prototype.resetCss = function () {
-        tribes_css.clear()
-        languages_css.clear()
+        tribesCss.clear()
         console.log('Cleared CSS maps')
     }
 
