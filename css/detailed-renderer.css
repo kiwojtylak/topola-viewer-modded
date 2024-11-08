@@ -1,0 +1,146 @@
+.detailed text {
+    font-family: verdana, arial, sans-serif;
+    font-size: 12px;
+}
+
+.detailed .name {
+    font-weight: bold;
+}
+
+.link {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1px;
+}
+
+.additional-marriage {
+    stroke-dasharray: 2;
+}
+
+.detailed rect {
+    stroke: black;
+}
+
+.detailed {
+    stroke-width: 2px;
+}
+
+.detailed .details {
+    font-size: 10px;
+}
+
+.detailed .id {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.detailed rect.nocolor {
+    fill: #ffffff;
+}
+
+
+.detailed rect.bysex,
+.detailed rect.bytribe,
+.detailed rect.bylanguages {
+    fill: #eeeeee;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+.detailed rect.bysex.male {
+    fill: #dbffff;
+}
+
+.detailed rect.bysex.female {
+    fill: #ffdbed;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+.detailed rect.bygeneration,
+.detailed rect.bytribe.tribe0,
+.detailed rect.bylanguages.n1,
+.detailed rect.bylanguages.l1 {
+    fill: #ffffdd;
+}
+
+.generation-11 .detailed rect.bygeneration,
+.generation1 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe6,
+.detailed rect.bylanguages.l2 {
+    fill: #edffdb;
+}
+
+.generation-10 .detailed rect.bygeneration,
+.generation2 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe1,
+.detailed rect.bylanguages.n2,
+.detailed rect.bylanguages.l2 {
+    fill: #dbffdb;
+}
+
+.generation-9 .detailed rect.bygeneration,
+.generation3 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe7,
+.detailed rect.bylanguages.l3 {
+    fill: #dbffed;
+}
+
+.generation-8 .detailed rect.bygeneration,
+.generation4 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe2,
+.detailed rect.bylanguages.n4,
+.detailed rect.bylanguages.l4 {
+    fill: #dbffff;
+}
+
+.generation-7 .detailed rect.bygeneration,
+.generation5 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe8,
+.detailed rect.bylanguages.n7,
+.detailed rect.bylanguages.l5 {
+    fill: #dbedff;
+}
+
+.generation-6 .detailed rect.bygeneration,
+.generation6 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe3,
+.detailed rect.bylanguages.n6,
+.detailed rect.bylanguages.l6 {
+    fill: #dbdbff;
+}
+
+.generation-5 .detailed rect.bygeneration,
+.generation7 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe9,
+.detailed rect.bylanguages.n5,
+.detailed rect.bylanguages.l7 {
+    fill: #eddbff;
+}
+
+.generation-4 .detailed rect.bygeneration,
+.generation8 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe4,
+.detailed rect.bylanguages.l8 {
+    fill: #ffdbff;
+}
+
+.generation-3 .detailed rect.bygeneration,
+.generation9 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe10,
+.detailed rect.bylanguages.n3,
+.detailed rect.bylanguages.l9 {
+    fill: #ffdbed;
+}
+
+.generation-2 .detailed rect.bygeneration,
+.generation10 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe5,
+.detailed rect.bylanguages.l10 {
+    fill: #ffdbdb;
+}
+
+.generation-1 .detailed rect.bygeneration,
+.generation11 .detailed rect.bygeneration,
+.detailed rect.bytribe.tribe11,
+.detailed rect.bylanguages.l11 {
+    fill: #ffeddb;
+}
