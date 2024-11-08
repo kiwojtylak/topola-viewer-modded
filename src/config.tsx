@@ -239,7 +239,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_LANGUAGES" defaultMessage="by languages"/>
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_LANGUAGES" defaultMessage="by nr. languages"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="languages"
