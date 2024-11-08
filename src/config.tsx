@@ -1,6 +1,7 @@
 import {Item, Checkbox, Form, Header} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
 import {ParsedQuery} from 'query-string';
+import {Language} from "./languages/languages-loader";
 
 export enum ChartColors {
     NO_COLOR,
@@ -11,44 +12,44 @@ export enum ChartColors {
     COLOR_BY_LANGUAGE = 5,
 }
 
-export enum Languages {
+export enum LanguagesArg {
     HIDE,
     SHOW,
 }
 
-export enum Tribe {
+export enum TribeArg {
     HIDE,
     SHOW,
 }
 
-export enum Ids {
+export enum IdsArg {
     HIDE,
     SHOW,
 }
 
-export enum Sex {
+export enum SexArg {
     HIDE,
     SHOW,
 }
 
 export interface Config {
     color: ChartColors;
-    languages: Languages;
-    tribe: Tribe;
-    id: Ids;
-    sex: Sex;
+    languages: LanguagesArg;
+    tribe: TribeArg;
+    id: IdsArg;
+    sex: SexArg;
     renderLanguagesOption: boolean
     renderTribeOption: boolean
-    languageOptions: string[],
-    selectedLanguage: number | null
+    languageOptions: Language[],
+    selectedLanguage: string | null
 }
 
 export const DEFAULT_CONFIG: Config = {
     color: ChartColors.COLOR_BY_GENERATION,
-    languages: Languages.HIDE,
-    tribe: Tribe.HIDE,
-    id: Ids.SHOW,
-    sex: Sex.SHOW,
+    languages: LanguagesArg.HIDE,
+    tribe: TribeArg.HIDE,
+    id: IdsArg.SHOW,
+    sex: SexArg.SHOW,
     renderLanguagesOption: false,
     renderTribeOption: false,
     languageOptions: [],
@@ -66,32 +67,32 @@ const COLOR_ARG = new Map<string, ChartColors>([
 const COLOR_ARG_INVERSE = new Map<ChartColors, string>();
 COLOR_ARG.forEach((v, k) => COLOR_ARG_INVERSE.set(v, k));
 
-const LANGUAGES_ARG = new Map<string, Languages>([
-    ['h', Languages.HIDE],
-    ['s', Languages.SHOW],
+const LANGUAGES_ARG = new Map<string, LanguagesArg>([
+    ['h', LanguagesArg.HIDE],
+    ['s', LanguagesArg.SHOW],
 ]);
-const LANGUAGES_ARG_INVERSE = new Map<Languages, string>();
+const LANGUAGES_ARG_INVERSE = new Map<LanguagesArg, string>();
 LANGUAGES_ARG.forEach((v, k) => LANGUAGES_ARG_INVERSE.set(v, k));
 
-const TRIBE_ARG = new Map<string, Tribe>([
-    ['h', Tribe.HIDE],
-    ['s', Tribe.SHOW],
+const TRIBE_ARG = new Map<string, TribeArg>([
+    ['h', TribeArg.HIDE],
+    ['s', TribeArg.SHOW],
 ]);
-const TRIBE_ARG_INVERSE = new Map<Tribe, string>();
+const TRIBE_ARG_INVERSE = new Map<TribeArg, string>();
 TRIBE_ARG.forEach((v, k) => TRIBE_ARG_INVERSE.set(v, k));
 
-const ID_ARG = new Map<string, Ids>([
-    ['h', Ids.HIDE],
-    ['s', Ids.SHOW],
+const ID_ARG = new Map<string, IdsArg>([
+    ['h', IdsArg.HIDE],
+    ['s', IdsArg.SHOW],
 ]);
-const ID_ARG_INVERSE = new Map<Ids, string>();
+const ID_ARG_INVERSE = new Map<IdsArg, string>();
 ID_ARG.forEach((v, k) => ID_ARG_INVERSE.set(v, k));
 
-const SEX_ARG = new Map<string, Sex>([
-    ['h', Sex.HIDE],
-    ['s', Sex.SHOW],
+const SEX_ARG = new Map<string, SexArg>([
+    ['h', SexArg.HIDE],
+    ['s', SexArg.SHOW],
 ]);
-const SEX_ARG_INVERSE = new Map<Sex, string>();
+const SEX_ARG_INVERSE = new Map<SexArg, string>();
 SEX_ARG.forEach((v, k) => SEX_ARG_INVERSE.set(v, k));
 
 export function argsToConfig(args: ParsedQuery<any>): Config {
@@ -122,10 +123,7 @@ export function configToArgs(config: Config): ParsedQuery<any> {
     };
 }
 
-export function ConfigPanel(props: {
-    config: Config;
-    onChange: (config: Config) => void;
-}) {
+export function ConfigPanel(props: {config: Config; onChange: (config: Config) => void}) {
     const languageOptions = [];
     for (let i = 0; i < props.config.languageOptions.length; i++) {
         const language = props.config.languageOptions[i];
@@ -133,16 +131,16 @@ export function ConfigPanel(props: {
             <Form.Field key={i} className={!props.config.renderLanguagesOption ? 'hidden' : 'no-margin suboption'}>
                 <Checkbox
                     radio
-                    label={language}
+                    label={language.name}
                     name="checkboxRadioGroup"
                     value={i}
-                    /* eslint eqeqeq: 0 */
-                    checked={props.config.selectedLanguage == i}
+                    checked={props.config.selectedLanguage === language.id}
                     onClick={
                         () => props.onChange({
                             ...props.config,
-                            selectedLanguage: i,
+                            selectedLanguage: language.id,
                             color: ChartColors.COLOR_BY_LANGUAGE,
+                            languages: LanguagesArg.SHOW,
                         })
                     }
                 />
@@ -170,8 +168,8 @@ export function ConfigPanel(props: {
                                     () => props.onChange({
                                         ...props.config,
                                         color: ChartColors.NO_COLOR,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.HIDE,
+                                        languages: LanguagesArg.HIDE,
+                                        tribe: TribeArg.HIDE,
                                         selectedLanguage: null
                                     })
                                 }
@@ -190,8 +188,8 @@ export function ConfigPanel(props: {
                                     () => props.onChange({
                                         ...props.config,
                                         color: ChartColors.COLOR_BY_GENERATION,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.HIDE,
+                                        languages: LanguagesArg.HIDE,
+                                        tribe: TribeArg.HIDE,
                                         selectedLanguage: null,
                                     })
                                 }
@@ -210,8 +208,8 @@ export function ConfigPanel(props: {
                                     () => props.onChange({
                                         ...props.config,
                                         color: ChartColors.COLOR_BY_SEX,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.HIDE,
+                                        languages: LanguagesArg.HIDE,
+                                        tribe: TribeArg.HIDE,
                                         selectedLanguage: null,
                                     })
                                 }
@@ -230,8 +228,8 @@ export function ConfigPanel(props: {
                                     () => props.onChange({
                                         ...props.config,
                                         color: ChartColors.COLOR_BY_TRIBE,
-                                        languages: Languages.HIDE,
-                                        tribe: Tribe.SHOW,
+                                        languages: LanguagesArg.HIDE,
+                                        tribe: TribeArg.SHOW,
                                         selectedLanguage: null,
                                     })
                                 }
@@ -250,8 +248,8 @@ export function ConfigPanel(props: {
                                     () => props.onChange({
                                         ...props.config,
                                         color: ChartColors.COLOR_BY_NR_LANGUAGES,
-                                        languages: Languages.SHOW,
-                                        tribe: Tribe.HIDE,
+                                        languages: LanguagesArg.SHOW,
+                                        tribe: TribeArg.HIDE,
                                         selectedLanguage: null,
                                     })
                                 }
@@ -274,8 +272,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
-                                checked={props.config.languages === Languages.HIDE}
-                                onClick={() => props.onChange({...props.config, languages: Languages.HIDE})}
+                                checked={props.config.languages === LanguagesArg.HIDE}
+                                onClick={() => props.onChange({...props.config, languages: LanguagesArg.HIDE})}
                             />
                         </Form.Field>
                         <Form.Field className="no-margin">
@@ -286,8 +284,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"
-                                checked={props.config.languages === Languages.SHOW}
-                                onClick={() => props.onChange({...props.config, languages: Languages.SHOW})}
+                                checked={props.config.languages === LanguagesArg.SHOW}
+                                onClick={() => props.onChange({...props.config, languages: LanguagesArg.SHOW})}
                             />
                         </Form.Field>
                     </Item.Content>
@@ -306,8 +304,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
-                                checked={props.config.tribe === Tribe.HIDE}
-                                onClick={() => props.onChange({...props.config, tribe: Tribe.HIDE})}
+                                checked={props.config.tribe === TribeArg.HIDE}
+                                onClick={() => props.onChange({...props.config, tribe: TribeArg.HIDE})}
                             />
                         </Form.Field>
                         <Form.Field className="no-margin">
@@ -318,8 +316,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"
-                                checked={props.config.tribe === Tribe.SHOW}
-                                onClick={() => props.onChange({...props.config, tribe: Tribe.SHOW})}
+                                checked={props.config.tribe === TribeArg.SHOW}
+                                onClick={() => props.onChange({...props.config, tribe: TribeArg.SHOW})}
                             />
                         </Form.Field>
                     </Item.Content>
@@ -338,8 +336,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
-                                checked={props.config.id === Ids.HIDE}
-                                onClick={() => props.onChange({...props.config, id: Ids.HIDE})}
+                                checked={props.config.id === IdsArg.HIDE}
+                                onClick={() => props.onChange({...props.config, id: IdsArg.HIDE})}
                             />
                         </Form.Field>
                         <Form.Field className="no-margin">
@@ -350,8 +348,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"
-                                checked={props.config.id === Ids.SHOW}
-                                onClick={() => props.onChange({...props.config, id: Ids.SHOW})}
+                                checked={props.config.id === IdsArg.SHOW}
+                                onClick={() => props.onChange({...props.config, id: IdsArg.SHOW})}
                             />
                         </Form.Field>
                     </Item.Content>
@@ -370,8 +368,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="hide"
-                                checked={props.config.sex === Sex.HIDE}
-                                onClick={() => props.onChange({...props.config, sex: Sex.HIDE})}
+                                checked={props.config.sex === SexArg.HIDE}
+                                onClick={() => props.onChange({...props.config, sex: SexArg.HIDE})}
                             />
                         </Form.Field>
                         <Form.Field className="no-margin">
@@ -382,8 +380,8 @@ export function ConfigPanel(props: {
                                 }
                                 name="checkboxRadioGroup"
                                 value="show"
-                                checked={props.config.sex === Sex.SHOW}
-                                onClick={() => props.onChange({...props.config, sex: Sex.SHOW})}
+                                checked={props.config.sex === SexArg.SHOW}
+                                onClick={() => props.onChange({...props.config, sex: SexArg.SHOW})}
                             />
                         </Form.Field>
                     </Item.Content>

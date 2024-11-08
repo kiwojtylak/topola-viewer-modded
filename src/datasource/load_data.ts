@@ -3,15 +3,28 @@ import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
 import {IndiInfo, JsonGedcomData} from '../lib/topola';
 import {TopolaError} from '../util/error';
 import AdmZip from 'adm-zip';
+import {Language} from "../languages/languages-loader";
+
+export interface UploadSourceSpec {
+    source: DataSourceEnum.UPLOADED;
+    gedcom: string;
+    allLanguages: Language[];
+    hash: string;
+    images?: Map<string, string>;
+}
+
+export interface UrlSourceSpec {
+    source: DataSourceEnum.GEDCOM_URL;
+    url: string;
+    allLanguages: Language[];
+    handleCors: boolean;
+}
 
 /**
  * Returns a valid IndiInfo object, either with the given indi and generation
  * or with an individual taken from the data and generation 0.
  */
-export function getSelection(
-    data: JsonGedcomData,
-    selection?: IndiInfo,
-): IndiInfo {
+export function getSelection(data: JsonGedcomData, selection?: IndiInfo): IndiInfo {
     // If ID is not given, or it doesn't exist in the data, use the first ID in the data.
     const id = selection && data.indis.some((i) => i.id === selection.id)
         ? selection.id
@@ -22,9 +35,10 @@ export function getSelection(
 function prepareData(
     gedcom: string,
     cacheId: string,
-    images?: Map<string, string>,
+    allLanguages: Language[],
+    images?: Map<string, string>
 ): TopolaData {
-    const data = convertGedcom(gedcom, images || new Map());
+    const data = convertGedcom(gedcom, allLanguages, images || new Map());
     const serializedData = JSON.stringify(data);
     try {
         sessionStorage.setItem(cacheId, serializedData);
@@ -72,6 +86,7 @@ export async function loadFile(blob: Blob): Promise<{ gedcom: string; images: Ma
 export async function loadFromUrl(
     url: string,
     handleCors: boolean,
+    allLanguages: Language[]
 ): Promise<TopolaData> {
     try {
         const cachedData = sessionStorage.getItem(url);
@@ -95,14 +110,15 @@ export async function loadFromUrl(
         throw new Error(response.statusText);
     }
     const {gedcom, images} = await loadFile(await response.blob());
-    return prepareData(gedcom, url, images);
+    return prepareData(gedcom, url, allLanguages, images);
 }
 
 /** Loads data from the given GEDCOM file contents. */
 export async function loadGedcom(
     hash: string,
     gedcom?: string,
-    images?: Map<string, string>,
+    allLanguages?: Language[],
+    images?: Map<string, string>
 ): Promise<TopolaData> {
     try {
         const cachedData = sessionStorage.getItem(hash);
@@ -112,25 +128,18 @@ export async function loadGedcom(
     } catch (e) {
         console.warn('Failed to load data from session storage: ' + e);
     }
-    if (!gedcom) {
-        throw new TopolaError(
-            'ERROR_LOADING_UPLOADED_FILE',
+    if ((!gedcom) || (!allLanguages)) {
+        throw new TopolaError('ERROR_LOADING_UPLOADED_FILE',
             'Error loading data. Please upload your file again.',
         );
     }
-    return prepareData(gedcom, hash, images);
+    return prepareData(gedcom, hash, allLanguages, images);
 }
 
-export interface UploadSourceSpec {
-    source: DataSourceEnum.UPLOADED;
-    gedcom?: string;
-    /** Hash of the GEDCOM contents. */
-    hash: string;
-    images?: Map<string, string>;
-}
 
 /** Files opened from the local computer. */
 export class UploadedDataSource implements DataSource<UploadSourceSpec> {
+
     isNewData(
         newSource: SourceSelection<UploadSourceSpec>,
         oldSource: SourceSelection<UploadSourceSpec>,
@@ -139,13 +148,12 @@ export class UploadedDataSource implements DataSource<UploadSourceSpec> {
         return newSource.spec.hash !== oldSource.spec.hash;
     }
 
-    async loadData(
-        source: SourceSelection<UploadSourceSpec>,
-    ): Promise<TopolaData> {
+    async loadData(source: SourceSelection<UploadSourceSpec>): Promise<TopolaData> {
         try {
             return await loadGedcom(
                 source.spec.hash,
                 source.spec.gedcom,
+                source.spec.allLanguages,
                 source.spec.images,
             );
         } catch (error) {
@@ -154,25 +162,14 @@ export class UploadedDataSource implements DataSource<UploadSourceSpec> {
     }
 }
 
-export interface UrlSourceSpec {
-    source: DataSourceEnum.GEDCOM_URL;
-    /** URL of the data that is loaded or is being loaded. */
-    url: string;
-    handleCors: boolean;
-}
-
 /** GEDCOM file loaded by pointing to a URL. */
 export class GedcomUrlDataSource implements DataSource<UrlSourceSpec> {
-    isNewData(
-        newSource: SourceSelection<UrlSourceSpec>,
-        oldSource: SourceSelection<UrlSourceSpec>,
-        data?: TopolaData,
-    ): boolean {
+    isNewData(newSource: SourceSelection<UrlSourceSpec>, oldSource: SourceSelection<UrlSourceSpec>, data?: TopolaData) {
         return newSource.spec.url !== oldSource.spec.url;
     }
     async loadData(source: SourceSelection<UrlSourceSpec>): Promise<TopolaData> {
         try {
-            return await loadFromUrl(source.spec.url, source.spec.handleCors);
+            return await loadFromUrl(source.spec.url, source.spec.handleCors, source.spec.allLanguages);
         } catch (error) {
             throw error;
         }

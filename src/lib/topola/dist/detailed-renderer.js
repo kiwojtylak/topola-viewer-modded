@@ -136,7 +136,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const indi = this.options.data.getIndi(id);
         const details = this.getIndiDetails(indi);
         const tribeHeight = indi.showTribe() && indi.getTribe() != null ? TRIBE_HEIGHT : 0;
-        const languagesHeight = indi.showLanguages() && indi.getLanguages() != null ? LANGUAGES_HEIGHT : 0;
+        const languagesHeight = indi.showLanguages() && indi.getLanguages().length > 0 ? LANGUAGES_HEIGHT : 0;
         const idAndSexHeight = indi.showId() || indi.showSex() ? DETAILS_HEIGHT : 0;
         const height = d3_array_1.max([
             INDI_MIN_HEIGHT + languagesHeight + tribeHeight + (details.length * DETAILS_HEIGHT) + idAndSexHeight,
@@ -148,7 +148,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             maxDetailsWidth + 22,
             getLength(indi.getFirstName() || '', 'name') + 8,
             getLength(indi.getLastName() || '', 'name') + 8,
-            indi.showLanguages() && indi.getLanguages() != null ? (getLength(indi.getLanguagesLabel(), 'languages') + 28) : 0,
+            indi.showLanguages() && indi.getLanguages().length > 0 ? (getLength(indi.getLanguagesLabel(), 'languages') + 28) : 0,
             indi.showTribe() && indi.getTribe() != null ? (getLength(indi.getTribe(), 'tribe') + 28) : 0,
             getLength(id, 'id') + 32,
             INDI_MIN_WIDTH,
@@ -276,29 +276,56 @@ var DetailedRenderer = /** @class */ (function (_super) {
     const tribes_css = new Map();
     DetailedRenderer.prototype.getTribeClass = function (indiId) {
         let _a;
-        const indi = this.options.data.getIndi(indiId)
         const tribe = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getTribe();
+        // Assign the tribe of the ego as tribe0
+        if (!tribes_css.has("tribe0")) {
+            const egoTribe = Array.from(this.options.data.indis?.values() || []).find(indi => indi.isEgo())?.json.tribe
+            if (egoTribe) {
+                tribes_css.set(egoTribe, "tribe0")
+            }
+        }
         if (tribe) {
-            if (indi.isEgo()) {
-                tribes_css.set(tribe, "tribe0")
-            } else {
-                if (!tribes_css.has(tribe)) {
-                    const startIndex = tribes_css.size + 1
-                    tribes_css.set(tribe, "tribe" + startIndex)
-                }
+            if (!tribes_css.has(tribe)) {
+                tribes_css.set(tribe, "tribe" + tribes_css.size)
+            }
+            if (tribes_css.size > 9) {
+                throw new Error('No CSS for more than 9 different tribes')
             }
             return tribes_css.get(tribe);
         }
         return ''  // Blank if no tribe
     };
 
-    DetailedRenderer.prototype.getLanguagesClass = function (indiId, selectedLanguage) {
+    const languages_css = new Map();
+    DetailedRenderer.prototype.getLanguagesClass = function (indiId, selectedLanguageId) {
         let _a;
         const languages = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getLanguages();
-        if (selectedLanguage != null) {
-            // TODO: find selected in the indi languages
+        languages.forEach(language => {
+            if (!languages_css.has(language.id)) {
+                const startIndex = languages_css.size + 1
+                languages_css.set(language.id, "l" + startIndex);
+            }
+            if (languages_css.size > 10) {
+                throw new Error('No CSS for more than 9 different languages')
+            }
+        })
+        if (selectedLanguageId != null) {
+            // By specific language
+            const hasSelectedLanguage = languages.some(language => language.id === selectedLanguageId);
+            if (hasSelectedLanguage) {
+                return languages_css.get(selectedLanguageId);
+            }
+        } else {
+            // By nr. languages
+            return languages.length > 0 ? 'n' + Math.min(languages.length, 7) : '';
         }
-        return languages.length > 0 ? 'n' + Math.min(languages.length, 7) : '';
+        return '' // Blank if no language
+    }
+
+    DetailedRenderer.prototype.resetCss = function () {
+        tribes_css.clear()
+        languages_css.clear()
+        console.log('Cleared CSS maps')
     }
 
     DetailedRenderer.prototype.renderIndi = function (enter, update) {

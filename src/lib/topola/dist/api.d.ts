@@ -46,10 +46,12 @@ export interface DataProvider<IndiT extends Indi, FamT extends Fam> {
 }
 /** D3 selection containing TreeNode data. */
 export declare type TreeNodeSelection = Selection<BaseType, HierarchyPointNode<TreeNode>, BaseType, {}>;
+
 /** Interface for rendering data. */
 export interface Renderer {
     render(enter: TreeNodeSelection, update: TreeNodeSelection): void;
     getCss(): string;
+    resetCss(): void;
     updateNodes(nodes: Array<HierarchyNode<TreeNode>>): void;
     getFamilyAnchor(node: TreeNode): [number, number];
     getIndiAnchor(node: TreeNode): [number, number];

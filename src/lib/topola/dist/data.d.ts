@@ -1,4 +1,6 @@
 import { DataProvider, Fam, Indi } from './api';
+import {Language} from "../../../languages/languages-loader";
+
 export interface Date {
     qualifier?: string;
     day?: number;
@@ -38,7 +40,7 @@ export interface JsonIndi {
     birth?: JsonEvent;
     death?: JsonEvent;
     sex?: string;
-    languages?: string[];
+    languages?: Language[];
     languagesLabel?: string;
     tribe?: string;
     images?: JsonImage[];
@@ -75,14 +77,14 @@ export interface IndiDetails extends Indi {
     getDeathDate(): DateOrRange | null;
     getDeathPlace(): string | null;
     isConfirmedDeath(): boolean;
-    getLanguages(): string[] | null;
+    getLanguages(): Language[] | [];
     getLanguagesLabel(): string[] | null;
     getTribe(): string | null;
     getSex(): string | null;
     getImageUrl(): string | null;
-    getImages(): JsonImage[] | null;
-    getNotes(): string[] | null;
-    getEvents(): JsonEvent[] | null;
+    getImages(): JsonImage[] | [];
+    getNotes(): string[] | [];
+    getEvents(): JsonEvent[] | [];
     showLanguages(): boolean;
     showTribe(): boolean;
     showId(): boolean;

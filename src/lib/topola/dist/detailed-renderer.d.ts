@@ -18,6 +18,7 @@ export declare class DetailedRenderer extends CompositeRenderer implements Rende
     getPreferredFamSize(id: string): [number, number];
     render(enter: TreeNodeSelection, update: TreeNodeSelection): void;
     getCss(): string;
+    resetCss(): void;
     private transition;
     private renderIndi;
     private renderFamily;

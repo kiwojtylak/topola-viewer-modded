@@ -1,6 +1,7 @@
 import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
 import {TopolaData} from '../util/gedcom_util';
 import {loadGedcom} from './load_data';
+import {Language} from "../languages/languages-loader";
 
 /**
  * Message types used in embedded mode.
@@ -23,13 +24,14 @@ interface EmbeddedMessage {
 interface GedcomMessage extends EmbeddedMessage {
     message: EmbeddedMessageType.GEDCOM;
     gedcom?: string;
+    allLanguages?: Language[]
 }
 
 export interface EmbeddedSourceSpec {
     source: DataSourceEnum.EMBEDDED;
 }
 
-/** GEDCOM file received from outside of the iframe. */
+/** GEDCOM file received from outside the iframe. */
 export class EmbeddedDataSource implements DataSource<EmbeddedSourceSpec> {
     isNewData(
         newSource: SourceSelection<EmbeddedSourceSpec>,
@@ -50,11 +52,12 @@ export class EmbeddedDataSource implements DataSource<EmbeddedSourceSpec> {
             window.parent.postMessage({message: EmbeddedMessageType.READY}, '*');
         } else if (message.message === EmbeddedMessageType.GEDCOM) {
             const gedcom = (message as GedcomMessage).gedcom;
-            if (!gedcom) {
+            const allLanguages = (message as GedcomMessage).allLanguages;
+            if (!gedcom || !allLanguages) {
                 return;
             }
             try {
-                const data = await loadGedcom('', gedcom);
+                const data = await loadGedcom('', gedcom, allLanguages);
                 resolve(data);
             } catch (error) {
                 reject(error);

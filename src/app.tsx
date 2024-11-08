@@ -14,31 +14,11 @@ import {TopolaData} from './util/gedcom_util';
 import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router';
 import {idToIndiMap} from './util/gedcom_util';
-import {
-    Chart,
-    ChartType,
-    downloadPdf,
-    downloadPng,
-    downloadSvg,
-} from './chart';
-import {
-    argsToConfig,
-    Config,
-    ConfigPanel,
-    configToArgs,
-    DEFAULT_CONFIG,
-    Languages,
-    Tribe,
-    Ids,
-    Sex,
-} from './config';
-import {
-    getSelection,
-    UploadSourceSpec,
-    UrlSourceSpec,
-    GedcomUrlDataSource,
-    UploadedDataSource,
-} from './datasource/load_data';
+import {Chart, ChartType, downloadPdf, downloadPng, downloadSvg} from './chart';
+import {getSelection, UploadSourceSpec, UrlSourceSpec, GedcomUrlDataSource, UploadedDataSource} from './datasource/load_data';
+import CSVLoader, {Language} from "./languages/languages-loader";
+import {argsToConfig, Config, ConfigPanel, configToArgs, DEFAULT_CONFIG, LanguagesArg, TribeArg, IdsArg, SexArg} from './config';
+
 
 /**
  * Load GEDCOM URL from REACT_APP_STATIC_URL environment variable.
@@ -93,10 +73,7 @@ enum AppState {
     LOADING_MORE,
 }
 
-type DataSourceSpec =
-    | UrlSourceSpec
-    | UploadSourceSpec
-    | EmbeddedSourceSpec;
+type DataSourceSpec = UrlSourceSpec | UploadSourceSpec | EmbeddedSourceSpec;
 
 /**
  * Arguments passed to the application, primarily through URL parameters.
@@ -126,8 +103,7 @@ function startIndi(data: TopolaData | undefined) {
 }
 
 function getEgoIndi(data: TopolaData | undefined) {
-    return Object.entries(data?.gedcom?.other || {})
-        .filter(([_, value]) => value.tag === "EGO")
+    return Object.entries(data?.gedcom?.other || {}).filter(([_, value]) => value.tag === "EGO")
 }
 
 function getEgoGen(data: TopolaData | undefined) {
@@ -136,7 +112,12 @@ function getEgoGen(data: TopolaData | undefined) {
         .find(data => data !== undefined);
 }
 
-function getLanguageOptions(data: TopolaData | undefined) {
+function loadLanguageOptions(data: TopolaData | undefined, allLanguages: Language[]) {
+    const gedcomLanguages = Array.from(getGedcomLanguages(data));
+    return allLanguages.filter((l: Language) => gedcomLanguages.includes(l.name)).sort();
+}
+
+function getGedcomLanguages(data: TopolaData | undefined) {
     return Object.entries(data?.gedcom?.indis || {})
         .reduce<Set<string>>((acc, [_, value]) => {
             const langDataArray = value.tree.filter((sub: any) => sub.tag === "LANG");
@@ -161,7 +142,7 @@ function getTribes(data: TopolaData | undefined) {
 /**
  * Retrieve arguments passed into the application through the URL and uploaded data.
  */
-function getArguments(location: H.Location<any>): Arguments {
+function getArguments(location: H.Location<any>, allLanguages: Language[]): Arguments {
     const chartTypes = new Map<string | undefined, ChartType>([
         ['hourglass', ChartType.Hourglass]
     ]);
@@ -177,18 +158,21 @@ function getArguments(location: H.Location<any>): Arguments {
             source: DataSourceEnum.GEDCOM_URL,
             url: staticUrl,
             handleCors: false,
+            allLanguages: allLanguages
         };
     } else if (hash) {
         sourceSpec = {
             source: DataSourceEnum.UPLOADED,
             hash,
             gedcom: location.state && location.state.data,
+            allLanguages: allLanguages,
             images: location.state && location.state.images,
         };
     } else if (url) {
         sourceSpec = {
             source: DataSourceEnum.GEDCOM_URL,
             url,
+            allLanguages: allLanguages,
             handleCors: getParam('handleCors') !== 'false', // True by default.
         };
     } else if (embedded) {
@@ -235,6 +219,9 @@ export function App() {
     /** Freeze animations after initial chart render. */
     const [freezeAnimation, setFreezeAnimation] = useState(false);
     const [config, setConfig] = useState(DEFAULT_CONFIG);
+    /** All languages. */
+    const [allLanguages, setAllLanguages] = useState<Language[]>([]);
+
 
     const intl = useIntl();
     const history = useHistory();
@@ -247,20 +234,20 @@ export function App() {
         }
     }
 
-    function toggleDetails(config: Config, data: TopolaData | undefined) {
+    function toggleDetails(config: Config, data: TopolaData | undefined, allLanguages: Language[]) {
         if (data === undefined) {
             return;
         }
         // Find if there are languages
-        config.languageOptions = Array.from(getLanguageOptions(data)).sort()
+        config.languageOptions = loadLanguageOptions(data, allLanguages)
         config.renderLanguagesOption = config.languageOptions.length > 0
         // Find if there are tribes
         config.renderTribeOption = Array.from(getTribes(data)).length > 0
         idToIndiMap(data.chartData).forEach((indi) => {
-            indi.hideLanguages = config.languages === Languages.HIDE;
-            indi.hideTribe = config.tribe === Tribe.HIDE;
-            indi.hideId = config.id === Ids.HIDE;
-            indi.hideSex = config.sex === Sex.HIDE;
+            indi.hideLanguages = config.languages === LanguagesArg.HIDE;
+            indi.hideTribe = config.tribe === TribeArg.HIDE;
+            indi.hideId = config.id === IdsArg.HIDE;
+            indi.hideSex = config.sex === SexArg.HIDE;
         });
     }
 
@@ -306,25 +293,27 @@ export function App() {
         }
     }
 
-    function loadData(newSourceSpec: DataSourceSpec, newSelection?: IndiInfo) {
+    function loadData(newSourceSpec: DataSourceSpec, newSelection?: IndiInfo, allLanguages?: Language[]) {
         switch (newSourceSpec.source) {
             case DataSourceEnum.UPLOADED:
-                return uploadedDataSource.loadData({
-                    spec: newSourceSpec,
-                    selection: newSelection,
-                });
+                return uploadedDataSource.loadData({spec: newSourceSpec, selection: newSelection, allLanguages: allLanguages});
             case DataSourceEnum.GEDCOM_URL:
-                return gedcomUrlDataSource.loadData({
-                    spec: newSourceSpec,
-                    selection: newSelection,
-                });
+                return gedcomUrlDataSource.loadData({spec: newSourceSpec, selection: newSelection, allLanguages: allLanguages});
             case DataSourceEnum.EMBEDDED:
-                return embeddedDataSource.loadData({
-                    spec: newSourceSpec,
-                    selection: newSelection,
-                });
+                return embeddedDataSource.loadData({spec: newSourceSpec, selection: newSelection, allLanguages: allLanguages});
         }
     }
+
+    // Function to load languages from CSV
+    const loadAllLanguages = async () => {
+        const allLanguages = await CSVLoader.loadLanguages('data/languages.csv') || [];
+        setAllLanguages(allLanguages);
+    };
+
+    // useEffect to load languages when pathname is '/view'
+    useEffect(() => {
+        loadAllLanguages();
+    }, [location.pathname]);
 
     useEffect(() => {
         const rootElement = document.getElementById('root');
@@ -343,7 +332,8 @@ export function App() {
                 }
                 return;
             }
-            const args = getArguments(location);
+
+            const args = getArguments(location, allLanguages);
             if (!args.sourceSpec) {
                 history.replace({pathname: '/'});
                 return;
@@ -361,7 +351,7 @@ export function App() {
                     const data = await loadData(args.sourceSpec, args.selection);
                     setData(data);
                     setSelection(args.selection !== undefined ? args.selection : startIndi(data));
-                    toggleDetails(args.config, data);
+                    toggleDetails(args.config, data, allLanguages);
                     setShowSidePanel(args.showSidePanel);
                     setState(AppState.SHOWING_CHART);
                 } catch (error: any) {
@@ -370,7 +360,6 @@ export function App() {
             } else if (
                 state === AppState.SHOWING_CHART || state === AppState.LOADING_MORE
             ) {
-                // Update selection if it has changed in the URL.
                 setChartType(args.chartType);
                 setState(AppState.SHOWING_CHART);
                 updateDisplay(args.selection !== undefined ? args.selection : startIndi(data));
@@ -449,10 +438,7 @@ export function App() {
                 const updatedSelection = getSelection(data!.chartData, selection);
                 const sidePanelTabs = [
                     {
-                        menuItem: intl.formatMessage({
-                            id: 'tab.info',
-                            defaultMessage: 'Info',
-                        }),
+                        menuItem: intl.formatMessage({id: 'tab.info', defaultMessage: 'Info'}),
                         render: () => (
                             <Details gedcom={data!.gedcom} indi={updatedSelection.id}/>
                         ),
@@ -467,7 +453,7 @@ export function App() {
                                 config={config}
                                 onChange={(config) => {
                                     setConfig(config);
-                                    toggleDetails(config, data);
+                                    toggleDetails(config, data, allLanguages);
                                     updateUrl(configToArgs(config));
                                 }}
                             />

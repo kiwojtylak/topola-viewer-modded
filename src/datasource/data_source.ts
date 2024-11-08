@@ -1,5 +1,6 @@
 import {IndiInfo} from '../lib/topola';
 import {TopolaData} from '../util/gedcom_util';
+import {Language} from "../languages/languages-loader";
 
 /** Supported data sources. */
 export enum DataSourceEnum {
@@ -12,6 +13,7 @@ export enum DataSourceEnum {
 export interface SourceSelection<SourceSpecT> {
     spec: SourceSpecT;
     selection?: IndiInfo;
+    allLanguages?: Language[];
 }
 
 /** Interface encapsulating functions specific for a data source. */

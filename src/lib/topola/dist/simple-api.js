@@ -1,8 +1,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createChart = void 0;
-var d3_selection_1 = require("d3-selection");
-var data_1 = require("./data");
-var DEFAULT_SVG_SELECTOR = 'svg';
+const d3_selection_1 = require("d3-selection");
+const data_1 = require("./data");
+const DEFAULT_SVG_SELECTOR = 'svg';
+
 function createChartOptions(chartOptions, renderOptions, options) {
     const data = new data_1.JsonDataProvider(chartOptions.json);
     const indiHrefFunc = chartOptions.indiUrl ? function (id) {
@@ -40,6 +41,7 @@ function createChartOptions(chartOptions, renderOptions, options) {
 }
 
 const SimpleChartHandle = /** @class */ (function () {
+
     function SimpleChartHandle(options) {
         this.options = options;
         this.initialRender = true;
@@ -50,8 +52,12 @@ const SimpleChartHandle = /** @class */ (function () {
             renderOptions = {};
         }
         const chartOptions = createChartOptions(this.options, renderOptions, {
-            initialRender: this.initialRender,
+            initialRender: this.initialRender
         });
+        // Reset CSS maps
+        if (this.initialRender) {
+            chartOptions.renderer.resetCss();
+        }
         this.initialRender = false;
         const chart = new this.options.chartType(chartOptions);
         const info = chart.render();

@@ -51,10 +51,10 @@ var JsonIndiDetails = /** @class */ (function () {
         return this.json.sex || null;
     };
     JsonIndiDetails.prototype.getLanguages = function () {
-        return this.json.languages || null;
+        return this.json.languages || [];
     };
     JsonIndiDetails.prototype.getLanguagesLabel = function () {
-        const abbreviations = this.json.languages.map(lang => lang.slice(0, 3).toUpperCase());
+        const abbreviations = this.json.languages.map(lang => lang.abbreviation);
         return abbreviations.length > 0 ? `${abbreviations.join(', ')}` : null;
     };
     JsonIndiDetails.prototype.getTribe = function () {
@@ -67,13 +67,13 @@ var JsonIndiDetails = /** @class */ (function () {
             null);
     };
     JsonIndiDetails.prototype.getImages = function () {
-        return this.json.images || null;
+        return this.json.images || [];
     };
     JsonIndiDetails.prototype.getNotes = function () {
-        return this.json.notes || null;
+        return this.json.notes || [];
     };
     JsonIndiDetails.prototype.getEvents = function () {
-        return this.json.events || null;
+        return this.json.events || [];
     };
     JsonIndiDetails.prototype.showLanguages = function () {
         return !this.json.hideLanguages;

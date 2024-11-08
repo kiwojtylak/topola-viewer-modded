@@ -2,6 +2,7 @@ import {GedcomEntry, parse as parseGedcom} from 'parse-gedcom';
 import {TopolaError} from './error';
 import {gedcomEntriesToJson, JsonFam, JsonGedcomData, JsonImage, JsonIndi} from '../lib/topola';
 import {compareDates} from './date_util';
+import {Language} from "../languages/languages-loader";
 
 export interface GedcomData {
     /** The HEAD entry. */
@@ -234,15 +235,16 @@ function filterImages(
  * - remove images that are not HTTP links and aren't mapped in `images`.
  *
  * @param gedcom
- * @param images Map from file name to image URL. This is used to pass in
- *   uploaded images.
+ * @param images Map from file name to image URL. This is used to pass in uploaded images.
+ * @param allLanguages
  */
 export function convertGedcom(
     gedcom: string,
-    images: Map<string, string>,
+    allLanguages: Language[],
+    images: Map<string, string>
 ): TopolaData {
-    const entries = parseGedcom(gedcom);
-    const json = gedcomEntriesToJson(entries);
+    const entries = parseGedcom(gedcom, allLanguages);
+    const json = gedcomEntriesToJson(entries, allLanguages);
     if (
         !json ||
         !json.indis ||
@@ -254,7 +256,7 @@ export function convertGedcom(
     }
     return {
         chartData: filterImages(normalizeGedcom(json), images),
-        gedcom: prepareGedcom(entries),
+        gedcom: prepareGedcom(entries)
     };
 }
 

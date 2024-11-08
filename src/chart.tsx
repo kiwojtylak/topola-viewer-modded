@@ -1,4 +1,4 @@
-import {ChartColors, Languages, Tribe, Ids, Sex} from './config';
+import {ChartColors, LanguagesArg, TribeArg, IdsArg, SexArg} from './config';
 import {interpolateNumber} from 'd3-interpolate';
 import {IntlShape, useIntl} from 'react-intl';
 import {max, min} from 'd3-array';
@@ -196,11 +196,11 @@ export interface ChartProps {
     onSelection: (indiInfo: IndiInfo) => void;
     freezeAnimation?: boolean;
     colors?: ChartColors;
-    selectedLanguage?: number | null;
-    hideLanguages?: Languages;
-    hideTribe?: Tribe;
-    hideIds?: Ids;
-    hideSex?: Sex;
+    selectedLanguage?: string | null;
+    hideLanguages?: LanguagesArg;
+    hideTribe?: TribeArg;
+    hideIds?: IdsArg;
+    hideSex?: SexArg;
 }
 
 class ChartWrapper {
@@ -364,6 +364,7 @@ export function Chart(props: ChartProps) {
             const initialRender =
                 props.chartType !== prevProps?.chartType ||
                 props.colors !== prevProps?.colors ||
+                props.selectedLanguage !== prevProps?.selectedLanguage ||
                 props.hideLanguages !== prevProps?.hideLanguages ||
                 props.hideTribe !== prevProps?.hideTribe ||
                 props.hideIds !== prevProps?.hideIds ||

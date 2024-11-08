@@ -1,7 +1,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.gedcomEntriesToJson = exports.gedcomToJson = exports.getDate = void 0;
-
-var parse_gedcom_1 = require("parse-gedcom");
+const parse_gedcom_1 = require("parse-gedcom");
 
 /** Returns the first entry with the given tag or undefined if not found. */
 function findTag(tree, tag) {
@@ -155,7 +154,7 @@ function createEvent(entry) {
 }
 
 /** Creates a JsonIndi object from an INDI entry in GEDCOM. */
-function createIndi(entry, objects, ego) {
+function createIndi(entry, objects, ego, allLanguages) {
     let firstName;
     let lastName;
     const id = pointerToId(entry.pointer);
@@ -219,9 +218,9 @@ function createIndi(entry, objects, ego) {
     // Languages
     const languageTags = findTags(entry.tree, 'LANG')
     if (languageTags) {
-        indi.languages = findTags(entry.tree, 'LANG').map(lang => lang.data)
+        const gedcomLanguages = findTags(entry.tree, 'LANG').map(lang => lang.data)
+        indi.languages = allLanguages.filter(l => gedcomLanguages.includes(l.name));
     }
-
     // Tribe
     const tribeTag = findTag(entry.tree, '_TRIB');
     if (tribeTag) {
@@ -303,17 +302,17 @@ function createMap(entries) {
 }
 
 /** Parses a GEDCOM file into a JsonGedcomData structure. */
-function gedcomToJson(gedcomContents) {
-    return gedcomEntriesToJson(parse_gedcom_1.parse(gedcomContents));
+function gedcomToJson(gedcomContents, allLanguages) {
+    return gedcomEntriesToJson(parse_gedcom_1.parse(gedcomContents, allLanguages));
 }
 exports.gedcomToJson = gedcomToJson;
 
 /** Converts parsed GEDCOM entries into a JsonGedcomData structure. */
-function gedcomEntriesToJson(gedcom) {
+function gedcomEntriesToJson(gedcom, allLanguages) {
     const objects = createMap(findTags(gedcom, 'OBJE'));
     const ego = findTags(gedcom, 'EGO')
     const indis = findTags(gedcom, 'INDI').map(function (entry) {
-        return createIndi(entry, objects, ego.length > 0 ? ego[0]: undefined);
+        return createIndi(entry, objects, ego.length > 0 ? ego[0] : undefined, allLanguages);
     });
     const fams = findTags(gedcom, 'FAM').map(createFam);
     return { indis: indis, fams: fams };
