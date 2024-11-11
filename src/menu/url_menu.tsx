@@ -65,9 +65,7 @@ export function UrlMenu(props: Props) {
                                 }
                                 values={{
                                     link: (
-                                        <a href="https://topolaproxy.bieda.it/">
-                                            topolaproxy.bieda.it (cors-anywhere proxy)
-                                        </a>
+                                        <a href="https://corsproxy.io/">corsproxy.io</a>
                                     ),
                                 }}
                             />

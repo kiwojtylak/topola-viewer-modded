@@ -77,25 +77,38 @@ export function TopBar(props: Props) {
                         </Menu.Menu>
                     </>
                 );
-
             case ScreenSize.SMALL:
-                return (
-                    <>
-                        <Dropdown.Item onClick={props.eventHandlers.onDownloadPdf}>
-                            <Icon name="download"/>
-                            <FormattedMessage id="menu.download_pdf" defaultMessage="Download PDF"/>
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={props.eventHandlers.onDownloadPng}>
-                            <Icon name="download"/>
-                            <FormattedMessage id="menu.download_png" defaultMessage="Download PNG"/>
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={props.eventHandlers.onDownloadSvg}>
-                            <Icon name="download"/>
-                            <FormattedMessage id="menu.download_svg" defaultMessage="Download SVG"/>
-                        </Dropdown.Item>
-                        <Dropdown.Divider/>
-                    </>
-                );
+                if (!props.showingChart) {
+                    return (
+                        <>
+                            <UrlMenu menuType={MenuType.Dropdown} {...props} />
+                        </>
+                    );
+                } else {
+                    return (
+                        <>
+                            <UrlMenu menuType={MenuType.Dropdown} {...props} />
+                            <Dropdown.Divider/>
+                            <Dropdown.Item onClick={props.eventHandlers.onDownloadPdf}>
+                                <Icon name="download"/>
+                                <FormattedMessage id="menu.download_pdf" defaultMessage="Download PDF"/>
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={props.eventHandlers.onDownloadPng}>
+                                <Icon name="download"/>
+                                <FormattedMessage id="menu.download_png" defaultMessage="Download PNG"/>
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={props.eventHandlers.onDownloadSvg}>
+                                <Icon name="download"/>
+                                <FormattedMessage id="menu.download_svg" defaultMessage="Download SVG"/>
+                            </Dropdown.Item>
+                            <Dropdown.Divider/>
+                            <Menu.Item onClick={props.eventHandlers.onCenterView}>
+                                <Icon name="eye" />
+                                <FormattedMessage id="menu.view" defaultMessage="Center view" />
+                            </Menu.Item>
+                        </>
+                    );
+                }
         }
     }
 
@@ -104,37 +117,28 @@ export function TopBar(props: Props) {
         if (!props.standalone) {
             return null;
         }
-
         switch (screenSize) {
             case ScreenSize.LARGE:
-                // Show dropdown if chart is shown, otherwise show individual menu items.
-                return props.showingChart ? (
-                    <>
-                        <UploadMenu menuType={MenuType.Menu} {...props} />
-                        {/*<UrlMenu menuType={MenuType.Menu} {...props} />*/}
-                    </>
-                ) : (
+                return (
                     <Dropdown
+                        closeOnChange={false}
                         trigger={
                             <div>
                                 <Icon name="folder open"/>
                                 <FormattedMessage id="menu.open" defaultMessage="Open"/>
                             </div>
                         }
-                        className="item"
-                    >
-                        <Dropdown.Menu>
+                        className="item">
+                        <Dropdown.Menu >
                             <UploadMenu menuType={MenuType.Dropdown} {...props} />
                             <UrlMenu menuType={MenuType.Dropdown} {...props} />
                         </Dropdown.Menu>
                     </Dropdown>
                 );
-
             case ScreenSize.SMALL:
                 return (
                     <>
                         <UploadMenu menuType={MenuType.Dropdown} {...props} />
-                        {/*<UrlMenu menuType={MenuType.Dropdown} {...props} />*/}
                         <Dropdown.Divider/>
                     </>
                 );

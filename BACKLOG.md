@@ -21,4 +21,8 @@ Backlog:
 - [x] Color by languages
 - [x] Change on language option does not trigger change of color
 - [x] Consistency assigning color to language across different loads
+- [x] Fix CORS proxy
+- [x] After loading 1st file, you can't ever use from URL
+- [ ] Dropdowns not closing after selection
+- [ ] Add option to convert CSV to Gedcom
 - [ ] Sometimes allLanguages does not load the first time

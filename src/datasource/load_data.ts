@@ -87,7 +87,7 @@ export async function loadFromUrl(
     url: string,
     handleCors: boolean,
     allLanguages: Language[]
-): Promise<TopolaData> {
+) {
     try {
         const cachedData = sessionStorage.getItem(url);
         if (cachedData) {
@@ -96,21 +96,25 @@ export async function loadFromUrl(
     } catch (e) {
         console.warn('Failed to load data from session storage: ' + e);
     }
-    const driveUrlMatch1 = url.match(/https:\/\/drive\.google\.com\/file\/d\/(.*)\/.*/);
-    if (driveUrlMatch1) {
-        url = `https://drive.google.com/uc?id=${driveUrlMatch1[1]}&export=download`;
-    }
-    const driveUrlMatch2 = url.match(/https:\/\/drive\.google\.com\/open\?id=([^&]*)&?.*/);
-    if (driveUrlMatch2) {
-        url = `https://drive.google.com/uc?id=${driveUrlMatch2[1]}&export=download`;
-    }
-    const urlToFetch = handleCors ? 'https://topolaproxy.bieda.it/' + url : url;
-    const response = await window.fetch(urlToFetch);
-    if (response.status !== 200) {
+
+    const urlToFetch = handleCors ? 'https://corsproxy.io/?' + encodeURIComponent(url) : url;
+    const response = await fetch(urlToFetch);
+    if (!response.ok) {
         throw new Error(response.statusText);
     }
-    const {gedcom, images} = await loadFile(await response.blob());
-    return prepareData(gedcom, url, allLanguages, images);
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/zip")) {
+        const data = await response.blob();
+        const {gedcom, images} = await loadFile(data)
+        return prepareData(gedcom, url, allLanguages, images);
+    } else if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return prepareData(data.contents, url, allLanguages, new Map());
+    } else if (contentType && contentType.includes("text/plain")) {
+        const data = await response.text();
+        return prepareData(data, url, allLanguages, new Map());
+    }
 }
 
 /** Loads data from the given GEDCOM file contents. */

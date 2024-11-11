@@ -252,7 +252,7 @@ export function convertGedcom(
         !json.fams ||
         !json.fams.length
     ) {
-        throw new TopolaError('GEDCOM_READ_FAILED', 'Failed to read GEDCOM file');
+        throw new TopolaError('GEDCOM_READ_FAILED', 'Insufficient GEDCOM data');
     }
     return {
         chartData: filterImages(normalizeGedcom(json), images),
