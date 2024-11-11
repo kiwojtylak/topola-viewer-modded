@@ -52,7 +52,7 @@ export function UploadMenu(props: Props) {
         historyPush({
             pathname: '/view',
             search: queryString.stringify({file: hash}),
-            state: {data: gedcom, images},
+            state: {data: gedcom, images}
         });
     }
 
@@ -73,8 +73,7 @@ export function UploadMenu(props: Props) {
                     {content}
                 </Dropdown.Item>
             )}
-            <input
-                className="hidden"
+            <input className="hidden"
                 type="file"
                 accept=".ged,.gdz,.gedzip,.zip,image/*"
                 id="fileInput"

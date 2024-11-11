@@ -7,7 +7,7 @@ import {
 
 export enum MenuType {
     Menu,
-    Dropdown,
+    Dropdown
 }
 
 interface Props {
@@ -20,7 +20,7 @@ export function MenuItem(props: Props & MenuItemProps & DropdownItemProps) {
     delete newProps.menuType;
     return (
         <>
-            {props.menuType === MenuType.Menu ? (
+            {props.menuType === MenuType.Menu? (
                 <Menu.Item {...newProps}>{props.children}</Menu.Item>
             ) : (
                 <Dropdown.Item {...newProps}>{props.children}</Dropdown.Item>

@@ -29,24 +29,17 @@ export function UrlMenu(props: Props) {
         if (url) {
             history.push({
                 pathname: '/view',
-                search: queryString.stringify({url}),
+                search: queryString.stringify({url})
             });
         }
     }
 
     function loadFromUrlModal() {
         return (
-            <Modal
-                open={dialogOpen}
-                onClose={() => setDialogOpen(false)}
-                centered={false}
-            >
+            <Modal open={dialogOpen} onClose={() => setDialogOpen(false)} centered={false}>
                 <Header>
                     <Icon name="cloud download"/>
-                    <FormattedMessage
-                        id="load_from_url.title"
-                        defaultMessage="Load from URL"
-                    />
+                    <FormattedMessage id="load_from_url.title" defaultMessage="Load from URL"/>
                 </Header>
                 <Modal.Content>
                     <Form onSubmit={handleLoad}>
@@ -74,10 +67,7 @@ export function UrlMenu(props: Props) {
                 </Modal.Content>
                 <Modal.Actions>
                     <Button secondary onClick={() => setDialogOpen(false)}>
-                        <FormattedMessage
-                            id="load_from_url.cancel"
-                            defaultMessage="Cancel"
-                        />
+                        <FormattedMessage id="load_from_url.cancel" defaultMessage="Cancel"/>
                     </Button>
                     <Button primary onClick={handleLoad}>
                         <FormattedMessage id="load_from_url.load" defaultMessage="Load"/>
@@ -91,10 +81,7 @@ export function UrlMenu(props: Props) {
         <>
             <MenuItem onClick={() => setDialogOpen(true)} menuType={props.menuType}>
                 <Icon name="cloud download"/>
-                <FormattedMessage
-                    id="menu.load_from_url"
-                    defaultMessage="Load from URL"
-                />
+                <FormattedMessage id="menu.load_from_url" defaultMessage="Load from URL"/>
             </MenuItem>
             {loadFromUrlModal()}
         </>

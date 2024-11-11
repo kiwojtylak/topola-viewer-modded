@@ -7,7 +7,8 @@ import {UploadMenu} from './upload_menu';
 import {UrlMenu} from './url_menu';
 import {useHistory, useLocation} from 'react-router';
 import {IndiInfo, JsonGedcomData} from '../lib/topola';
-import {useState} from "react";
+import {useRef, useState} from "react";
+import {ConvertCSVMenu} from "./convert_csv";
 
 enum ScreenSize {
     LARGE,
@@ -23,9 +24,7 @@ interface EventHandlers {
 }
 
 interface Props {
-    /** True if the application is currently showing a chart. */
     showingChart: boolean;
-    /** Data used for the search index. */
     data?: JsonGedcomData;
     standalone: boolean;
     eventHandlers: EventHandlers;
@@ -34,7 +33,61 @@ interface Props {
 export function TopBar(props: Props) {
     useHistory();
     useLocation();
-    function chartMenus(screenSize: ScreenSize) {
+
+    function FileMenus(screenSize: ScreenSize) {
+        const [menuOpen, setMenuOpen] = useState(false);
+        const cooldown = useRef(false);
+
+        // Debug handler
+        const toggleMenu = (state: boolean) => {
+            if (!state) {
+                cooldown.current = true;
+                setMenuOpen(false);
+                setTimeout(() => {
+                    cooldown.current = false;
+                }, 150);
+            } else if (!cooldown.current) {
+                setMenuOpen(true);
+            }
+        };
+
+        // Don't show "open" menus in non-standalone mode.
+        if (!props.standalone) {
+            return null;
+        }
+        switch (screenSize) {
+            case ScreenSize.LARGE:
+                return (
+                    <Dropdown
+                        onOpen={() => toggleMenu(true)}
+                        onClose={() => toggleMenu(false)}
+                        open={menuOpen}
+                        trigger={
+                            <div>
+                                <Icon name="folder open"/>
+                                <FormattedMessage id="menu.open" defaultMessage="Open"/>
+                            </div>
+                        }
+                        className="item">
+                        <Dropdown.Menu onClick={() => toggleMenu(false)}>
+                            <UploadMenu menuType={MenuType.Dropdown} {...props} />
+                            <UrlMenu menuType={MenuType.Dropdown} {...props} />
+                            <ConvertCSVMenu menuType={MenuType.Dropdown} {...props} />
+                        </Dropdown.Menu>
+                    </Dropdown>
+                );
+            case ScreenSize.SMALL:
+                return (
+                    <>
+                        <UploadMenu menuType={MenuType.Dropdown} {...props} />
+                        <UrlMenu menuType={MenuType.Dropdown} {...props} />
+                        <ConvertCSVMenu menuType={MenuType.Dropdown} {...props} />
+                    </>
+                );
+        }
+    }
+
+    function ChartMenus(screenSize: ScreenSize) {
         if (!props.showingChart) {
             return null;
         }
@@ -88,7 +141,6 @@ export function TopBar(props: Props) {
                 } else {
                     return (
                         <>
-                            <UrlMenu menuType={MenuType.Dropdown} {...props} />
                             <Dropdown.Divider/>
                             <Dropdown.Item onClick={props.eventHandlers.onDownloadPdf}>
                                 <Icon name="download"/>
@@ -113,44 +165,13 @@ export function TopBar(props: Props) {
         }
     }
 
-    function FileMenus(screenSize: ScreenSize) {
-        const [isOpen, setIsOpen] = useState(false);
-        const toggleMenu = () => {
-            setIsOpen(true); // TODO: fix toggle
-        };
-        // Don't show "open" menus in non-standalone mode.
-        if (!props.standalone) {
-            return null;
-        }
-        switch (screenSize) {
-            case ScreenSize.LARGE:
-                return (
-                    <Dropdown
-                        closeOnBlur
-                        open={isOpen}  // Controlled state
-                        onClose={() => setIsOpen(false)} // Ensures dropdown closes on blur
-                        onOpen={() => setIsOpen(true)}   // Opens dropdown when clicked
-                        trigger={
-                            <div onClick={toggleMenu}>
-                                <Icon name="folder open"/>
-                                <FormattedMessage id="menu.open" defaultMessage="Open"/>
-                            </div>
-                        }
-                        className="item">
-                        <Dropdown.Menu >
-                            <UploadMenu menuType={MenuType.Dropdown} {...props} />
-                            <UrlMenu menuType={MenuType.Dropdown} {...props} />
-                        </Dropdown.Menu>
-                    </Dropdown>
-                );
-            case ScreenSize.SMALL:
-                return (
-                    <>
-                        <UploadMenu menuType={MenuType.Dropdown} {...props} />
-                        <Dropdown.Divider/>
-                    </>
-                );
-        }
+    function desktopMenus() {
+        return (
+            <>
+                {FileMenus(ScreenSize.LARGE)}
+                {ChartMenus(ScreenSize.LARGE)}
+            </>
+        );
     }
 
     function mobileMenus() {
@@ -167,42 +188,19 @@ export function TopBar(props: Props) {
                 >
                     <Dropdown.Menu>
                         {FileMenus(ScreenSize.SMALL)}
-                        {chartMenus(ScreenSize.SMALL)}
+                        {ChartMenus(ScreenSize.SMALL)}
                     </Dropdown.Menu>
                 </Dropdown>
             </>
         );
     }
 
-    function desktopMenus() {
-        return (
-            <>
-                {FileMenus(ScreenSize.LARGE)}
-                {chartMenus(ScreenSize.LARGE)}
-            </>
-        );
-    }
-
     return (
         <>
-            <Menu
-                as={Media}
-                greaterThanOrEqual="large"
-                attached="top"
-                inverted
-                color="blue"
-                size="large"
-            >
+            <Menu as={Media} greaterThanOrEqual="large" attached="top" inverted color="blue" size="large">
                 {desktopMenus()}
             </Menu>
-            <Menu
-                as={Media}
-                at="small"
-                attached="top"
-                inverted
-                color="blue"
-                size="large"
-            >
+            <Menu as={Media} at="small" attached="top" inverted color="blue" size="large">
                 {mobileMenus()}
             </Menu>
         </>
