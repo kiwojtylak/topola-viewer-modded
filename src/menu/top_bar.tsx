@@ -7,6 +7,7 @@ import {UploadMenu} from './upload_menu';
 import {UrlMenu} from './url_menu';
 import {useHistory, useLocation} from 'react-router';
 import {IndiInfo, JsonGedcomData} from '../lib/topola';
+import {useState} from "react";
 
 enum ScreenSize {
     LARGE,
@@ -112,7 +113,11 @@ export function TopBar(props: Props) {
         }
     }
 
-    function fileMenus(screenSize: ScreenSize) {
+    function FileMenus(screenSize: ScreenSize) {
+        const [isOpen, setIsOpen] = useState(false);
+        const toggleMenu = () => {
+            setIsOpen(true); // TODO: fix toggle
+        };
         // Don't show "open" menus in non-standalone mode.
         if (!props.standalone) {
             return null;
@@ -121,9 +126,12 @@ export function TopBar(props: Props) {
             case ScreenSize.LARGE:
                 return (
                     <Dropdown
-                        closeOnChange={false}
+                        closeOnBlur
+                        open={isOpen}  // Controlled state
+                        onClose={() => setIsOpen(false)} // Ensures dropdown closes on blur
+                        onOpen={() => setIsOpen(true)}   // Opens dropdown when clicked
                         trigger={
-                            <div>
+                            <div onClick={toggleMenu}>
                                 <Icon name="folder open"/>
                                 <FormattedMessage id="menu.open" defaultMessage="Open"/>
                             </div>
@@ -158,7 +166,7 @@ export function TopBar(props: Props) {
                     icon={null}
                 >
                     <Dropdown.Menu>
-                        {fileMenus(ScreenSize.SMALL)}
+                        {FileMenus(ScreenSize.SMALL)}
                         {chartMenus(ScreenSize.SMALL)}
                     </Dropdown.Menu>
                 </Dropdown>
@@ -169,7 +177,7 @@ export function TopBar(props: Props) {
     function desktopMenus() {
         return (
             <>
-                {fileMenus(ScreenSize.LARGE)}
+                {FileMenus(ScreenSize.LARGE)}
                 {chartMenus(ScreenSize.LARGE)}
             </>
         );
