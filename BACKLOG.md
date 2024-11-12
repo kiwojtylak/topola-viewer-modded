@@ -24,5 +24,6 @@ Backlog:
 - [x] Fix CORS proxy
 - [x] After loading 1st file, you can't ever use from URL
 - [x] Dropdowns not closing after selection
+- [x] Check radio toggle
 - [ ] Add option to convert CSV to Gedcom
 - [ ] Sometimes allLanguages does not load the first time

@@ -2,6 +2,7 @@ import {Item, Checkbox, Form, Header} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
 import {ParsedQuery} from 'query-string';
 import {Language} from "./languages/languages-loader";
+import {useState} from "react";
 
 export enum ChartColors {
     NO_COLOR,
@@ -124,6 +125,28 @@ export function configToArgs(config: Config): ParsedQuery<any> {
 }
 
 export function ConfigPanel(props: {config: Config; onChange: (config: Config) => void}) {
+    const [languagesEnabled, setLanguagesEnabled] = useState(props.config.languages === LanguagesArg.SHOW);
+    const [tribeEnabled, setTribeEnabled] = useState(props.config.tribe === TribeArg.SHOW);
+    const [idsEnabled, setIdsEnabled] = useState(props.config.id === IdsArg.SHOW);
+    const [sexEnabled, setSexEnabled] = useState(props.config.sex === SexArg.SHOW);
+
+    const toggleLanguages = (newState: LanguagesArg) => {
+        setLanguagesEnabled(!languagesEnabled);
+        props.onChange({...props.config, languages: newState});
+    };
+    const toggleTribe = (newState: TribeArg) => {
+        setTribeEnabled(!tribeEnabled);
+        props.onChange({...props.config, tribe: newState});
+    };
+    const toggleIds = (newState: IdsArg) => {
+        setIdsEnabled(!idsEnabled);
+        props.onChange({...props.config, id: newState});
+    };
+    const toggleSex = (newState: SexArg) => {
+        setSexEnabled(!sexEnabled);
+        props.onChange({...props.config, sex: newState});
+    };
+
     const languageOptions = [];
     for (let i = 0; i < props.config.languageOptions.length; i++) {
         const language = props.config.languageOptions[i];
@@ -136,12 +159,15 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                     value={i}
                     checked={props.config.selectedLanguage === language.id}
                     onClick={
-                        () => props.onChange({
-                            ...props.config,
-                            selectedLanguage: language.id,
-                            color: ChartColors.COLOR_BY_LANGUAGE,
-                            languages: LanguagesArg.SHOW,
-                        })
+                        () => {
+                            props.onChange({
+                                ...props.config,
+                                selectedLanguage: language.id,
+                                color: ChartColors.COLOR_BY_LANGUAGE,
+                                languages: LanguagesArg.SHOW,
+                            });
+                            setLanguagesEnabled(true);
+                        }
                     }
                 />
             </Form.Field>
@@ -165,13 +191,17 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 value="none"
                                 checked={props.config.color === ChartColors.NO_COLOR}
                                 onClick={
-                                    () => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.NO_COLOR,
-                                        languages: LanguagesArg.HIDE,
-                                        tribe: TribeArg.HIDE,
-                                        selectedLanguage: null
-                                    })
+                                    () => {
+                                        props.onChange({
+                                            ...props.config,
+                                            color: ChartColors.NO_COLOR,
+                                            languages: LanguagesArg.HIDE,
+                                            tribe: TribeArg.HIDE,
+                                            selectedLanguage: null
+                                        });
+                                        setTribeEnabled(false);
+                                        setLanguagesEnabled(false);
+                                    }
                                 }
                             />
                         </Form.Field>
@@ -185,13 +215,17 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 value="generation"
                                 checked={props.config.color === ChartColors.COLOR_BY_GENERATION}
                                 onClick={
-                                    () => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.COLOR_BY_GENERATION,
-                                        languages: LanguagesArg.HIDE,
-                                        tribe: TribeArg.HIDE,
-                                        selectedLanguage: null,
-                                    })
+                                    () => {
+                                        props.onChange({
+                                            ...props.config,
+                                            color: ChartColors.COLOR_BY_GENERATION,
+                                            languages: LanguagesArg.HIDE,
+                                            tribe: TribeArg.HIDE,
+                                            selectedLanguage: null,
+                                        });
+                                        setTribeEnabled(false);
+                                        setLanguagesEnabled(false);
+                                    }
                                 }
                             />
                         </Form.Field>
@@ -205,13 +239,17 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 value="gender"
                                 checked={props.config.color === ChartColors.COLOR_BY_SEX}
                                 onClick={
-                                    () => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.COLOR_BY_SEX,
-                                        languages: LanguagesArg.HIDE,
-                                        tribe: TribeArg.HIDE,
-                                        selectedLanguage: null,
-                                    })
+                                    () => {
+                                        props.onChange({
+                                            ...props.config,
+                                            color: ChartColors.COLOR_BY_SEX,
+                                            languages: LanguagesArg.HIDE,
+                                            tribe: TribeArg.HIDE,
+                                            selectedLanguage: null,
+                                        });
+                                        setTribeEnabled(false);
+                                        setLanguagesEnabled(false);
+                                    }
                                 }
                             />
                         </Form.Field>
@@ -225,13 +263,17 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 value="tribe"
                                 checked={props.config.color === ChartColors.COLOR_BY_TRIBE}
                                 onClick={
-                                    () => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.COLOR_BY_TRIBE,
-                                        languages: LanguagesArg.HIDE,
-                                        tribe: TribeArg.SHOW,
-                                        selectedLanguage: null,
-                                    })
+                                    () => {
+                                        props.onChange({
+                                            ...props.config,
+                                            color: ChartColors.COLOR_BY_TRIBE,
+                                            languages: LanguagesArg.HIDE,
+                                            tribe: TribeArg.SHOW,
+                                            selectedLanguage: null,
+                                        });
+                                        setTribeEnabled(true);
+                                        setLanguagesEnabled(false);
+                                    }
                                 }
                             />
                         </Form.Field>
@@ -245,13 +287,17 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 value="languages"
                                 checked={props.config.color === ChartColors.COLOR_BY_NR_LANGUAGES}
                                 onClick={
-                                    () => props.onChange({
-                                        ...props.config,
-                                        color: ChartColors.COLOR_BY_NR_LANGUAGES,
-                                        languages: LanguagesArg.SHOW,
-                                        tribe: TribeArg.HIDE,
-                                        selectedLanguage: null,
-                                    })
+                                    () => {
+                                        props.onChange({
+                                            ...props.config,
+                                            color: ChartColors.COLOR_BY_NR_LANGUAGES,
+                                            languages: LanguagesArg.SHOW,
+                                            tribe: TribeArg.HIDE,
+                                            selectedLanguage: null,
+                                        });
+                                        setTribeEnabled(false);
+                                        setLanguagesEnabled(true);
+                                    }
                                 }
                             />
                         </Form.Field>
@@ -261,134 +307,90 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
 
                 <Item className={!props.config.renderLanguagesOption ? 'hidden' : ''}>
                     <Item.Content>
-                        <Header sub>
-                            <FormattedMessage id="config.languages" defaultMessage="Languages"/>
-                        </Header>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="hide"
-                                checked={props.config.languages === LanguagesArg.HIDE}
-                                onClick={() => props.onChange({...props.config, languages: LanguagesArg.HIDE})}
-                            />
-                        </Form.Field>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="show"
-                                checked={props.config.languages === LanguagesArg.SHOW}
-                                onClick={() => props.onChange({...props.config, languages: LanguagesArg.SHOW})}
-                            />
-                        </Form.Field>
+                        <Checkbox toggle
+                                  id="languages"
+                                  checked={languagesEnabled}
+                                  onClick={() => toggleLanguages(languagesEnabled ? LanguagesArg.HIDE : LanguagesArg.SHOW)}
+                        />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label style={{ verticalAlign: "top" }}>
+                            {languagesEnabled ?
+                                <FormattedMessage id="config.toggle.HIDE" defaultMessage="Hide"/> :
+                                <FormattedMessage id="config.toggle.SHOW" defaultMessage="Show"/>
+                            }
+                            {" "}
+                            <FormattedMessage id="config.languages" defaultMessage="languages"/>
+                        </label>
                     </Item.Content>
                 </Item>
 
                 <Item className={!props.config.renderTribeOption ? 'hidden' : ''}>
                     <Item.Content>
-                        <Header sub>
-                            <FormattedMessage id="config.tribe" defaultMessage="Tribe"/>
-                        </Header>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="hide"
-                                checked={props.config.tribe === TribeArg.HIDE}
-                                onClick={() => props.onChange({...props.config, tribe: TribeArg.HIDE})}
-                            />
-                        </Form.Field>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="show"
-                                checked={props.config.tribe === TribeArg.SHOW}
-                                onClick={() => props.onChange({...props.config, tribe: TribeArg.SHOW})}
-                            />
-                        </Form.Field>
+                        <Checkbox toggle
+                                  id="tribe"
+                                  checked={tribeEnabled}
+                                  onClick={() => toggleTribe(tribeEnabled ? TribeArg.HIDE : TribeArg.SHOW)}
+                        />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label style={{ verticalAlign: "top" }}>
+                            {tribeEnabled ?
+                                <FormattedMessage id="config.toggle.HIDE" defaultMessage="Hide"/> :
+                                <FormattedMessage id="config.toggle.SHOW" defaultMessage="Show"/>
+                            }
+                            {" "}
+                            <FormattedMessage id="config.tribe" defaultMessage="tribe"/>
+                        </label>
                     </Item.Content>
                 </Item>
 
                 <Item>
                     <Item.Content>
-                        <Header sub>
+                        <Checkbox toggle
+                                  id="ids"
+                                  checked={idsEnabled}
+                                  onClick={() => toggleIds(idsEnabled ? IdsArg.HIDE : IdsArg.SHOW)}
+                        />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label style={{ verticalAlign: "top" }}>
+                            {idsEnabled ?
+                                <FormattedMessage id="config.toggle.HIDE" defaultMessage="Hide"/> :
+                                <FormattedMessage id="config.toggle.SHOW" defaultMessage="Show"/>
+                            }
+                            {" "}
                             <FormattedMessage id="config.ids" defaultMessage="IDs"/>
-                        </Header>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="hide"
-                                checked={props.config.id === IdsArg.HIDE}
-                                onClick={() => props.onChange({...props.config, id: IdsArg.HIDE})}
-                            />
-                        </Form.Field>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="show"
-                                checked={props.config.id === IdsArg.SHOW}
-                                onClick={() => props.onChange({...props.config, id: IdsArg.SHOW})}
-                            />
-                        </Form.Field>
+                        </label>
                     </Item.Content>
                 </Item>
 
                 <Item>
                     <Item.Content>
-                        <Header sub>
-                            <FormattedMessage id="config.sex" defaultMessage="Sex"/>
-                        </Header>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.HIDE" defaultMessage="hide"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="hide"
-                                checked={props.config.sex === SexArg.HIDE}
-                                onClick={() => props.onChange({...props.config, sex: SexArg.HIDE})}
-                            />
-                        </Form.Field>
-                        <Form.Field className="no-margin">
-                            <Checkbox
-                                radio
-                                label={
-                                    <FormattedMessage tagName="label" id="config.toggle.SHOW" defaultMessage="show"/>
-                                }
-                                name="checkboxRadioGroup"
-                                value="show"
-                                checked={props.config.sex === SexArg.SHOW}
-                                onClick={() => props.onChange({...props.config, sex: SexArg.SHOW})}
-                            />
-                        </Form.Field>
+                        <Checkbox toggle
+                                  id="sex"
+                                  checked={sexEnabled}
+                                  onClick={() => toggleSex(sexEnabled ? SexArg.HIDE : SexArg.SHOW)}
+                        />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label style={{ verticalAlign: "top" }}>
+                            {sexEnabled ?
+                                <FormattedMessage id="config.toggle.HIDE" defaultMessage="Hide"/> :
+                                <FormattedMessage id="config.toggle.SHOW" defaultMessage="Show"/>
+                            }
+                            {" "}
+                            <FormattedMessage id="config.sex" defaultMessage="sex"/>
+                        </label>
                     </Item.Content>
                 </Item>
             </Item.Group>
             <div style={{textAlign: "center"}}>
-                <Form.Button primary onClick={() => props.onChange(DEFAULT_CONFIG)}>
+                <Form.Button primary onClick={
+                    () => {
+                        props.onChange(DEFAULT_CONFIG);
+                        setTribeEnabled(false);
+                        setLanguagesEnabled(false);
+                        setIdsEnabled(true);
+                        setSexEnabled(true);
+                    }
+                }>
                     <FormattedMessage id="config.reset" defaultMessage="Reset"/>
                 </Form.Button>
             </div>

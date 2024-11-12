@@ -18,8 +18,6 @@ export function ConvertCSVMenu(props: Props) {
     const history = useHistory();
 
     function handleUpload(event: SyntheticEvent<HTMLInputElement>) {
-        setDialogOpen(false);
-
         const files = (event.target as HTMLInputElement).files;
         if (!files || !files.length) {
             return;
@@ -74,7 +72,7 @@ export function ConvertCSVMenu(props: Props) {
                     </Button>
                     {/* TODO: enable */}
                     <Button disabled={true} primary onClick={() => convert2gedcom()}>
-                        <FormattedMessage id="load_from_url.load" defaultMessage="Load"/>
+                        <FormattedMessage id="load_from_url.load" defaultMessage="Generate"/>
                     </Button>
                 </Modal.Actions>
             </Modal>
