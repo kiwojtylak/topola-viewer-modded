@@ -241,7 +241,20 @@ var DetailedRenderer = /** @class */ (function (_super) {
     };
 
     DetailedRenderer.prototype.getCss = function () {
-        return null  // moved to external file
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', './styles/detailed-renderer.css', false);
+        try {
+            xhr.send();
+            if (xhr.status === 200) {
+                const cssCode = xhr.responseText
+                return cssCode;
+            } else {
+                throw new Error('Failed to load CSS file:' + xhr.statusText);
+            }
+        } catch (error) {
+            console.error('Error occurred while loading CSS:', error);
+            return null;
+        }
     };
 
     DetailedRenderer.prototype.transition = function (selection) {
