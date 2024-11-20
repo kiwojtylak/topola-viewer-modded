@@ -257,7 +257,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_TRIBE" defaultMessage="by tribe"/>
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_TRIBE" defaultMessage="by clan"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="tribe"
@@ -281,7 +281,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_LANGUAGES" defaultMessage="by nr. languages"/>
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_LANGUAGES" defaultMessage="by no. languages"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="languages"
