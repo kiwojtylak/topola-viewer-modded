@@ -26,6 +26,8 @@ Backlog:
 - [x] Dropdowns not closing after selection
 - [x] Check radio toggle
 - [x] Download images broken
-- [ ] Missing literals
+- [x] Languages legend
+- [ ] Color by ethnicity
 - [ ] Add option to convert CSV to Gedcom
+- [ ] Missing literals
 - [ ] Sometimes allLanguages does not load the first time

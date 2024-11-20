@@ -422,7 +422,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return getIndi(node).getLanguagesLabel()
             });
         this.transition(languages).attr('transform', function (node) {
-            // if the indi does not have tribe to show, the height start does not apply
+            // if the indi does not have languages to show, the height start does not apply
             const languages_height_start =  getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0 ? 52 : null
             return "translate(" + getDetailsWidth(node) / 2 + ", " + languages_height_start + ")";
         });

@@ -97,7 +97,7 @@ function getParamFromSearch(name: string, search: queryString.ParsedQuery) {
 function startIndi(data: TopolaData | undefined) {
     const egoGen = getEgoGen(data)
     return {
-        id: data?.chartData?.indis?.[0]?.id || 'I0',  // lowest ID on the chart
+        id: data?.chartData?.indis?.[0]?.id || 'I0',  // lowest ID on the chart, focus at the root, not at the EGO
         generation: egoGen !== undefined ? -parseInt(egoGen, 10) : 0
     };
 }

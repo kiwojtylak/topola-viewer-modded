@@ -154,7 +154,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
             <Form.Field key={i} className={!props.config.renderLanguagesOption ? 'hidden' : 'no-margin suboption'}>
                 <Checkbox
                     radio
-                    label={language.name}
+                    label={language.name + " (" + language.abbreviation + ")"}
                     name="checkboxRadioGroup"
                     value={i}
                     checked={props.config.selectedLanguage === language.id}
