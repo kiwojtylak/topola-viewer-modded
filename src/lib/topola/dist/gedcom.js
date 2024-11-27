@@ -221,6 +221,11 @@ function createIndi(entry, objects, ego, allLanguages) {
         const gedcomLanguages = findTags(entry.tree, 'LANG').map(lang => lang.data)
         indi.languages = allLanguages.filter(l => gedcomLanguages.includes(l.name));
     }
+    // Ethnicity
+    const ethnicityTag = findTag(entry.tree, '_ETHN');
+    if (ethnicityTag) {
+        indi.ethnicity = ethnicityTag.data;
+    }
     // Tribe
     const tribeTag = findTag(entry.tree, '_TRIB');
     if (tribeTag) {
