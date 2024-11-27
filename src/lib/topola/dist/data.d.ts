@@ -42,11 +42,13 @@ export interface JsonIndi {
     sex?: string;
     languages?: Language[];
     languagesLabel?: string;
+    ethnicity?: string;
     tribe?: string;
     images?: JsonImage[];
     notes?: string[];
     events?: JsonEvent[];
     hideLanguages?: boolean;
+    hideEthnicity?: boolean;
     hideTribe?: boolean;
     hideId?: boolean;
     hideSex?: boolean;

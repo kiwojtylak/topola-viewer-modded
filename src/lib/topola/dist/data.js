@@ -57,6 +57,9 @@ var JsonIndiDetails = /** @class */ (function () {
         const abbreviations = this.json.languages.map(lang => lang.abbreviation);
         return abbreviations.length > 0 ? `${abbreviations.join(', ')}` : null;
     };
+    JsonIndiDetails.prototype.getEthnicity = function () {
+        return this.json.ethnicity || null;
+    };
     JsonIndiDetails.prototype.getTribe = function () {
         return this.json.tribe || null;
     };
@@ -77,6 +80,9 @@ var JsonIndiDetails = /** @class */ (function () {
     };
     JsonIndiDetails.prototype.showLanguages = function () {
         return !this.json.hideLanguages;
+    };
+    JsonIndiDetails.prototype.showEthnicity = function () {
+        return !this.json.hideEthnicity;
     };
     JsonIndiDetails.prototype.showTribe = function () {
         return !this.json.hideTribe;
