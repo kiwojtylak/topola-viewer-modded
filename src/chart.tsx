@@ -17,7 +17,7 @@ import {
     IndiInfo,
     JsonGedcomData,
 } from './lib/topola';
-
+import {GedcomData, TopolaData} from "./util/gedcom_util";
 
 /** How much to zoom when using the +/- buttons. */
 const ZOOM_FACTOR = 1.3;
@@ -150,11 +150,15 @@ export async function downloadSvg() {
     saveAs(blob, 'genealogy.svg');
 }
 
-export async function downloadGedcom() {
-    // TODO: implement
+export async function downloadGedcom(data: TopolaData | undefined) {
     console.log("Saving gedcom...")
     const blob = new Blob()
+    // const egoIndi = getEgoIndi(data?.gedcom)
     saveAs(blob, 'genealogy.gedcom');
+}
+
+export function getEgoIndi(gedcom: GedcomData | undefined) {
+    return Object.entries(gedcom?.other || {}).filter(([_, value]) => value.tag === "EGO")
 }
 
 async function drawOnCanvas(): Promise<HTMLCanvasElement> {

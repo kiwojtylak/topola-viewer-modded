@@ -14,7 +14,7 @@ import {TopolaData} from './util/gedcom_util';
 import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router';
 import {idToIndiMap} from './util/gedcom_util';
-import {Chart, ChartType, downloadGedcom, downloadPdf, downloadPng, downloadSvg} from './chart';
+import {Chart, ChartType, downloadGedcom, downloadPdf, downloadPng, downloadSvg, getEgoIndi} from './chart';
 import {getSelection, UploadSourceSpec, UrlSourceSpec, GedcomUrlDataSource, UploadedDataSource} from './datasource/load_data';
 import CSVLoader, {Language} from "./languages/languages-loader";
 import {argsToConfig, Config, ConfigPanel, configToArgs, DEFAULT_CONFIG, LanguagesArg, EthnicityArg, IdsArg, SexArg} from './config';
@@ -70,7 +70,7 @@ enum AppState {
     LOADING,
     ERROR,
     SHOWING_CHART,
-    LOADING_MORE,
+    LOADING_MORE
 }
 
 type DataSourceSpec = UrlSourceSpec | UploadSourceSpec | EmbeddedSourceSpec;
@@ -102,12 +102,8 @@ function startIndi(data: TopolaData | undefined) {
     };
 }
 
-function getEgoIndi(data: TopolaData | undefined) {
-    return Object.entries(data?.gedcom?.other || {}).filter(([_, value]) => value.tag === "EGO")
-}
-
 function getEgoGen(data: TopolaData | undefined) {
-    return getEgoIndi(data)
+    return getEgoIndi(data?.gedcom)
         .map(([_, value]) => value.tree.find(sub => sub.tag === "GEN")?.data)
         .find(data => data !== undefined);
 }
@@ -434,7 +430,7 @@ export function App() {
     }
 
     async function onDownloadGedcom() {
-        await downloadGedcom();
+        await downloadGedcom(data);
     }
 
     function onCenterView() {
