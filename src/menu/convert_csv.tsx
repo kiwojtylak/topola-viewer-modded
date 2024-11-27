@@ -66,7 +66,7 @@ export function ConvertCSVMenu(props: Props) {
             <Modal open={dialogOpen} onClose={() => setDialogOpen(false)} centered={false}>
                 <Header>
                     <Icon name="sitemap"/>
-                    <FormattedMessage id="menu.convert_csv_gedcom" defaultMessage="Convert CSV's to GEDCOM"/>
+                    <FormattedMessage id="menu.convert_csv_gedcom" defaultMessage="Convert CSV files to GEDCOM"/>
                 </Header>
                 <Modal.Content>
                     <Form onSubmit={() => convert2gedcom()}>
