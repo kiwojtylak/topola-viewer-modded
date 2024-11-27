@@ -1,4 +1,4 @@
-import {ChartColors, LanguagesArg, TribeArg, IdsArg, SexArg} from './config';
+import {ChartColors, LanguagesArg, EthnicityArg, IdsArg, SexArg} from './config';
 import {interpolateNumber} from 'd3-interpolate';
 import {IntlShape, useIntl} from 'react-intl';
 import {max, min} from 'd3-array';
@@ -184,7 +184,7 @@ const chartColors = new Map<ChartColors, TopolaChartColors>([
     [ChartColors.NO_COLOR, TopolaChartColors.NO_COLOR],
     [ChartColors.COLOR_BY_GENERATION, TopolaChartColors.COLOR_BY_GENERATION],
     [ChartColors.COLOR_BY_SEX, TopolaChartColors.COLOR_BY_SEX],
-    [ChartColors.COLOR_BY_TRIBE, TopolaChartColors.COLOR_BY_TRIBE],
+    [ChartColors.COLOR_BY_ETHNICITY, TopolaChartColors.COLOR_BY_ETHNICITY],
     [ChartColors.COLOR_BY_NR_LANGUAGES, TopolaChartColors.COLOR_BY_NR_LANGUAGES],
     [ChartColors.COLOR_BY_LANGUAGE, TopolaChartColors.COLOR_BY_LANGUAGE]
 ]);
@@ -198,7 +198,7 @@ export interface ChartProps {
     colors?: ChartColors;
     selectedLanguage?: string | null;
     hideLanguages?: LanguagesArg;
-    hideTribe?: TribeArg;
+    hideEthnicity?: EthnicityArg;
     hideIds?: IdsArg;
     hideSex?: SexArg;
 }
@@ -366,7 +366,7 @@ export function Chart(props: ChartProps) {
                 props.colors !== prevProps?.colors ||
                 props.selectedLanguage !== prevProps?.selectedLanguage ||
                 props.hideLanguages !== prevProps?.hideLanguages ||
-                props.hideTribe !== prevProps?.hideTribe ||
+                props.hideEthnicity !== prevProps?.hideEthnicity ||
                 props.hideIds !== prevProps?.hideIds ||
                 props.hideSex !== prevProps?.hideSex;
             const resetPosition =

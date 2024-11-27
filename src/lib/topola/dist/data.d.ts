@@ -49,7 +49,6 @@ export interface JsonIndi {
     events?: JsonEvent[];
     hideLanguages?: boolean;
     hideEthnicity?: boolean;
-    hideTribe?: boolean;
     hideId?: boolean;
     hideSex?: boolean;
 }
@@ -88,7 +87,7 @@ export interface IndiDetails extends Indi {
     getNotes(): string[] | [];
     getEvents(): JsonEvent[] | [];
     showLanguages(): boolean;
-    showTribe(): boolean;
+    showEthnicity(): boolean;
     showId(): boolean;
     showSex(): boolean;
 }

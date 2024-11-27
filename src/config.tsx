@@ -8,7 +8,7 @@ export enum ChartColors {
     NO_COLOR,
     COLOR_BY_SEX,
     COLOR_BY_GENERATION,
-    COLOR_BY_TRIBE,
+    COLOR_BY_ETHNICITY,
     COLOR_BY_NR_LANGUAGES = 4,
     COLOR_BY_LANGUAGE = 5,
 }
@@ -18,7 +18,7 @@ export enum LanguagesArg {
     SHOW,
 }
 
-export enum TribeArg {
+export enum EthnicityArg {
     HIDE,
     SHOW,
 }
@@ -36,11 +36,11 @@ export enum SexArg {
 export interface Config {
     color: ChartColors;
     languages: LanguagesArg;
-    tribe: TribeArg;
+    ethnicity: EthnicityArg;
     id: IdsArg;
     sex: SexArg;
     renderLanguagesOption: boolean
-    renderTribeOption: boolean
+    renderEthnicityOption: boolean
     languageOptions: Language[],
     selectedLanguage: string | null
 }
@@ -48,11 +48,11 @@ export interface Config {
 export const DEFAULT_CONFIG: Config = {
     color: ChartColors.COLOR_BY_GENERATION,
     languages: LanguagesArg.HIDE,
-    tribe: TribeArg.HIDE,
+    ethnicity: EthnicityArg.HIDE,
     id: IdsArg.SHOW,
     sex: SexArg.SHOW,
     renderLanguagesOption: false,
-    renderTribeOption: false,
+    renderEthnicityOption: false,
     languageOptions: [],
     selectedLanguage: null,
 };
@@ -61,7 +61,7 @@ const COLOR_ARG = new Map<string, ChartColors>([
     ['n', ChartColors.NO_COLOR],
     ['g', ChartColors.COLOR_BY_GENERATION],
     ['s', ChartColors.COLOR_BY_SEX],
-    ['t', ChartColors.COLOR_BY_TRIBE],
+    ['e', ChartColors.COLOR_BY_ETHNICITY],
     ['nl', ChartColors.COLOR_BY_NR_LANGUAGES],
     ['l', ChartColors.COLOR_BY_LANGUAGE],
 ]);
@@ -75,12 +75,12 @@ const LANGUAGES_ARG = new Map<string, LanguagesArg>([
 const LANGUAGES_ARG_INVERSE = new Map<LanguagesArg, string>();
 LANGUAGES_ARG.forEach((v, k) => LANGUAGES_ARG_INVERSE.set(v, k));
 
-const TRIBE_ARG = new Map<string, TribeArg>([
-    ['h', TribeArg.HIDE],
-    ['s', TribeArg.SHOW],
+const ETHNICITY_ARG = new Map<string, EthnicityArg>([
+    ['h', EthnicityArg.HIDE],
+    ['s', EthnicityArg.SHOW],
 ]);
-const TRIBE_ARG_INVERSE = new Map<TribeArg, string>();
-TRIBE_ARG.forEach((v, k) => TRIBE_ARG_INVERSE.set(v, k));
+const ETHNICITY_ARG_INVERSE = new Map<EthnicityArg, string>();
+ETHNICITY_ARG.forEach((v, k) => ETHNICITY_ARG_INVERSE.set(v, k));
 
 const ID_ARG = new Map<string, IdsArg>([
     ['h', IdsArg.HIDE],
@@ -104,10 +104,10 @@ export function argsToConfig(args: ParsedQuery<any>): Config {
         color: COLOR_ARG.get(getParam('c') ?? '') ?? DEFAULT_CONFIG.color,
         languages: LANGUAGES_ARG.get(getParam('l') ?? '') ?? DEFAULT_CONFIG.languages,
         selectedLanguage: getParam('n') ?? DEFAULT_CONFIG.selectedLanguage,
-        tribe: TRIBE_ARG.get(getParam('t') ?? '') ?? DEFAULT_CONFIG.tribe,
+        ethnicity: ETHNICITY_ARG.get(getParam('e') ?? '') ?? DEFAULT_CONFIG.ethnicity,
         id: ID_ARG.get(getParam('i') ?? '') ?? DEFAULT_CONFIG.id,
         sex: SEX_ARG.get(getParam('s') ?? '') ?? DEFAULT_CONFIG.sex,
-        renderTribeOption: DEFAULT_CONFIG.renderTribeOption,
+        renderEthnicityOption: DEFAULT_CONFIG.renderEthnicityOption,
         renderLanguagesOption: DEFAULT_CONFIG.renderLanguagesOption,
         languageOptions: DEFAULT_CONFIG.languageOptions
     };
@@ -117,7 +117,7 @@ export function configToArgs(config: Config): ParsedQuery<any> {
     return {
         c: COLOR_ARG_INVERSE.get(config.color),
         l: LANGUAGES_ARG_INVERSE.get(config.languages),
-        t: TRIBE_ARG_INVERSE.get(config.tribe),
+        e: ETHNICITY_ARG_INVERSE.get(config.ethnicity),
         i: ID_ARG_INVERSE.get(config.id),
         s: SEX_ARG_INVERSE.get(config.sex),
         n: config.selectedLanguage
@@ -126,7 +126,7 @@ export function configToArgs(config: Config): ParsedQuery<any> {
 
 export function ConfigPanel(props: {config: Config; onChange: (config: Config) => void}) {
     const [languagesEnabled, setLanguagesEnabled] = useState(props.config.languages === LanguagesArg.SHOW);
-    const [tribeEnabled, setTribeEnabled] = useState(props.config.tribe === TribeArg.SHOW);
+    const [ethnicityEnabled, setEthnicityEnabled] = useState(props.config.ethnicity === EthnicityArg.SHOW);
     const [idsEnabled, setIdsEnabled] = useState(props.config.id === IdsArg.SHOW);
     const [sexEnabled, setSexEnabled] = useState(props.config.sex === SexArg.SHOW);
 
@@ -134,9 +134,9 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
         setLanguagesEnabled(!languagesEnabled);
         props.onChange({...props.config, languages: newState});
     };
-    const toggleTribe = (newState: TribeArg) => {
-        setTribeEnabled(!tribeEnabled);
-        props.onChange({...props.config, tribe: newState});
+    const toggleEthnicity = (newState: EthnicityArg) => {
+        setEthnicityEnabled(!ethnicityEnabled);
+        props.onChange({...props.config, ethnicity: newState});
     };
     const toggleIds = (newState: IdsArg) => {
         setIdsEnabled(!idsEnabled);
@@ -196,10 +196,10 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                             ...props.config,
                                             color: ChartColors.NO_COLOR,
                                             languages: LanguagesArg.HIDE,
-                                            tribe: TribeArg.HIDE,
+                                            ethnicity: EthnicityArg.HIDE,
                                             selectedLanguage: null
                                         });
-                                        setTribeEnabled(false);
+                                        setEthnicityEnabled(false);
                                         setLanguagesEnabled(false);
                                     }
                                 }
@@ -220,10 +220,10 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                             ...props.config,
                                             color: ChartColors.COLOR_BY_GENERATION,
                                             languages: LanguagesArg.HIDE,
-                                            tribe: TribeArg.HIDE,
+                                            ethnicity: EthnicityArg.HIDE,
                                             selectedLanguage: null,
                                         });
-                                        setTribeEnabled(false);
+                                        setEthnicityEnabled(false);
                                         setLanguagesEnabled(false);
                                     }
                                 }
@@ -244,34 +244,34 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                             ...props.config,
                                             color: ChartColors.COLOR_BY_SEX,
                                             languages: LanguagesArg.HIDE,
-                                            tribe: TribeArg.HIDE,
+                                            ethnicity: EthnicityArg.HIDE,
                                             selectedLanguage: null,
                                         });
-                                        setTribeEnabled(false);
+                                        setEthnicityEnabled(false);
                                         setLanguagesEnabled(false);
                                     }
                                 }
                             />
                         </Form.Field>
-                        <Form.Field className={!props.config.renderTribeOption ? 'hidden' : 'no-margin'}>
+                        <Form.Field className={!props.config.renderEthnicityOption ? 'hidden' : 'no-margin'}>
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_TRIBE" defaultMessage="by clan"/>
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_ETHNICITY" defaultMessage="by ethnicity"/>
                                 }
                                 name="checkboxRadioGroup"
-                                value="tribe"
-                                checked={props.config.color === ChartColors.COLOR_BY_TRIBE}
+                                value="ethnicity"
+                                checked={props.config.color === ChartColors.COLOR_BY_ETHNICITY}
                                 onClick={
                                     () => {
                                         props.onChange({
                                             ...props.config,
-                                            color: ChartColors.COLOR_BY_TRIBE,
+                                            color: ChartColors.COLOR_BY_ETHNICITY,
                                             languages: LanguagesArg.HIDE,
-                                            tribe: TribeArg.SHOW,
+                                            ethnicity: EthnicityArg.SHOW,
                                             selectedLanguage: null,
                                         });
-                                        setTribeEnabled(true);
+                                        setEthnicityEnabled(true);
                                         setLanguagesEnabled(false);
                                     }
                                 }
@@ -292,10 +292,10 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                             ...props.config,
                                             color: ChartColors.COLOR_BY_NR_LANGUAGES,
                                             languages: LanguagesArg.SHOW,
-                                            tribe: TribeArg.HIDE,
+                                            ethnicity: EthnicityArg.HIDE,
                                             selectedLanguage: null,
                                         });
-                                        setTribeEnabled(false);
+                                        setEthnicityEnabled(false);
                                         setLanguagesEnabled(true);
                                     }
                                 }
@@ -324,21 +324,21 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                     </Item.Content>
                 </Item>
 
-                <Item className={!props.config.renderTribeOption ? 'hidden' : ''}>
+                <Item className={!props.config.renderEthnicityOption ? 'hidden' : ''}>
                     <Item.Content>
                         <Checkbox toggle
-                                  id="tribe"
-                                  checked={tribeEnabled}
-                                  onClick={() => toggleTribe(tribeEnabled ? TribeArg.HIDE : TribeArg.SHOW)}
+                                  id="ethnicity"
+                                  checked={ethnicityEnabled}
+                                  onClick={() => toggleEthnicity(ethnicityEnabled ? EthnicityArg.HIDE : EthnicityArg.SHOW)}
                         />
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label style={{ verticalAlign: "top" }}>
-                            {tribeEnabled ?
+                            {ethnicityEnabled ?
                                 <FormattedMessage id="config.toggle.HIDE" defaultMessage="Hide"/> :
                                 <FormattedMessage id="config.toggle.SHOW" defaultMessage="Show"/>
                             }
                             {" "}
-                            <FormattedMessage id="config.tribe" defaultMessage="tribe"/>
+                            <FormattedMessage id="config.ethnicity" defaultMessage="ethnicity"/>
                         </label>
                     </Item.Content>
                 </Item>
@@ -385,7 +385,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                 <Form.Button primary onClick={
                     () => {
                         props.onChange(DEFAULT_CONFIG);
-                        setTribeEnabled(false);
+                        setEthnicityEnabled(false);
                         setLanguagesEnabled(false);
                         setIdsEnabled(true);
                         setSexEnabled(true);

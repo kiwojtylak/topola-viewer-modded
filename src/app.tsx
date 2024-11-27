@@ -17,7 +17,7 @@ import {idToIndiMap} from './util/gedcom_util';
 import {Chart, ChartType, downloadPdf, downloadPng, downloadSvg} from './chart';
 import {getSelection, UploadSourceSpec, UrlSourceSpec, GedcomUrlDataSource, UploadedDataSource} from './datasource/load_data';
 import CSVLoader, {Language} from "./languages/languages-loader";
-import {argsToConfig, Config, ConfigPanel, configToArgs, DEFAULT_CONFIG, LanguagesArg, TribeArg, IdsArg, SexArg} from './config';
+import {argsToConfig, Config, ConfigPanel, configToArgs, DEFAULT_CONFIG, LanguagesArg, EthnicityArg, IdsArg, SexArg} from './config';
 
 
 /**
@@ -128,6 +128,18 @@ function getGedcomLanguages(data: TopolaData | undefined) {
         }, new Set<string>());
 }
 
+function getEthnicities(data: TopolaData | undefined) {
+    return Object.entries(data?.gedcom?.indis || {})
+        .reduce<Set<string>>((acc, [_, value]) => {
+            const langDataArray = value.tree.filter((sub: any) => sub.tag === "_ETHN");
+            langDataArray.forEach(lang => {
+                if (lang.data) acc.add(lang.data);
+            });
+            return acc;
+        }, new Set<string>());
+}
+
+// TODO: dismantle?
 function getTribes(data: TopolaData | undefined) {
     return Object.entries(data?.gedcom?.indis || {})
         .reduce<Set<string>>((acc, [_, value]) => {
@@ -241,11 +253,11 @@ export function App() {
         // Find if there are languages
         config.languageOptions = loadLanguageOptions(data, allLanguages)
         config.renderLanguagesOption = config.languageOptions.length > 0
-        // Find if there are tribes
-        config.renderTribeOption = Array.from(getTribes(data)).length > 0
+        // Find if there are ethnicities/tribes
+        config.renderEthnicityOption = Array.from(getEthnicities(data)).length > 0
         idToIndiMap(data.chartData).forEach((indi) => {
             indi.hideLanguages = config.languages === LanguagesArg.HIDE;
-            indi.hideTribe = config.tribe === TribeArg.HIDE;
+            indi.hideEthnicity = config.ethnicity === EthnicityArg.HIDE;
             indi.hideId = config.id === IdsArg.HIDE;
             indi.hideSex = config.sex === SexArg.HIDE;
         });
@@ -479,7 +491,7 @@ export function App() {
                             colors={config.color}
                             selectedLanguage={config.selectedLanguage}
                             hideLanguages={config.languages}
-                            hideTribe={config.tribe}
+                            hideEthnicity={config.ethnicity}
                             hideIds={config.id}
                             hideSex={config.sex}
                         />

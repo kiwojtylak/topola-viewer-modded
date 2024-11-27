@@ -40,7 +40,7 @@ const IMAGE_WIDTH = 70;
 
 /** Minimum box height when an image is present. */
 const IMAGE_HEIGHT = 90;
-const TRIBE_HEIGHT = 17;
+const ETHNICITY_HEIGHT = 17;
 const LANGUAGES_HEIGHT = 17;
 const DETAILS_HEIGHT = 17;
 const ANIMATION_DELAY_MS = 200;
@@ -88,8 +88,8 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return 'bygeneration';
             case _1.ChartColors.COLOR_BY_SEX:
                 return 'bysex';
-            case _1.ChartColors.COLOR_BY_TRIBE:
-                return 'bytribe';
+            case _1.ChartColors.COLOR_BY_ETHNICITY:
+                return 'byethnicity';
             case _1.ChartColors.COLOR_BY_NR_LANGUAGES:
                 return 'bylanguages';
             case _1.ChartColors.COLOR_BY_LANGUAGE:
@@ -135,11 +135,11 @@ var DetailedRenderer = /** @class */ (function (_super) {
         // Height
         const indi = this.options.data.getIndi(id);
         const details = this.getIndiDetails(indi);
-        const tribeHeight = indi.showTribe() && indi.getTribe() != null ? TRIBE_HEIGHT : 0;
+        const ethnicityHeight = indi.showEthnicity() && indi.getEthnicity() != null ? ETHNICITY_HEIGHT : 0;
         const languagesHeight = indi.showLanguages() && indi.getLanguages().length > 0 ? LANGUAGES_HEIGHT : 0;
         const idAndSexHeight = indi.showId() || indi.showSex() ? DETAILS_HEIGHT : 0;
         const height = d3_array_1.max([
-            INDI_MIN_HEIGHT + languagesHeight + tribeHeight + (details.length * DETAILS_HEIGHT) + idAndSexHeight,
+            INDI_MIN_HEIGHT + languagesHeight + ethnicityHeight + (details.length * DETAILS_HEIGHT) + idAndSexHeight,
             indi.getImageUrl() ? IMAGE_HEIGHT : 0,
         ]);
         // Width
@@ -149,7 +149,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             getLength(indi.getFirstName() || '', 'name') + 8,
             getLength(indi.getLastName() || '', 'name') + 8,
             indi.showLanguages() && indi.getLanguages().length > 0 ? (getLength(indi.getLanguagesLabel(), 'languages') + 28) : 0,
-            indi.showTribe() && indi.getTribe() != null ? (getLength(indi.getTribe(), 'tribe') + 28) : 0,
+            indi.showEthnicity() && indi.getEthnicity() != null ? (getLength(indi.getEthnicity(), 'ethnicity') + 28) : 0,
             getLength(id, 'id') + 32,
             INDI_MIN_WIDTH,
         ]) + (indi.getImageUrl() ? IMAGE_WIDTH : 0);
@@ -286,38 +286,45 @@ var DetailedRenderer = /** @class */ (function (_super) {
         }
     };
 
-    const tribesCss = new Map();
-    DetailedRenderer.prototype.getTribeClass = function (indiId) {
-        if (tribesCss.size === 0) {
-            this.buildTribesMap()
+    const ethnicityCss = new Map();
+    DetailedRenderer.prototype.getEthnicityClass = function (indiId) {
+        if (ethnicityCss.size === 0) {
+            this.buildEthnicityMap()
         }
         let _a;
-        const tribe = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getTribe();
-        if (tribe) {
-            return tribesCss.get(tribe);
+        const ethnicity = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getEthnicity();
+        if (ethnicity) {
+            return ethnicityCss.get(ethnicity);
         }
-        return ''  // Blank if no tribe
+        return ''  // Blank if no ethnicity
     };
 
-    DetailedRenderer.prototype.buildTribesMap = function () {
-        // Assign the tribe of the ego as tribe0
-        if (!tribesCss.has("tribe0")) {
-            const egoTribe = Array.from(this.options.data.indis?.values() || []).find(indi => indi.isEgo())?.json.tribe
-            if (egoTribe) {
-                tribesCss.set(egoTribe, "tribe0")
+    DetailedRenderer.prototype.buildEthnicityMap = function () {
+        try {
+            // Assign the ethnicity of the ego as eth0
+            if (!ethnicityCss.has("eth0")) {
+                const egoEthnicity = Array.from(this.options.data.indis?.values() || []).find(indi => indi.isEgo())?.json.ethnicity
+                if (egoEthnicity) {
+                    ethnicityCss.set(egoEthnicity, "ego")
+                }
             }
+            ethnicityCss.set("Blanco", "blanco")
+            ethnicityCss.set("Afroamerican", "afroamerican")
+            // Assign the ethnicities of the the rest individuals
+            Array.from(this.options.data.indis?.values() || [])
+                .filter(indi => indi.getEthnicity() != null)
+                .forEach(indi => {
+                    const ethnicity = indi.getEthnicity()
+                    if (!ethnicityCss.has(ethnicity)) {
+                        ethnicityCss.set(ethnicity, "eth" + ethnicityCss.size)
+                    }
+                    if (ethnicityCss.size > 14) {
+                        throw new Error('No CSS for more than 14 different ethnicities')
+                    }
+                })
+        } catch (e) {
+            console.log(e)
         }
-        Array.from(this.options.data.indis?.values() || [])
-            .filter(indi => indi.getTribe() != null)
-            .forEach(indi => {
-                const tribe = indi.getTribe()
-                if (!tribesCss.has(tribe)) {
-                    tribesCss.set(tribe, "tribe" + tribesCss.size)
-                }
-                if (tribesCss.size > 9) {
-                    throw new Error('No CSS for more than 9 different tribes')
-                }
-            })
     }
 
     DetailedRenderer.prototype.getLanguagesClass = function (indiId, selectedLanguageId) {
@@ -337,7 +344,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
     }
 
     DetailedRenderer.prototype.resetCss = function () {
-        tribesCss.clear()
+        ethnicityCss.clear()
         console.log('Cleared CSS maps')
     }
 
@@ -369,7 +376,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 return "background "
                     +_this.getColoringClass() + " "
                     + _this.getSexClass(node.indi.id) + " "
-                    + _this.getTribeClass(node.indi.id) + " "
+                    + _this.getEthnicityClass(node.indi.id) + " "
                     + _this.getLanguagesClass(node.indi.id, _this.options.selectedLanguage) + " ";
             })
             .merge(update.select('rect.background'));
@@ -427,24 +434,24 @@ var DetailedRenderer = /** @class */ (function (_super) {
             return "translate(" + getDetailsWidth(node) / 2 + ", " + languages_height_start + ")";
         });
 
-        // Tribe
-        const tribe = enter
+        // Ethnicity
+        const ethnicity = enter
             .filter(function (node) {
-                return getIndi(node).showTribe() && getIndi(node).getTribe() != null
+                return getIndi(node).showEthnicity() && getIndi(node).getEthnicity() != null
             })
             .append('text')
-            .attr('class', 'tribe')
+            .attr('class', 'ethnicity')
             .text(function (node) {
-                return '¤ ' + getIndi(node).getTribe()
+                return '¤ ' + getIndi(node).getEthnicity()
             });
-        this.transition(tribe).attr('transform', function (node) {
-            let tribe_height_start =  null
+        this.transition(ethnicity).attr('transform', function (node) {
+            let ethnicity_height_start =  null
             if (getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0) {
-                tribe_height_start = 71
-            } else if (getIndi(node).showTribe() && getIndi(node).getTribe() != null) {
-                tribe_height_start = 55
+                ethnicity_height_start = 71
+            } else if (getIndi(node).showEthnicity() && getIndi(node).getEthnicity() != null) {
+                ethnicity_height_start = 55
             }
-            return "translate(5, " + tribe_height_start + ")";
+            return "translate(5, " + ethnicity_height_start + ")";
         });
 
         // Extract details
@@ -461,7 +468,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         function details_height_start(node) {
             return 55
                 + ((getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0) ? LANGUAGES_HEIGHT : 0)
-                + ((getIndi(node).showTribe() && getIndi(node).getTribe() != null) ? TRIBE_HEIGHT : 0)
+                + ((getIndi(node).showEthnicity() && getIndi(node).getEthnicity() != null) ? ETHNICITY_HEIGHT : 0)
         }
 
         const _loop_2 = function (i) {

@@ -84,9 +84,6 @@ var JsonIndiDetails = /** @class */ (function () {
     JsonIndiDetails.prototype.showEthnicity = function () {
         return !this.json.hideEthnicity;
     };
-    JsonIndiDetails.prototype.showTribe = function () {
-        return !this.json.hideTribe;
-    };
     JsonIndiDetails.prototype.showId = function () {
         return !this.json.hideId;
     };

@@ -41,7 +41,6 @@
 
 .detailed rect.bysex,
 .detailed rect.byethnicity,
-.detailed rect.bytribe,
 .detailed rect.bylanguages {
     fill: #eeeeee;
 }
@@ -57,8 +56,6 @@
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 .detailed rect.bygeneration,
-.detailed rect.bytribe.tribe0,
-.detailed rect.bytribe.eth0,
 .detailed rect.bylanguages.n1,
 .detailed rect.bylanguages.l1,
 .detailed rect.bylanguages.l13 {
@@ -67,8 +64,6 @@
 
 .generation-11 .detailed rect.bygeneration,
 .generation1 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth6,
-.detailed rect.bytribe.tribe6,
 .detailed rect.bylanguages.l2,
 .detailed rect.bylanguages.l14 {
     fill: #edffdb;
@@ -76,8 +71,6 @@
 
 .generation-10 .detailed rect.bygeneration,
 .generation2 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth1,
-.detailed rect.bytribe.tribe1,
 .detailed rect.bylanguages.n2,
 .detailed rect.bylanguages.l3,
 .detailed rect.bylanguages.l15 {
@@ -86,8 +79,6 @@
 
 .generation-9 .detailed rect.bygeneration,
 .generation3 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth7,
-.detailed rect.bytribe.tribe7,
 .detailed rect.bylanguages.l4,
 .detailed rect.bylanguages.l16 {
     fill: #dbffed;
@@ -95,8 +86,6 @@
 
 .generation-8 .detailed rect.bygeneration,
 .generation4 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth2,
-.detailed rect.bytribe.tribe2,
 .detailed rect.bylanguages.n4,
 .detailed rect.bylanguages.l5,
 .detailed rect.bylanguages.l17 {
@@ -105,8 +94,6 @@
 
 .generation-7 .detailed rect.bygeneration,
 .generation5 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth8,
-.detailed rect.bytribe.tribe8,
 .detailed rect.bylanguages.n7,
 .detailed rect.bylanguages.l6,
 .detailed rect.bylanguages.l18 {
@@ -115,8 +102,6 @@
 
 .generation-6 .detailed rect.bygeneration,
 .generation6 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth3,
-.detailed rect.bytribe.tribe3,
 .detailed rect.bylanguages.n6,
 .detailed rect.bylanguages.l7,
 .detailed rect.bylanguages.l19 {
@@ -125,8 +110,6 @@
 
 .generation-5 .detailed rect.bygeneration,
 .generation7 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth9,
-.detailed rect.bytribe.tribe9,
 .detailed rect.bylanguages.n5,
 .detailed rect.bylanguages.l8,
 .detailed rect.bylanguages.l20 {
@@ -135,8 +118,6 @@
 
 .generation-4 .detailed rect.bygeneration,
 .generation8 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth4,
-.detailed rect.bytribe.tribe4,
 .detailed rect.bylanguages.l9,
 .detailed rect.bylanguages.l21 {
     fill: #ffdbff;
@@ -144,8 +125,6 @@
 
 .generation-3 .detailed rect.bygeneration,
 .generation9 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth10,
-.detailed rect.bytribe.tribe10,
 .detailed rect.bylanguages.n3,
 .detailed rect.bylanguages.l10,
 .detailed rect.bylanguages.l22 {
@@ -154,8 +133,6 @@
 
 .generation-2 .detailed rect.bygeneration,
 .generation10 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth5,
-.detailed rect.bytribe.tribe5,
 .detailed rect.bylanguages.l11,
 .detailed rect.bylanguages.l23 {
     fill: #ffdbdb;
@@ -163,9 +140,55 @@
 
 .generation-1 .detailed rect.bygeneration,
 .generation11 .detailed rect.bygeneration,
-.detailed rect.bytribe.eth11,
-.detailed rect.bytribe.tribe11,
 .detailed rect.bylanguages.l12,
 .detailed rect.bylanguages.l24 {
     fill: #ffeddb;
 }
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+.detailed rect.byethnicity.ego {
+    fill: #ffffdd;
+}
+.detailed rect.byethnicity.blanco {
+    fill: #ffffff;
+}
+.detailed rect.byethnicity.afroamerican {
+    fill: #e8d5bc;
+}
+.detailed rect.byethnicity.eth3 {
+    fill: #dbffdb;
+}
+.detailed rect.byethnicity.eth4 {
+    fill: #dbffff;
+}
+.detailed rect.byethnicity.eth5 {
+    fill: #dbdbff;
+}
+.detailed rect.byethnicity.eth6 {
+    fill: #ffdbff;
+}
+.detailed rect.byethnicity.eth7 {
+    fill: #ffdbdb;
+}
+.detailed rect.byethnicity.eth8 {
+    fill: #edffdb;
+}
+.detailed rect.byethnicity.eth9 {
+    fill: #dbedff;
+}
+.detailed rect.byethnicity.eth10 {
+    fill: #dbffed;
+}
+.detailed rect.byethnicity.eth11 {
+    fill: #eddbff;
+}
+.detailed rect.byethnicity.eth12 {
+    fill: #ffdbed;
+}
+.detailed rect.byethnicity.eth13 {
+    fill: #ffeddb;
+}
+.detailed rect.byethnicity.eth14 {
+    fill: #a8d5ba;
+}
+

@@ -27,7 +27,7 @@ Backlog:
 - [x] Check radio toggle
 - [x] Download images broken
 - [x] Languages legend
-- [ ] Color by ethnicity
+- [x] Color by ethnicity
 - [ ] Add option to convert CSV to Gedcom
 - [ ] Missing literals
 - [ ] Sometimes allLanguages does not load the first time
