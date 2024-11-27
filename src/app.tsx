@@ -14,7 +14,7 @@ import {TopolaData} from './util/gedcom_util';
 import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router';
 import {idToIndiMap} from './util/gedcom_util';
-import {Chart, ChartType, downloadPdf, downloadPng, downloadSvg} from './chart';
+import {Chart, ChartType, downloadGedcom, downloadPdf, downloadPng, downloadSvg} from './chart';
 import {getSelection, UploadSourceSpec, UrlSourceSpec, GedcomUrlDataSource, UploadedDataSource} from './datasource/load_data';
 import CSVLoader, {Language} from "./languages/languages-loader";
 import {argsToConfig, Config, ConfigPanel, configToArgs, DEFAULT_CONFIG, LanguagesArg, EthnicityArg, IdsArg, SexArg} from './config';
@@ -410,10 +410,8 @@ export function App() {
             displayErrorPopup(
                 intl.formatMessage({
                     id: 'error.failed_pdf',
-                    defaultMessage:
-                        'Failed to generate PDF file.' +
-                        ' Please try with a smaller diagram or download an SVG file.',
-                }),
+                    defaultMessage: 'Failed to generate PDF file. Please try with a smaller diagram or download an SVG file.',
+                })
             );
         }
     }
@@ -426,13 +424,17 @@ export function App() {
                 intl.formatMessage({
                     id: 'error.failed_png',
                     defaultMessage:'Failed to generate PNG file. Please try with a smaller diagram or download an SVG file.'
-                }),
+                })
             );
         }
     }
 
-    function onDownloadSvg() {
-        downloadSvg();
+    async function onDownloadSvg() {
+        await downloadSvg();
+    }
+
+    async function onDownloadGedcom() {
+        await downloadGedcom();
     }
 
     function onCenterView() {
@@ -526,6 +528,7 @@ export function App() {
                             onDownloadPdf,
                             onDownloadPng,
                             onDownloadSvg,
+                            onDownloadGedcom,
                             onCenterView,
                         }}
                     />

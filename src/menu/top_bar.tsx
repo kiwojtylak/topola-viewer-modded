@@ -20,6 +20,7 @@ interface EventHandlers {
     onDownloadPdf: () => void;
     onDownloadPng: () => void;
     onDownloadSvg: () => void;
+    onDownloadGedcom: () => void;
     onCenterView: () => void;
 }
 
@@ -81,7 +82,7 @@ export function TopBar(props: Props) {
                     <>
                         <UploadMenu menuType={MenuType.Dropdown} {...props} />
                         <UrlMenu menuType={MenuType.Dropdown} {...props} />
-                        <ConvertCSVMenu menuType={MenuType.Dropdown} {...props} />
+                        {/*<ConvertCSVMenu menuType={MenuType.Dropdown} {...props} />*/}
                     </>
                 );
         }
@@ -102,17 +103,20 @@ export function TopBar(props: Props) {
                                     <FormattedMessage id="menu.download" defaultMessage="Download"/>
                                 </div>
                             }
-                            className="item"
-                        >
+                            className="item">
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={props.eventHandlers.onDownloadPdf}>
-                                    <FormattedMessage id="menu.pdf_file" defaultMessage="PDF file"/>
+                                    <FormattedMessage id="menu.download_pdf" defaultMessage="Download PDF"/>
                                 </Dropdown.Item>
                                 <Dropdown.Item onClick={props.eventHandlers.onDownloadPng}>
-                                    <FormattedMessage id="menu.png_file" defaultMessage="PNG file"/>
+                                    <FormattedMessage id="menu.download_png" defaultMessage="Download PNG"/>
                                 </Dropdown.Item>
                                 <Dropdown.Item onClick={props.eventHandlers.onDownloadSvg}>
-                                    <FormattedMessage id="menu.svg_file" defaultMessage="SVG file"/>
+                                    <FormattedMessage id="menu.download_svg" defaultMessage="Download SVG"/>
+                                </Dropdown.Item>
+                                <Dropdown.Divider/>
+                                <Dropdown.Item onClick={props.eventHandlers.onDownloadGedcom}>
+                                    <FormattedMessage id="menu.download_gecom" defaultMessage="Download GEDCOM"/>
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
@@ -153,6 +157,10 @@ export function TopBar(props: Props) {
                             <Dropdown.Item onClick={props.eventHandlers.onDownloadSvg}>
                                 <Icon name="download"/>
                                 <FormattedMessage id="menu.download_svg" defaultMessage="Download SVG"/>
+                            </Dropdown.Item>
+                            <Dropdown.Divider/>
+                            <Dropdown.Item onClick={props.eventHandlers.onDownloadGedcom}>
+                                <FormattedMessage id="menu.download_gecom" defaultMessage="Download GEDCOM"/>
                             </Dropdown.Item>
                             <Dropdown.Divider/>
                             <Menu.Item onClick={props.eventHandlers.onCenterView}>

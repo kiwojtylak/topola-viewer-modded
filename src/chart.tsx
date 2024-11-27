@@ -150,6 +150,13 @@ export async function downloadSvg() {
     saveAs(blob, 'genealogy.svg');
 }
 
+export async function downloadGedcom() {
+    // TODO: implement
+    console.log("Saving gedcom...")
+    const blob = new Blob()
+    saveAs(blob, 'genealogy.gedcom');
+}
+
 async function drawOnCanvas(): Promise<HTMLCanvasElement> {
     const contents = await getSvgContentsWithInlinedImages();
     const blob = new Blob([contents], {type: 'image/svg+xml'});
