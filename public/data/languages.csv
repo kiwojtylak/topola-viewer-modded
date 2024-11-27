@@ -14,5 +14,6 @@ id,name,family,ISO 639-3,latitude,longitude,legend
 13,kokama,tupian,cod,-5.00,-74.50,lightgreen
 14,makuna,tucanoan,myy,-0.33,-70.17,mediumblue
 15,binika-witoto,witotoan,,-1.40,-72.78,turquoise
-16,tikuna,ticuna-yuri,tca,-4.00,-70.50,orange
+16,tikuna,tikuna-yuri,tca,-4.00,-70.50,orange
 17,tucano,tucanoan,tuo,0.50,-69.17,deepskyblue
+18,miraña,boran,,-1.32,-70.81,darkred

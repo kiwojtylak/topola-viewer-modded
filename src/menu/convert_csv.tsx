@@ -1,11 +1,23 @@
 import {MenuItem, MenuType} from "./menu_item";
-import {Button, Form, Header, Icon, Modal} from "semantic-ui-react";
+import {
+    Button,
+    Form,
+    Header,
+    Icon, Label,
+    Modal, Segment
+} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
 import {SyntheticEvent, useState} from "react";
 import * as queryString from "query-string";
 import {useHistory} from "react-router";
 import {loadFile} from "../datasource/load_data";
 import md5 from "md5";
+import {
+    FamiliesTableExample,
+    IndividualsLanguagesTableExample,
+    IndividualsTableExample,
+    RelationshipsTableExample
+} from "./convert_tables";
 
 interface Props {
     menuType: MenuType;
@@ -58,6 +70,17 @@ export function ConvertCSVMenu(props: Props) {
                 </Header>
                 <Modal.Content>
                     <Form onSubmit={() => convert2gedcom()}>
+                        <Segment>
+                            <FormattedMessage id="convert.required" defaultMessage={"Columns with * are mandatory to be informed."}/>
+                        </Segment>
+                        {/*{<Label><Icon name="file text"/>1_individuals.csv</Label>}*/}
+                        {IndividualsTableExample}
+                        {/*{<Label><Icon name="file text"/>2_relationships.csv</Label>}*/}
+                        {RelationshipsTableExample}
+                        {/*{<Label><Icon name="file text"/>3_families.csv</Label>}*/}
+                        {FamiliesTableExample}
+                        {/*{<Label><Icon name="file text"/>4_individuals_languages.csv</Label>}*/}
+                        {IndividualsLanguagesTableExample}
                         <input type="file"
                                accept=".csv"
                                id="fileInput"
