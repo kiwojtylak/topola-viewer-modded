@@ -144,19 +144,10 @@ async function getSvgContentsWithInlinedImages() {
     return new XMLSerializer().serializeToString(svg);
 }
 
-export async function downloadSvg() {
+export async function downloadSvg(filename: string | undefined) {
     const contents = await getSvgContentsWithInlinedImages();
     const blob = new Blob([contents], {type: "image/svg+xml"});
-    saveAs(blob, "genealogy.svg");
-}
-
-export async function downloadGedcom(gedcom: string) {
-    const blob = new Blob([gedcom], {type: "text/plain"});
-    saveAs(blob, "genealogy.gedcom");
-}
-
-export function getEgoIndi(gedcom: GedcomData | undefined) {
-    return Object.entries(gedcom?.other || {}).filter(([_, value]) => value.tag === "EGO")
+    saveAs(blob, filename ? filename + ".svg" : "genealogy.svg");
 }
 
 async function drawOnCanvas(): Promise<HTMLCanvasElement> {
@@ -165,13 +156,13 @@ async function drawOnCanvas(): Promise<HTMLCanvasElement> {
     return drawImageOnCanvas(await loadImage(blob));
 }
 
-export async function downloadPng() {
+export async function downloadPng(filename: string | undefined) {
     const canvas = await drawOnCanvas();
     const blob = await canvasToBlob(canvas, "image/png");
-    saveAs(blob, "genealogy.png");
+    saveAs(blob, filename ? filename + ".png" : "genealogy.png");
 }
 
-export async function downloadPdf() {
+export async function downloadPdf(filename: string | undefined) {
     // Lazy load jspdf.
     const {default: jspdf} = await import("jspdf");
     const canvas = await drawOnCanvas();
@@ -181,7 +172,29 @@ export async function downloadPdf() {
         format: [canvas.width, canvas.height],
     });
     doc.addImage(canvas, "PNG", 0, 0, canvas.width, canvas.height, "NONE");
-    doc.save("genealogy.pdf");
+    doc.save(filename ? filename + ".pdf" : "genealogy.pdf");
+}
+
+export async function downloadGedcom(gedcom: string, filename: string | undefined) {
+    const blob = new Blob([gedcom], {type: "text/plain"});
+    saveAs(blob, filename ? filename + ".ged" : "genealogy.ged");
+}
+
+export function getEgoIndi(gedcom: GedcomData | undefined) {
+    return Object.entries(gedcom?.other || {}).filter(([_, value]) => value.tag === "EGO")
+}
+
+interface GedcomTreeItem {
+    tag: string;
+    data: string;
+}
+export function getFilename(gedcom: GedcomData | undefined) {
+    const filename = Object.entries(gedcom?.head || {})
+        .filter((k) => k[0] === "tree")
+        .map(_ => _[1])
+        .map(obj => obj.find((sub: GedcomTreeItem) => sub.tag === 'FILE'))
+        .map(file => file?.data)[0];
+    return !filename ? null : filename.substring(0, filename.lastIndexOf('.')) || filename; // Remove file extension (if any)
 }
 
 /** Supported chart types. */

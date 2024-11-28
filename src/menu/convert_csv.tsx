@@ -23,6 +23,8 @@ interface Props {
     menuType: MenuType;
 }
 
+const validFilenames = ["1_file.txt", "2_file.txt", "3_file.txt", "4_file.txt"];
+
 /** Displays and handles the "Convert CSV's" menu. */
 export function ConvertCSVMenu(props: Props) {
     const[inputFiles, setInputFiles] = useState<File[]>([]);
@@ -31,11 +33,16 @@ export function ConvertCSVMenu(props: Props) {
 
     function handleUpload(event: SyntheticEvent<HTMLInputElement>) {
         const files = (event.target as HTMLInputElement).files;
-        if (!files || !files.length) {
+        // Validate number of files
+        if (!files || files.length < 3 || files.length > 4) {
+            console.error("Upload should consist of at least 3 files and no more than 4")
             return;
         }
+        // Validate file names
+
+
         setInputFiles(Array.from(files));
-        (event.target as HTMLInputElement).value = ''; // Reset the file input.
+        (event.target as HTMLInputElement).value = ''; // Reset the file input
     }
 
     /** Load button clicked in the "Load from URL" dialog. */
@@ -70,16 +77,15 @@ export function ConvertCSVMenu(props: Props) {
                 </Header>
                 <Modal.Content>
                     <Form onSubmit={() => convert2gedcom()}>
-                        <Segment>
-                            <FormattedMessage id="convert.required" defaultMessage={"Columns with * are mandatory to be informed."}/>
-                        </Segment>
-                        {/*{<Label><Icon name="file text"/>1_individuals.csv</Label>}*/}
+                        {<Label><Icon name="file text"/>1_individuals.csv</Label>}
+                        {<Label><Icon name="file text"/>2_relationships.csv</Label>}
+                        {<Label><Icon name="file text"/>3_families.csv</Label>}
+                        {<Label className="optional-file">
+                            <Icon name="file text"/>4_individuals_languages.csv
+                        </Label>}
                         {IndividualsTableExample}
-                        {/*{<Label><Icon name="file text"/>2_relationships.csv</Label>}*/}
                         {RelationshipsTableExample}
-                        {/*{<Label><Icon name="file text"/>3_families.csv</Label>}*/}
                         {FamiliesTableExample}
-                        {/*{<Label><Icon name="file text"/>4_individuals_languages.csv</Label>}*/}
                         {IndividualsLanguagesTableExample}
                         <input type="file"
                                accept=".csv"

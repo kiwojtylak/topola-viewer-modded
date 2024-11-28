@@ -14,7 +14,16 @@ import {jsonToGedcom, TopolaData} from './util/gedcom_util';
 import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router';
 import {idToIndiMap} from './util/gedcom_util';
-import {Chart, ChartType, downloadGedcom, downloadPdf, downloadPng, downloadSvg, getEgoIndi} from './chart';
+import {
+    Chart,
+    ChartType,
+    downloadGedcom,
+    downloadPdf,
+    downloadPng,
+    downloadSvg,
+    getEgoIndi,
+    getFilename
+} from './chart';
 import {getSelection, UploadSourceSpec, UrlSourceSpec, GedcomUrlDataSource, UploadedDataSource} from './datasource/load_data';
 import CSVLoader, {Language} from "./languages/languages-loader";
 import {argsToConfig, Config, ConfigPanel, configToArgs, DEFAULT_CONFIG, LanguagesArg, EthnicityArg, IdsArg, SexArg} from './config';
@@ -402,7 +411,8 @@ export function App() {
 
     async function onDownloadPdf() {
         try {
-            await downloadPdf();
+            const filename = getFilename(data?.gedcom)
+            await downloadPdf(filename);
         } catch (e) {
             displayErrorPopup(
                 intl.formatMessage({
@@ -415,7 +425,8 @@ export function App() {
 
     async function onDownloadPng() {
         try {
-            await downloadPng();
+            const filename = getFilename(data?.gedcom)
+            await downloadPng(filename);
         } catch (e) {
             displayErrorPopup(
                 intl.formatMessage({
@@ -427,11 +438,13 @@ export function App() {
     }
 
     async function onDownloadSvg() {
-        await downloadSvg();
+        const filename = getFilename(data?.gedcom)
+        await downloadSvg(filename);
     }
 
     async function onDownloadGedcom() {
-        await downloadGedcom(gedcomString as string);
+        const filename = getFilename(data?.gedcom)
+        await downloadGedcom(gedcomString as string, filename);
     }
 
     function onCenterView() {

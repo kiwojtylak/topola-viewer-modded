@@ -7,6 +7,10 @@
     font-weight: bold;
 }
 
+.optional-file {
+    float: right;
+}
+
 .link {
     fill: none;
     stroke: #000;
@@ -37,7 +41,6 @@
 .detailed rect.nocolor {
     fill: #ffffff;
 }
-
 
 .detailed rect.bysex,
 .detailed rect.byethnicity,
