@@ -101,7 +101,7 @@ export function ConvertCSVMenu(props: Props) {
                         {<Label><Icon name="file text"/>1_individuals.csv</Label>}
                         {<Label><Icon name="file text"/>2_relationships.csv</Label>}
                         {<Label><Icon name="file text"/>3_families.csv</Label>}
-                        {<Label className="optional-file">
+                        {<Label style={{ float: "right" }}>
                             <Icon name="file text"/>4_individuals_languages.csv
                         </Label>}
                         {IndividualsTableExample}
