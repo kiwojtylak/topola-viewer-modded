@@ -32,22 +32,22 @@ function zoomed(
     size: [number, number],
     event: D3ZoomEvent<ZoomedElementBaseType, unknown>,
 ) {
-    const parent = select('#svgContainer').node() as Element;
+    const parent = select("#svgContainer").node() as Element;
     const scale = event.transform.k;
     const offsetX = max([0, (parent.clientWidth - size[0] * scale) / 2]);
     const offsetY = max([0, (parent.clientHeight - size[1] * scale) / 2]);
-    select('#chartSvg')
-        .attr('width', size[0] * scale)
-        .attr('height', size[1] * scale)
-        .attr('transform', `translate(${offsetX}, ${offsetY})`);
-    select('#chart').attr('transform', `scale(${scale})`);
+    select("#chartSvg")
+        .attr("width", size[0] * scale)
+        .attr("height", size[1] * scale)
+        .attr("transform", `translate(${offsetX}, ${offsetY})`);
+    select("#chart").attr("transform", `scale(${scale})`);
     parent.scrollLeft = -event.transform.x;
     parent.scrollTop = -event.transform.y;
 }
 
 /** Called when the scrollbars are used. */
 function scrolled() {
-    const parent = select('#svgContainer').node() as Element;
+    const parent = select("#svgContainer").node() as Element;
     const x = parent.scrollLeft + parent.clientWidth / 2;
     const y = parent.scrollTop + parent.clientHeight / 2;
     const scale = zoomTransform(parent).k;
@@ -73,7 +73,7 @@ async function inlineImage(image: SVGImageElement) {
         const blob = await response.blob();
         image.href.baseVal = await loadAsDataUrl(blob);
     } catch (e) {
-        console.warn('Failed to load image:', e);
+        console.warn("Failed to load image:", e);
     }
 }
 
@@ -92,19 +92,19 @@ function loadImage(blob: Blob): Promise<HTMLImageElement> {
     const image = new Image();
     image.src = URL.createObjectURL(blob);
     return new Promise<HTMLImageElement>((resolve) => {
-        image.addEventListener('load', () => resolve(image));
+        image.addEventListener("load", () => resolve(image));
     });
 }
 
 /** Draw image on a new canvas and return the canvas. */
 function drawImageOnCanvas(image: HTMLImageElement) {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     // Scale image for better quality.
     canvas.width = image.width * 2;
     canvas.height = image.height * 2;
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext("2d")!;
     const oldFill = ctx.fillStyle;
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = oldFill;
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -125,16 +125,16 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string) {
 
 /** Return a copy of the SVG chart but without scaling and positioning. */
 function getStrippedSvg() {
-    const svg = document.getElementById('chartSvg')!.cloneNode(true) as Element;
-    svg.removeAttribute('transform');
-    const parent = select('#svgContainer').node() as Element;
+    const svg = document.getElementById("chartSvg")!.cloneNode(true) as Element;
+    svg.removeAttribute("transform");
+    const parent = select("#svgContainer").node() as Element;
     const scale = zoomTransform(parent).k;
-    svg.setAttribute('width', String(Number(svg.getAttribute('width')) / scale));
+    svg.setAttribute("width", String(Number(svg.getAttribute("width")) / scale));
     svg.setAttribute(
-        'height',
-        String(Number(svg.getAttribute('height')) / scale),
+        "height",
+        String(Number(svg.getAttribute("height")) / scale),
     );
-    svg.querySelector('#chart')!.removeAttribute('transform');
+    svg.querySelector('#chart')!.removeAttribute("transform");
     return svg;
 }
 
@@ -146,15 +146,13 @@ async function getSvgContentsWithInlinedImages() {
 
 export async function downloadSvg() {
     const contents = await getSvgContentsWithInlinedImages();
-    const blob = new Blob([contents], {type: 'image/svg+xml'});
-    saveAs(blob, 'genealogy.svg');
+    const blob = new Blob([contents], {type: "image/svg+xml"});
+    saveAs(blob, "genealogy.svg");
 }
 
-export async function downloadGedcom(data: TopolaData | undefined) {
-    console.log("Saving gedcom...")
-    const blob = new Blob()
-    // const egoIndi = getEgoIndi(data?.gedcom)
-    saveAs(blob, 'genealogy.gedcom');
+export async function downloadGedcom(gedcom: string) {
+    const blob = new Blob([gedcom], {type: "text/plain"});
+    saveAs(blob, "genealogy.gedcom");
 }
 
 export function getEgoIndi(gedcom: GedcomData | undefined) {
@@ -163,27 +161,27 @@ export function getEgoIndi(gedcom: GedcomData | undefined) {
 
 async function drawOnCanvas(): Promise<HTMLCanvasElement> {
     const contents = await getSvgContentsWithInlinedImages();
-    const blob = new Blob([contents], {type: 'image/svg+xml'});
+    const blob = new Blob([contents], {type: "image/svg+xml"});
     return drawImageOnCanvas(await loadImage(blob));
 }
 
 export async function downloadPng() {
     const canvas = await drawOnCanvas();
-    const blob = await canvasToBlob(canvas, 'image/png');
-    saveAs(blob, 'genealogy.png');
+    const blob = await canvasToBlob(canvas, "image/png");
+    saveAs(blob, "genealogy.png");
 }
 
 export async function downloadPdf() {
     // Lazy load jspdf.
-    const {default: jspdf} = await import('jspdf');
+    const {default: jspdf} = await import("jspdf");
     const canvas = await drawOnCanvas();
     const doc = new jspdf({
         orientation: canvas.width > canvas.height ? 'l' : 'p',
-        unit: 'pt',
+        unit: "pt",
         format: [canvas.width, canvas.height],
     });
-    doc.addImage(canvas, 'PNG', 0, 0, canvas.width, canvas.height, 'NONE');
-    doc.save('genealogy.pdf');
+    doc.addImage(canvas, "PNG", 0, 0, canvas.width, canvas.height, "NONE");
+    doc.save("genealogy.pdf");
 }
 
 /** Supported chart types. */
@@ -227,7 +225,7 @@ class ChartWrapper {
     private rerenderResetPosition?: boolean;
 
     zoom(factor: number) {
-        const parent = select('#svgContainer') as Selection<Element, any, any, any>;
+        const parent = select("#svgContainer") as Selection<Element, any, any, any>;
         this.zoomBehavior!.scaleBy(parent, factor);
     }
 
@@ -257,12 +255,12 @@ class ChartWrapper {
         }
 
         if (args.initialRender) {
-            (select('#chart').node() as HTMLElement).innerHTML = '';
+            (select("#chart").node() as HTMLElement).innerHTML = '';
             this.chart = createChart({
                 json: props.data,
                 chartType: HourglassChart,
                 renderer: DetailedRenderer,
-                svgSelector: '#chart',
+                svgSelector: "#chart",
                 indiCallback: (info) => props.onSelection(info),
                 colors: chartColors.get(props.colors!),
                 selectedLanguage: props.selectedLanguage,
@@ -278,8 +276,8 @@ class ChartWrapper {
             startIndi: props.selection.id,
             baseGeneration: props.selection.generation,
         });
-        const svg = select('#chartSvg');
-        const parent = select('#svgContainer').node() as Element;
+        const svg = select("#chartSvg");
+        const parent = select("#svgContainer").node() as Element;
         const scale = zoomTransform(parent).k;
         const zoomOutFactor = min([
             1,
@@ -292,8 +290,8 @@ class ChartWrapper {
         this.zoomBehavior = zoom()
             .scaleExtent(extent)
             .translateExtent([[0, 0], chartInfo.size])
-            .on('zoom', (event) => zoomed(chartInfo.size, event));
-        select(parent).on('scroll', scrolled).call(this.zoomBehavior);
+            .on("zoom", (event) => zoomed(chartInfo.size, event));
+        select(parent).on("scroll", scrolled).call(this.zoomBehavior);
 
         const scrollTopTween = (scrollTop: number) => {
             return () => {
@@ -326,17 +324,17 @@ class ChartWrapper {
         const svgTransition = svg.transition().delay(200).duration(500);
         const transition = args.initialRender ? svg : svgTransition;
         transition
-            .attr('transform', `translate(${offsetX}, ${offsetY})`)
-            .attr('width', chartInfo.size[0] * scale)
-            .attr('height', chartInfo.size[1] * scale);
+            .attr("transform", `translate(${offsetX}, ${offsetY})`)
+            .attr("width", chartInfo.size[0] * scale)
+            .attr("height", chartInfo.size[1] * scale);
         if (args.resetPosition) {
             if (args.initialRender) {
                 parent.scrollLeft = -dx;
                 parent.scrollTop = -dy;
             } else {
                 svgTransition
-                    .tween('scrollLeft', scrollLeftTween(-dx))
-                    .tween('scrollTop', scrollTopTween(-dy));
+                    .tween("scrollLeft", scrollLeftTween(-dx))
+                    .tween("scrollTop", scrollTopTween(-dy));
             }
         }
 

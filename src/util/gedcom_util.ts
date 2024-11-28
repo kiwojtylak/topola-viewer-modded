@@ -286,3 +286,53 @@ export function getImageFileEntry(objectEntry: GedcomEntry): GedcomEntry | undef
             isImageFile(entry.data),
     );
 }
+
+/**
+ * Reverts a TopolaData object to a gedcom string.
+ * This is needed to export to gedcom. The original string is not for given, it could have originally come via
+ * file upload, but it could have come by other data sources (url, etc.)
+ * @param gedcomData
+ */
+export function jsonToGedcom(gedcomData: GedcomData): string {
+    let gedcom = "";
+
+    function processNode(node: GedcomEntry, level: number): void {
+        let line = `${level} `;
+        if (node.pointer) line += `${node.pointer} `;
+        line += `${node.tag}`;
+        if (node.data) line += ` ${node.data}`;
+        gedcom += line + '\n';
+        if (node.tree && node.tree.length > 0) {
+            node.tree.forEach(child => processNode(child, level + 1));
+        }
+    }
+
+    processNode(gedcomData.head, 0);
+    gedcom += '\n';
+    Object.values(gedcomData.other).forEach(record => {
+        if (record.tag === "SUBM") {
+            processNode(record, 0);
+            gedcom += '\n';
+        }
+        if (record.tag === "EGO") {
+            processNode(record, 0);
+            gedcom += '\n';
+        }
+    });
+    Object.values(gedcomData.indis).forEach(indi => {
+        processNode(indi, 0);
+        gedcom += '\n';
+    });
+    Object.values(gedcomData.fams).forEach(fam => {
+        processNode(fam, 0);
+        gedcom += '\n';
+    });
+    Object.values(gedcomData.other).forEach(record => {
+        if (record.tag !== "SUBM" && record.tag !== "EGO") {
+            processNode(record, 0);
+            gedcom += '\n';
+        }
+    });
+    gedcom += "0 TRLR";
+    return gedcom.trim();
+}

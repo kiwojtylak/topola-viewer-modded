@@ -10,7 +10,7 @@ import {Loader, Message, Portal, Tab} from 'semantic-ui-react';
 import {Media} from './util/media';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {TopBar} from './menu/top_bar';
-import {TopolaData} from './util/gedcom_util';
+import {jsonToGedcom, TopolaData} from './util/gedcom_util';
 import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router';
 import {idToIndiMap} from './util/gedcom_util';
@@ -196,8 +196,7 @@ function getArguments(location: H.Location<any>, allLanguages: Language[]): Argu
     return {
         sourceSpec,
         selection,
-        // Hourglass is the default view.
-        chartType: chartTypes.get(view) || ChartType.Hourglass,
+        chartType: chartTypes.get(view) || ChartType.Hourglass, // Hourglass is the default view.
         showSidePanel: getParam('sidePanel') !== 'false', // True by default.
         standalone: getParam('standalone') !== 'false' && !embedded && !staticUrl,
         freezeAnimation: getParam('freeze') === 'true', // False by default
@@ -224,6 +223,7 @@ export function App() {
     const [showErrorPopup, setShowErrorPopup] = useState(false);
     /** Specification of the source of the data. */
     const [sourceSpec, setSourceSpec] = useState<DataSourceSpec>();
+    const [gedcomString, setGedcomString] = useState<String>()
     /** Freeze animations after initial chart render. */
     const [freezeAnimation, setFreezeAnimation] = useState(false);
     const [config, setConfig] = useState(DEFAULT_CONFIG);
@@ -358,6 +358,7 @@ export function App() {
                 try {
                     const data = await loadData(args.sourceSpec, args.selection);
                     setData(data);
+                    setGedcomString(jsonToGedcom(data.gedcom))
                     setSelection(args.selection !== undefined ? args.selection : startIndi(data));
                     toggleDetails(args.config, data, allLanguages);
                     setShowSidePanel(args.showSidePanel);
@@ -430,7 +431,7 @@ export function App() {
     }
 
     async function onDownloadGedcom() {
-        await downloadGedcom(data);
+        await downloadGedcom(gedcomString as string);
     }
 
     function onCenterView() {
