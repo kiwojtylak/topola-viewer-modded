@@ -23,7 +23,12 @@ interface Props {
     menuType: MenuType;
 }
 
-const validFilenames = ["1_file.txt", "2_file.txt", "3_file.txt", "4_file.txt"];
+const validFilenames = [
+    "1_individuals.csv",
+    "2_relationships.csv",
+    "3_families.csv",
+    "4_individuals_languages.csv"
+];
 
 /** Displays and handles the "Convert CSV's" menu. */
 export function ConvertCSVMenu(props: Props) {
@@ -39,10 +44,26 @@ export function ConvertCSVMenu(props: Props) {
             return;
         }
         // Validate file names
-
+        if (!validateFilenames(Array.from(files), validFilenames)) {
+            return;
+        }
+        // Validate schemas
+        // TODO: get file 1. and check schema, etc
+        // TODO: for each file that I check, if success, change labels color
 
         setInputFiles(Array.from(files));
         (event.target as HTMLInputElement).value = ''; // Reset the file input
+    }
+
+    function validateFilenames(files: File[], validFilenames: string[]): boolean {
+        for (const file of files) {
+            const filename = file.name;
+            if (!validFilenames.includes(filename)) {
+                console.error(`Invalid filename: ${filename}`);
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Load button clicked in the "Load from URL" dialog. */

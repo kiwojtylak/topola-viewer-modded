@@ -1,7 +1,7 @@
 import {Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 
 export const IndividualsTableExample = (
-    <Table compact size="small" color={"orange"}>
+    <Table compact size="small" color={"yellow"}>
         <TableHeader>
             <TableRow>
                 <TableHeaderCell style={{ "color": "" }}>id *</TableHeaderCell>
@@ -54,7 +54,7 @@ export const IndividualsTableExample = (
 );
 
 export const RelationshipsTableExample = (
-    <Table compact size="small" color={"orange"}>
+    <Table compact size="small" color={"yellow"}>
         <TableHeader>
             <TableRow>
                 <TableHeaderCell style={{ "color": "" }}>person_id *</TableHeaderCell>
@@ -81,7 +81,7 @@ export const RelationshipsTableExample = (
 );
 
 export const FamiliesTableExample = (
-    <Table compact size="small" color={"orange"}>
+    <Table compact size="small" color={"yellow"}>
         <TableHeader>
             <TableRow>
                 <TableHeaderCell style={{ "color": "" }}>id *</TableHeaderCell>
@@ -102,7 +102,7 @@ export const FamiliesTableExample = (
 );
 
 export const IndividualsLanguagesTableExample = (
-    <Table compact size="small" color={"teal"}>
+    <Table compact size="small" color={"pink"}>
         <TableHeader>
             <TableRow>
                 <TableHeaderCell style={{ "color": "" }}>person_id *</TableHeaderCell>
