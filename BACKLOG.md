@@ -29,6 +29,6 @@ Backlog:
 - [x] Languages legend
 - [x] Color by ethnicity
 - [x] Download gedcom file
+- [x] Missing literals
 - [ ] Convert CSV to Gedcom
-- [ ] Missing literals
 - [ ] Sometimes allLanguages does not load the first time

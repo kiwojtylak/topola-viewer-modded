@@ -4,7 +4,7 @@ import {
     Form,
     Header,
     Icon, Label,
-    Modal, Segment
+    Modal
 } from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
 import {SyntheticEvent, useState} from "react";
@@ -33,8 +33,7 @@ export function ConvertCSVMenu(props: Props) {
     function handleUpload(event: SyntheticEvent<HTMLInputElement>) {
         const files = (event.target as HTMLInputElement).files;
         // Validate number of files
-        if (!files || files.length < 3 || files.length > 4) {
-            console.error("Upload should consist of at least 3 files and no more than 4")
+        if (!files) {
             return
         }
         // Validate file names
@@ -66,16 +65,18 @@ export function ConvertCSVMenu(props: Props) {
         Promise.all(fileReadPromises).then(results => {
             const validFiles = results.filter((file): file is File => file !== null);
             setInputFiles(validFiles);
+            // Validate number of files
+            if (!inputFiles || inputFiles.length < 3 || inputFiles.length > 4) {
+                console.error("Upload should consist of at least 3 files and no more than 4")
+                return
+            }
             (event.target as HTMLInputElement).value = ''; // Reset the file input
         });
     }
 
     /** Load button clicked in the "Load from URL" dialog. */
     async function convert2gedcom() {
-        const gedcomFile = inputFiles.length === 1
-            ? inputFiles[0]
-            : inputFiles.find((file) => file.name.toLowerCase().endsWith('.ged')) ||
-            inputFiles[0];
+        const gedcomFile = new Blob() // TODO: implement conversion
         const {gedcom, images} = await loadFile(gedcomFile);
 
         // Hash GEDCOM contents with uploaded image file names.
@@ -105,19 +106,29 @@ export function ConvertCSVMenu(props: Props) {
                         {<Label color={inputFiles.some((file: File) => file.name === "1_individuals.csv") ? "green" : undefined}>
                             <Icon name="file text"/>1_individuals.csv
                         </Label>}
-                        {<Label color={inputFiles.some((file: File) => file.name === "1_individuals.csv") ? "green" : undefined}>
+                        {<Label color={inputFiles.some((file: File) => file.name === "2_relationships.csv") ? "green" : undefined}>
                             <Icon name="file text"/>2_relationships.csv
                         </Label>}
-                        {<Label color={inputFiles.some((file: File) => file.name === "1_individuals.csv") ? "green" : undefined}>
+                        {<Label color={inputFiles.some((file: File) => file.name === "3_families.csv") ? "green" : undefined}>
                             <Icon name="file text"/>3_families.csv
                         </Label>}
-                        {<Label color={inputFiles.some((file: File) => file.name === "1_individuals.csv") ? "green" : undefined} style={{ float: "right" }}>
-                            <Icon name="file text"/>4_individuals_languages.csv
+                        {<Label
+                            color={inputFiles.some((file: File) => file.name === "4_individuals_languages.csv") ? "green" : undefined}
+                            style={{ float: "right" }}>
+                                <Icon name="file text"/>4_individuals_languages.csv
                         </Label>}
-                        {IndividualsTableExample}
-                        {RelationshipsTableExample}
-                        {FamiliesTableExample}
-                        {IndividualsLanguagesTableExample}
+                        {<IndividualsTableExample headerColor={
+                            inputFiles.some((file: File) => file.name === "1_individuals.csv") ? "green" : "yellow"} />
+                        }
+                        {<RelationshipsTableExample headerColor={
+                            inputFiles.some((file: File) => file.name === "2_relationships.csv") ? "green" : "yellow"} />
+                        }
+                        {<FamiliesTableExample headerColor={
+                            inputFiles.some((file: File) => file.name === "3_families.csv") ? "green" : "yellow"} />
+                        }
+                        {<IndividualsLanguagesTableExample headerColor={
+                            inputFiles.some((file: File) => file.name === "4_individuals_languages.csv") ? "green" : "yellow"} />
+                        }
                         <input type="file"
                                accept=".csv"
                                id="fileInput"
@@ -133,9 +144,12 @@ export function ConvertCSVMenu(props: Props) {
                     }}>
                         <FormattedMessage id="load_from_url.cancel" defaultMessage="Cancel"/>
                     </Button>
-                    {/* TODO: enable */}
-                    <Button disabled={true} primary onClick={() => convert2gedcom()}>
-                        <FormattedMessage id="load_from_url.load" defaultMessage="Generate"/>
+                    <Button
+                        disabled={!["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
+                            inputFiles.some((file: File) => file.name === fileName)
+                        )}
+                        primary onClick={() => convert2gedcom()}>
+                            <FormattedMessage id="load_from_gedcom.generate" defaultMessage="Generate"/>
                     </Button>
                 </Modal.Actions>
             </Modal>

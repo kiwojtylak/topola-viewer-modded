@@ -16,6 +16,7 @@
   "load_from_url.comment": "Die Daten der angegebenen URL werden über den {link} -Dienst geladen, um CORS-Probleme zu vermeiden.",
   "load_from_url.cancel": "Cancel",
   "load_from_url.load": "Öffnen",
+  "load_from_gedcom.generate": "Generieren",
   "gedcom.ADOP": "Annahme",
   "gedcom.BAPM": "Taufe",
   "gedcom.BIRT": "Geburt",
