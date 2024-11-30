@@ -2,6 +2,7 @@
   "menu.open": "Apri",
   "menu.open_file": "Apri file",
   "menu.load_from_url": "Apri URL",
+  "menu.convert_csv_gedcom": "Converti file CSV in GEDCOM",
   "menu.download": "Scaricare",
   "menu.download_pdf": "Scaricare PDF",
   "menu.download_png": "Scaricare PNG",

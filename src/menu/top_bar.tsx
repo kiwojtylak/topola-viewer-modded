@@ -116,7 +116,7 @@ export function TopBar(props: Props) {
                                 </Dropdown.Item>
                                 <Dropdown.Divider/>
                                 <Dropdown.Item onClick={props.eventHandlers.onDownloadGedcom}>
-                                    <FormattedMessage id="menu.download_gecom" defaultMessage="Download GEDCOM"/>
+                                    <FormattedMessage id="menu.download_gedcom" defaultMessage="Download GEDCOM"/>
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
@@ -160,7 +160,7 @@ export function TopBar(props: Props) {
                             </Dropdown.Item>
                             <Dropdown.Divider/>
                             <Dropdown.Item onClick={props.eventHandlers.onDownloadGedcom}>
-                                <FormattedMessage id="menu.download_gecom" defaultMessage="Download GEDCOM"/>
+                                <FormattedMessage id="menu.download_gedcom" defaultMessage="Download GEDCOM"/>
                             </Dropdown.Item>
                             <Dropdown.Divider/>
                             <Menu.Item onClick={props.eventHandlers.onCenterView}>

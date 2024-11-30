@@ -2,6 +2,7 @@
   "menu.open": "Abrir",
   "menu.open_file": "Abrir fichero",
   "menu.load_from_url": "Abrir URL",
+  "menu.convert_csv_gedcom": "Convertir archivos CSV a GEDCOM",
   "menu.download": "Descargar",
   "menu.download_pdf": "Descargar PDF",
   "menu.download_png": "Descargar PNG",
