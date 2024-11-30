@@ -118,15 +118,15 @@ export function IndividualsLanguagesTableExample({ headerColor }: { headerColor?
             </TableHeader>
             <TableBody>
                 <TableRow>
-                    <TableCell>F200</TableCell>
+                    <TableCell>I200</TableCell>
                     <TableCell>1</TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell>F202</TableCell>
+                    <TableCell>I202</TableCell>
                     <TableCell>1</TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell>F202</TableCell>
+                    <TableCell>I202</TableCell>
                     <TableCell>3</TableCell>
                 </TableRow>
             </TableBody>
