@@ -76,7 +76,7 @@ export function ConvertCSVMenu(props: Props) {
 
     /** Load button clicked in the "Load from URL" dialog. */
     async function convert2gedcom() {
-        const gedcomFile = new Blob() // TODO: implement conversion
+        const gedcomFile = new Blob() // TODO: invoke converter
         const {gedcom, images} = await loadFile(gedcomFile);
 
         // Hash GEDCOM contents with uploaded image file names.
@@ -127,7 +127,7 @@ export function ConvertCSVMenu(props: Props) {
                             inputFiles.some((file: File) => file.name === "3_families.csv") ? "green" : "yellow"} />
                         }
                         {<IndividualsLanguagesTableExample headerColor={
-                            inputFiles.some((file: File) => file.name === "4_individuals_languages.csv") ? "green" : "yellow"} />
+                            inputFiles.some((file: File) => file.name === "4_individuals_languages.csv") ? "green" : "pink"} />
                         }
                         <input type="file"
                                accept=".csv"
