@@ -18,7 +18,7 @@ import {
     IndividualsTableExample,
     RelationshipsTableExample
 } from "./convert_tables";
-import {filesValidation, validateCSV, validateFilenames} from "./validate_csv";
+import {filesValidation, validateCSV, validateFilenames} from "../util/validate_csv";
 
 interface Props {
     menuType: MenuType
