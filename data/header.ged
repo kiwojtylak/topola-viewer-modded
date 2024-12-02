@@ -1,0 +1,12 @@
+0 HEAD
+1 GEDC
+2 VERS 5.5.5
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+1 DATE {date}
+1 LANG English
+1 FILE {file}.ged
+
+1 SUBM @U1@
+0 @U1@ SUBM
+1 NAME {subm}
