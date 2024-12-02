@@ -30,5 +30,7 @@ Backlog:
 - [x] Color by ethnicity
 - [x] Download gedcom file
 - [x] Missing literals
+- [ ] Validate indi ids and family ids
 - [ ] Convert CSV to Gedcom
+- [ ] Add site to GA 
 - [ ] Sometimes allLanguages does not load the first time
