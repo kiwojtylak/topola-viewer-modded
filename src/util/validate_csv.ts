@@ -1,9 +1,16 @@
 const Papa = require("papaparse");
 
-export const filesValidation = {
+export const columnsValidation = {
+    "1_individuals.csv": ["id", "name", "surname", "nickname", "sex", "YOB", "ethnic", "clan", "notes"],
+    "2_relationships.csv": ["person_id", "father_id", "mother_id", "notes"],
+    "3_families.csv": ["id", "husband_id", "wife_id"],
+    "4_individuals_languages.csv": ["person_id", "language_id"]
+}
+
+export const valuesValidation = {
     "1_individuals.csv": ["id", "sex", "ethnic"],
     "2_relationships.csv": ["person_id"],
-    "3_families.csv": ["id", "husband_id", "wife_id"],
+    "3_families.csv": ["id", "husband_id", "wife_id", "notes"],
     "4_individuals_languages.csv": ["person_id", "language_id"]
 }
 
@@ -25,29 +32,30 @@ export function validateCSV(filename: string, content: string) {
         return false;
     }
     const rows = parsedData.data as Record<string, string>[];
-    return checkColumns(rows, filesValidation[filename]) && checkMissingValues(rows, filesValidation[filename]);
+    return checkColumns(filename, rows, columnsValidation[filename]) && checkMissingValues(filename, rows, valuesValidation[filename]);
 }
 
-export function checkColumns(rows: Record<string, string>[], requiredColumns: string[]) {
+export function checkColumns(filename: string, rows: Record<string, string>[], requiredColumns: string[]) {
     const headers = Object.keys(rows[0]);
     // Check for missing columns
     const missingColumns = requiredColumns.filter(col => !headers.includes(col));
     if (missingColumns.length) {
-        console.error(`The following required columns are missing: ${missingColumns.join(", ")}`);
+        const error = `${filename}: the following required columns are missing: ${missingColumns.join(", ")}`
+        console.error(error);
         return false;
     }
     return true;
 }
 
-export function checkMissingValues(rows: Record<string, string>[], requiredColumns: string[]) {
-    const errors: string[] = [];
+export function checkMissingValues(filename: string, rows: Record<string, string>[], requiredColumns: string[]) {
+    const cellErrors: string[] = [];
     rows.forEach((row, index) => {
         requiredColumns.forEach(column => {
             if (!row[column] || row[column].trim() === "") {
-                errors.push(`Row ${index + 1} is missing a value in column: ${column}`);
+                cellErrors.push(`${filename}: row ${index + 1} is missing a value in column: ${column}`);
             }
         });
     });
-    return errors.length <= 0
+    return cellErrors.length <= 0
 }
 

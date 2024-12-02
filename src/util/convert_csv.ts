@@ -1,85 +1,58 @@
-import * as fs from "fs/promises";
-
-enum Sex {
-    Male = "Male",
-    Female = "Female"
-}
-
-interface Individual {
-    id: string;
-    givenName?: string;
-    surname?: string;
-    nickname?: string;
-    sex: Sex;
-    birthYear?: number;
-    ethnicity?: string;
-    tribe?: string;
-    familyChild?: string;
-    familySpouses: string[];
-    languages: string[];
-}
-
-interface Language {
-    id: string;
-    name: string;
-}
-
-interface Family {
-    id: string;
-    husband: string;
-    wife: string;
-    children: string[];
-}
+import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+import {Individual, Sex} from "../languages/individual";
+import {Language} from "../languages/languages-loader";
+import {Family} from "../languages/family";
 
 type Relationships = Record<string, [string, string]>;
 
-async function csvToGedcom(
+export function csvToGedcom(
     languagesFile: string | null,
     individualsFile: string,
     relationshipsFile: string,
     familiesFile: string,
-    individualsLanguagesFile: string | null
-): Promise<void> {
+    individualsLanguagesFile: string | null,
+    egoIndiId: string | null
+): string {
     try {
-        const individuals = await parseIndividuals(individualsFile);
-        const relationships = await parseRelationships(relationshipsFile);
-        const families = await parseFamilies(familiesFile);
-
+        const individuals = parseIndividuals(individualsFile);
+        const relationships = parseRelationships(relationshipsFile);
+        const families = parseFamilies(familiesFile);
         mapFamiliesChildren(relationships, families, individuals);
         mapIndividualsSpouses(families, individuals);
-
         if (languagesFile && individualsLanguagesFile) {
-            const languages = await parseLanguages(languagesFile);
-            const individualsLanguages = await parseIndividualsLanguages(individualsLanguagesFile);
+            const languages = parseLanguages(languagesFile);
+            const individualsLanguages = parseIndividualsLanguages(individualsLanguagesFile);
             mapIndividualsLanguages(individuals, individualsLanguages, languages);
         }
-
-        await saveGedcomFile(individuals, relationships, families);
+        return createGedcomString(individuals, relationships, families, egoIndiId);
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
 
-async function parseIndividuals(filePath: string): Promise<Individual[]> {
-    const data = await fs.readFile(filePath, "utf8");
+function parseIndividuals(filePath: string): Individual[] {
+    const data = fs.readFileSync(filePath, "utf-8");
     const rows = parseCSV(data);
-    return rows.map(row => ({
+    return rows.map(row => new Individual({
         id: row["id"],
+        sex: row["sex"] as Sex,
         givenName: row["name"] || undefined,
         surname: row["surname"] || undefined,
         nickname: row["nickname"] || undefined,
-        sex: row["sex"] as Sex,
         birthYear: row["YOB"] ? parseInt(row["YOB"], 10) : undefined,
         ethnicity: row["ethnic"] || undefined,
         tribe: row["clan"] || undefined,
         familySpouses: [],
-        languages: []
+        languages: [],
+        notes: row["notes"] || undefined
     }));
+
 }
 
-async function parseLanguages(filePath: string): Promise<Language[]> {
-    const data = await fs.readFile(filePath, "utf8");
+function parseLanguages(filePath: string): Language[] {
+    const data = fs.readFileSync(filePath, "utf-8");
     const rows = parseCSV(data);
     return rows.map(row => ({
         id: row["id"],
@@ -87,8 +60,8 @@ async function parseLanguages(filePath: string): Promise<Language[]> {
     }));
 }
 
-async function parseIndividualsLanguages(filePath: string): Promise<Record<string, string[]>> {
-    const data = await fs.readFile(filePath, "utf8");
+function parseIndividualsLanguages(filePath: string): Record<string, string[]> {
+    const data = fs.readFileSync(filePath, "utf-8");
     const rows = parseCSV(data);
     const individualsLanguages: Record<string, string[]> = {};
     rows.forEach(row => {
@@ -101,8 +74,8 @@ async function parseIndividualsLanguages(filePath: string): Promise<Record<strin
     return individualsLanguages;
 }
 
-async function parseRelationships(filePath: string): Promise<Relationships> {
-    const data = await fs.readFile(filePath, "utf8");
+function parseRelationships(filePath: string): Relationships {
+    const data = fs.readFileSync(filePath, "utf-8");
     const rows = parseCSV(data);
     const relationships: Relationships = {};
     rows.forEach(row => {
@@ -113,14 +86,15 @@ async function parseRelationships(filePath: string): Promise<Relationships> {
     return relationships;
 }
 
-async function parseFamilies(filePath: string): Promise<Family[]> {
-    const data = await fs.readFile(filePath, "utf8");
+function parseFamilies(filePath: string): Family[] {
+    const data = fs.readFileSync(filePath, "utf-8");
     const rows = parseCSV(data);
-    return rows.map(row => ({
+    return rows.map(row => new Family({
         id: row["id"],
         husband: row["husband_id"],
         wife: row["wife_id"],
-        children: []
+        children: [],
+        notes: row["notes"] || undefined
     }));
 }
 
@@ -131,11 +105,12 @@ function mapIndividualsLanguages(
 ): void {
     Object.entries(individualsLanguages).forEach(([personId, langIds]) => {
         const individual = individuals.find(ind => ind.id === personId);
-        if (!individual) throw new Error(`Individual not found: ${personId}`);
-
+        if (!individual)
+            throw new Error(`Individual not found: ${personId}`);
         langIds.forEach(langId => {
             const language = languages.find(lang => lang.id === langId);
-            if (!language) throw new Error(`Language not found: ${langId}`);
+            if (!language)
+                throw new Error(`Language not found: ${langId}`);
             individual.languages.push(language.name);
         });
     });
@@ -148,12 +123,12 @@ function mapFamiliesChildren(
 ): void {
     Object.entries(relationships).forEach(([childId, [fatherId, motherId]]) => {
         const family = families.find(fam => fam.husband === fatherId && fam.wife === motherId);
-        if (!family) throw new Error(`Family not found: ${childId} (${fatherId}, ${motherId})`);
-
+        if (!family)
+            throw new Error(`Family not found: ${childId} (${fatherId}, ${motherId})`);
         family.children.push(childId);
-
         const individual = individuals.find(ind => ind.id === childId);
-        if (!individual) throw new Error(`Individual not found: ${childId}`);
+        if (!individual)
+            throw new Error(`Individual not found: ${childId}`);
         individual.familyChild = family.id;
     });
 }
@@ -161,49 +136,54 @@ function mapFamiliesChildren(
 function mapIndividualsSpouses(families: Family[], individuals: Individual[]): void {
     families.forEach(family => {
         const husband = individuals.find(ind => ind.id === family.husband);
-        if (!husband) throw new Error(`Husband not found: ${family.husband}`);
+        if (!husband)
+            throw new Error(`Husband not found: ${family.husband}`);
         husband.familySpouses.push(family.id);
-
         const wife = individuals.find(ind => ind.id === family.wife);
-        if (!wife) throw new Error(`Wife not found: ${family.wife}`);
+        if (!wife)
+            throw new Error(`Wife not found: ${family.wife}`);
         wife.familySpouses.push(family.id);
     });
 }
 
-const resourcesFolder = "" // TODO: how do you pass the ego indi now?
-async function saveGedcomFile(
+function createGedcomString(
     individuals: Individual[],
     relationships: Relationships,
-    families: Family[]
-): Promise<string> {
-    const egoIndividual = individuals.reduce((prev, current) => (
-        `${prev.givenName}_${prev.surname}`.toLowerCase() === resourcesFolder.toLowerCase() &&
-        prev.id < current.id ? prev : current
-    ));
+    families: Family[],
+    egoIndiId: string | null
+): string {
+    const egoIndi = individuals.filter(_i => _i.id === egoIndiId);
+    // @ts-ignore
+    const lowestEgoIndi = egoIndi.reduce((prev, current) => (prev.id < current.id ? prev : current));
+    const filename = `${lowestEgoIndi.givenName} ${lowestEgoIndi.surname}`
 
-    const header = createHeader(resourcesFolder, egoIndividual.id, ""); // Add generation logic
-    const indiRecords = individuals.map(indi => indiToGedcom(indi)).join("\n");
-    const famRecords = families.map(fam => familyToGedcom(fam)).join("\n");
-    const tail = createTail(resourcesFolder);
+    const header = createHeader(filename, lowestEgoIndi.id, lowestEgoIndi.generation(relationships));
+    const indiRecords = individuals.map(indi => indi.asGedcom()).join("\n");
+    const famRecords = families.map(fam => fam.asGedcom()).join("\n");
+    const tail = createTail(filename);
 
     return [header, indiRecords, famRecords, tail].join("\n")
 }
 
-// Placeholder functions for GEDCOM formatting
-function createHeader(file: string, egoId: string, egoGen: string): string {
-    return `0 HEAD\n1 SOUR Script\n1 DEST GEDCOM\n...`; // Example, expand as needed
+function createHeader(filename: string, egoId: string | null, egoGen: string | null): string {
+    const headerTemplate = fs.readFileSync("header.ged", "utf-8");
+    const date = new Date().toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'});
+    let replaced = headerTemplate
+        .replace(/{file}/g, filename)
+        .replace(/{date}/g, date)
+        .replace(/{subm}/g, 'drexa1@hotmail.com')
+    if (egoId && egoGen) {
+        const egoSection = `0 @${egoId}@ EGO\n1 GEN ${egoGen}\n`;
+        replaced += egoSection;
+    }
+    return replaced
 }
 
-function createTail(file: string): string {
-    return `0 TRLR\n`;
-}
-
-function indiToGedcom(individual: Individual): string {
-    return `0 @I${individual.id}@ INDI\n1 NAME ${individual.givenName} /${individual.surname}/\n...`;
-}
-
-function familyToGedcom(family: Family): string {
-    return `0 @F${family.id}@ FAM\n1 HUSB @I${family.husband}@\n1 WIFE @I${family.wife}@\n...`;
+function createTail(filename: string): string {
+    const tailTemplate = fs.readFileSync("data/tail.ged", "utf-8");
+    const uid = uuidv4().toUpperCase();
+    const repo = `The ${filename.replace(/_/g, ' ').toUpperCase()} family`;
+    return tailTemplate.replace(/{uid}/g, uid).replace(/{repo}/g, repo);
 }
 
 // CSV parser utility

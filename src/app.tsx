@@ -323,7 +323,7 @@ export function App() {
 
     // Function to load languages from CSV
     const loadAllLanguages = async () => {
-        const allLanguages = await CSVLoader.loadLanguages('data/languages.csv') || [];
+        const allLanguages = await CSVLoader.loadLanguages("data/languages.csv") || [];
         setAllLanguages(allLanguages);
     };
 
