@@ -10,7 +10,7 @@ export const columnsValidation = {
 export const valuesValidation = {
     "1_individuals.csv": ["id", "sex", "ethnic"],
     "2_relationships.csv": ["person_id"],
-    "3_families.csv": ["id", "husband_id", "wife_id", "notes"],
+    "3_families.csv": ["id", "husband_id", "wife_id"],
     "4_individuals_languages.csv": ["person_id", "language_id"]
 }
 
@@ -56,6 +56,9 @@ export function checkMissingValues(filename: string, rows: Record<string, string
             }
         });
     });
+    if (cellErrors.length > 0) {
+        console.error(`File ${filename} had ${cellErrors.length} missing values`)
+    }
     return cellErrors.length <= 0
 }
 

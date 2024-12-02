@@ -162,7 +162,7 @@ export function ConvertCSVMenu(props: Props) {
                     <FormattedMessage id="menu.convert_csv_gedcom" defaultMessage="Convert CSV files to GEDCOM"/>
                 </Header>
                 <Modal.Content>
-                    <Message negative className={errors.length === 0 ? "hidden" : undefined}>
+                    <Message negative className={errors.length ? "hidden" : undefined}>
                         <p>{errors}</p>
                     </Message>
                     <Form onSubmit={() => convert2gedcom()}>
@@ -191,8 +191,10 @@ export function ConvertCSVMenu(props: Props) {
 
                         <div style={{textAlign: "center", marginBottom: 10}}>
                             <Input id="egoIndi"
+                                   disabled={!["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
+                                       inputFiles.some((file: File) => file.name === fileName)
+                                   )}
                                    fluid
-                                   disabled={!inputFiles.some((file: File) => file.name === "1_individuals.csv")}
                                    size="small"
                                    label="Ego ID"
                                    labelPosition="left"
