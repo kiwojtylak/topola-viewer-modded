@@ -162,7 +162,7 @@ export function ConvertCSVMenu(props: Props) {
                     <FormattedMessage id="menu.convert_csv_gedcom" defaultMessage="Convert CSV files to GEDCOM"/>
                 </Header>
                 <Modal.Content>
-                    <Message negative className={errors.length ? "hidden" : undefined}>
+                    <Message negative className={errors.length === 0 ? "hidden" : undefined}>
                         <p>{errors}</p>
                     </Message>
                     <Form onSubmit={() => convert2gedcom()}>
