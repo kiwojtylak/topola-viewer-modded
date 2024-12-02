@@ -1,15 +1,5 @@
 import {MenuItem, MenuType} from "./menu_item";
-import {
-    Button,
-    Icon,
-    Form,
-    Header,
-    Label,
-    Modal,
-    SemanticCOLORS,
-    Input,
-    Message
-} from "semantic-ui-react";
+import {Button, Icon, SemanticCOLORS, Input, Form, Header, Label, Modal, Message} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
 import {SyntheticEvent, useState} from "react";
 import * as queryString from "query-string";
@@ -48,11 +38,13 @@ export function ConvertCSVMenu(props: Props) {
 
     function closeDialog() {
         setInputFiles([])
+        setErrors([])
         setHeaderColors(initialHeaderColors)
         setDialogOpen(false)
     }
 
     function handleUpload(event: SyntheticEvent<HTMLInputElement>) {
+        setErrors([])
         const files = (event.target as HTMLInputElement).files;
         // Validate number of files
         if (!files) {
@@ -73,6 +65,7 @@ export function ConvertCSVMenu(props: Props) {
                     if (validFile) {
                         resolve(file);
                     } else {
+                        setErrors(["File '" + file.name + "' had errors. You can check them in the browser console"])
                         resolve(null);
                     }
                 };
@@ -170,7 +163,7 @@ export function ConvertCSVMenu(props: Props) {
                 </Header>
                 <Modal.Content>
                     <Message negative className={errors.length == 0 ? "hidden" : undefined}>
-                        <p>That offer has expired</p>
+                        <p>{errors}</p>
                     </Message>
                     <Form onSubmit={() => convert2gedcom()}>
                         {<Label
