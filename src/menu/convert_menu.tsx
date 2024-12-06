@@ -13,15 +13,11 @@ import {
     RelationshipsTableExample
 } from "./convert_tables";
 import {
-    checkColumns,
-    checkIdFormat,
     columnsValidation,
     validateCSV,
-    validateFilenames,
-    valuesValidation
+    validateFilenames
 } from "../util/validate_csv";
 import {csvToGedcom} from "../util/convert_csv";
-import fs from "fs";
 
 interface Props {
     menuType: MenuType
@@ -226,7 +222,7 @@ export function ConvertCSVMenu(props: Props) {
                                    }
                                    icon="user"
                                    placeholder="I..."
-                                   onChange={(e, { value }) => setEgoIndiId(value)}
+                                   onChange={(_e, { value }) => setEgoIndiId(value)}
                             />
                         </div>
 
