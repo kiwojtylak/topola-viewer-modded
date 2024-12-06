@@ -220,6 +220,11 @@ export function ConvertCSVMenu(props: Props) {
                                            inputFiles.some((file: File) => file.name === fileName)
                                        )
                                    }
+                                   className={
+                                       !["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
+                                           inputFiles.some((file: File) => file.name === fileName)
+                                       ) ? undefined : "ego-tag"
+                                   }
                                    icon="user"
                                    placeholder="I..."
                                    onChange={(_e, { value }) => setEgoIndiId(value)}
