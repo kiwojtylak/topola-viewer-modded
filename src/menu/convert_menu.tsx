@@ -12,7 +12,14 @@ import {
     IndividualsTableExample,
     RelationshipsTableExample
 } from "./convert_tables";
-import {columnsValidation, validateCSV, validateFilenames} from "../util/validate_csv";
+import {
+    checkColumns,
+    checkIdFormat,
+    columnsValidation,
+    validateCSV,
+    validateFilenames,
+    valuesValidation
+} from "../util/validate_csv";
 import {csvToGedcom} from "../util/convert_csv";
 import fs from "fs";
 
@@ -65,7 +72,6 @@ export function ConvertCSVMenu(props: Props) {
                     if (validFile) {
                         resolve(file);
                     } else {
-                        setErrors(["File '" + file.name + "' had errors. You can check them in the browser console"])
                         resolve(null);
                     }
                 };
@@ -79,14 +85,21 @@ export function ConvertCSVMenu(props: Props) {
         // Wait for all file validations to complete
         Promise.all(fileReadPromises).then(results => {
             const validFiles = results.filter((file): file is File => file !== null);
-            setInputFiles(validFiles)
+            const invalidFiles = Array.from(files)
+                .filter((file: File) => !validFiles.some(validFile => validFile.name === file.name))
+                .map(file => `'${file.name}'`)
+                .join(", ");
+            if (invalidFiles) {
+                setErrors(["Files had errors. You can check them in the browser console"])
+            }
             setHeaderColors(changeHeaderColors(files, validFiles));
+            setInputFiles(validFiles)
             // Validate number of files
-            if (!inputFiles || inputFiles.length < 3 || inputFiles.length > 4) {
-                console.error("Upload should consist of at least 3 files and no more than 4")
+            if (!validFiles || validFiles.length < 3 || validFiles.length > 4) {
+                console.error("Required files missing...")
                 return
             }
-            (event.target as HTMLInputElement).value = ''; // Reset the file input
+            // (event.target as HTMLInputElement).value = ''; // Reset the file input
         });
     }
 
@@ -113,11 +126,13 @@ export function ConvertCSVMenu(props: Props) {
                 readFileContents(relationshipsFile!),
                 readFileContents(familiesFile!),
                 readFileContents(individualsLanguagesFile!)
-            ]);
+            ])
 
-            const languagesFile = fs.readFileSync("data/languages.csv", "utf-8");
-            const gedcomString = csvToGedcom(
-                languagesFile,
+            const languagesFile = await fetch("data/languages.csv");
+            const languagesContents = await languagesFile.text();
+
+            const gedcomString = await csvToGedcom(
+                languagesContents,
                 individualsContent,
                 relationshipsContent,
                 familiesContent,
@@ -139,6 +154,8 @@ export function ConvertCSVMenu(props: Props) {
                 search: queryString.stringify({file: hash}),
                 state: {data: gedcom, images}
             });
+            // Finally
+            closeDialog()
         } catch (error) {
             console.error("Error converting to GEDCOM:", error);
             setErrors([error])
@@ -148,7 +165,9 @@ export function ConvertCSVMenu(props: Props) {
     const readFileContents = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
+            reader.onload = () => {
+                resolve(reader.result as string);
+            }
             reader.onerror = (error) => reject(error);
             reader.readAsText(file, "UTF-8");
         });
@@ -191,13 +210,20 @@ export function ConvertCSVMenu(props: Props) {
 
                         <div style={{textAlign: "center", marginBottom: 10}}>
                             <Input id="egoIndi"
-                                   disabled={!["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
-                                       inputFiles.some((file: File) => file.name === fileName)
-                                   )}
+                                   disabled={
+                                       !["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
+                                           inputFiles.some((file: File) => file.name === fileName)
+                                       )
+                                    }
                                    fluid
                                    size="small"
                                    label="Ego ID"
                                    labelPosition="left"
+                                   error={
+                                       ["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
+                                           inputFiles.some((file: File) => file.name === fileName)
+                                       )
+                                   }
                                    icon="user"
                                    placeholder="I..."
                                    onChange={(e, { value }) => setEgoIndiId(value)}
@@ -218,11 +244,11 @@ export function ConvertCSVMenu(props: Props) {
                     }}>
                         <FormattedMessage id="load_from_url.cancel" defaultMessage="Cancel"/>
                     </Button>
-                    <Button
+                    <Button primary
                         disabled={!["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
                             inputFiles.some((file: File) => file.name === fileName)
                         )}
-                        primary onClick={() => convert2gedcom()}>
+                        onClick={() => convert2gedcom()}>
                             <FormattedMessage id="load_from_gedcom.generate" defaultMessage="Generate"/>
                     </Button>
                 </Modal.Actions>

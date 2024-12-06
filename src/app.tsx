@@ -144,7 +144,6 @@ function getEthnicities(data: TopolaData | undefined) {
         }, new Set<string>());
 }
 
-// TODO: dismantle?
 function getTribes(data: TopolaData | undefined) {
     return Object.entries(data?.gedcom?.indis || {})
         .reduce<Set<string>>((acc, [_, value]) => {

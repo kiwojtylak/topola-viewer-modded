@@ -1,4 +1,5 @@
-const nx = require('jsnetworkx');
+const Graph = require("graphology");
+const shortestPath = require("graphology-shortest-path");
 
 export enum Sex {
     M = "M",
@@ -48,13 +49,27 @@ export class Individual {
     }
 
     generation(relationships: Record<string, [string | null, string | null]>): string {
-        const g = new nx.DiGraph();
-        for (const [_indID, [fatherId, motherId]] of Object.entries(relationships)) {
-            if (fatherId) g.addEdge(fatherId, _indID);
-            if (motherId) g.addEdge(motherId, _indID);
+        const g = new Graph({ type: "directed" });
+        // Add all nodes
+        for (const [indID, [fatherId, motherId]] of Object.entries(relationships)) {
+            if (!g.hasNode(indID)) {
+                g.addNode(indID);
+            }
+            if (!g.hasNode(fatherId)) {
+                g.addNode(fatherId);
+            }
+            if (!g.hasNode(motherId)) {
+                g.addNode(motherId);
+            }
         }
-        const root = Math.min(...Array.from(g.nodes(), Number)); // Root MUST have the lowest ID!
-        return nx.shortestPathLength(g, root.toString(), this.id);
+        // Add all edges
+        for (const [indID, [fatherId, motherId]] of Object.entries(relationships)) {
+            if (fatherId) g.addEdge(fatherId, indID);
+            if (motherId) g.addEdge(motherId, indID);
+        }
+        const source = g.nodes().reduce((min: string, current: string) => (current < min ? current : min));  // root MUST have the lowest ID!
+        // @ts-ignore
+        return shortestPath.singleSourceLength(g, source)[this.id]
     }
 
     asGedcom(): string {
@@ -84,6 +99,10 @@ export class Individual {
     }
 
     private capitalize(str: string): string {
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        return str
+            .toLowerCase()
+            .split(/[-\s]/)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join((str.includes('-') ? '-' : ' '));
     }
 }

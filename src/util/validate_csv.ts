@@ -32,7 +32,9 @@ export function validateCSV(filename: string, content: string) {
         return false;
     }
     const rows = parsedData.data as Record<string, string>[];
-    return checkColumns(filename, rows, columnsValidation[filename]) && checkMissingValues(filename, rows, valuesValidation[filename]);
+    return checkColumns(filename, rows, columnsValidation[filename])
+        && checkMissingValues(filename, rows, valuesValidation[filename])
+        && checkIdFormat(filename, rows, valuesValidation[filename]);
 }
 
 export function checkColumns(filename: string, rows: Record<string, string>[], requiredColumns: string[]) {
@@ -51,6 +53,7 @@ export function checkMissingValues(filename: string, rows: Record<string, string
     const cellErrors: string[] = [];
     rows.forEach((row, index) => {
         requiredColumns.forEach(column => {
+            // Checks empty
             if (!row[column] || row[column].trim() === "") {
                 cellErrors.push(`${filename}: row ${index + 1} is missing a value in column: ${column}`);
             }
@@ -60,5 +63,51 @@ export function checkMissingValues(filename: string, rows: Record<string, string
         console.error(`File ${filename} had ${cellErrors.length} missing values`)
     }
     return cellErrors.length <= 0
+}
+
+export function checkIdFormat(filename: string, rows: Record<string, string>[], requiredColumns: string[]) {
+    const indiIdErrors: string[] = [];
+    const famIdErrors: string[] = [];
+    const langIdErrors: string[] = [];
+    rows.forEach((row, index) => {
+        requiredColumns.forEach(column => {
+            // Check id format
+            switch(filename) {
+                case "1_individuals.csv":
+                    if (column === "id" && !row[column].startsWith('I')) {
+                        indiIdErrors.push(`${filename}: row ${index + 1} is not a valid individual ID`);
+                        console.log(`${filename}: '${column}' must start with 'I'`)
+                    }
+                    break;
+                case "2_relationships.csv":
+                    if (["person_id", "father_id", "mother_id"].includes(column) && !row[column].startsWith('I')) {
+                        indiIdErrors.push(`${filename}: row ${index + 1} is not a valid individual ID`);
+                        console.log(`${filename}: '${column}' must start with 'I'`)
+                    }
+                    break;
+                case "3_families.csv":
+                    if (column === "id" && !row[column].startsWith('F')) {
+                        famIdErrors.push(`${filename}: row ${index + 1} is not a valid family ID`);
+                        console.log(`${filename}: '${column}' must start with 'F'`)
+                    }
+                    if (["husband_id", "wife_id"].includes(column) && !row[column].startsWith('I')) {
+                        indiIdErrors.push(`${filename}: row ${index + 1} is not a valid individual ID`);
+                        console.log(`${filename}: '${column}' must start with 'I'`)
+                    }
+                    break;
+                case "4_individuals_languages.csv":
+                    if (column === "person_id" && !row[column].startsWith('I')) {
+                        indiIdErrors.push(`${filename}: row ${index + 1} is not a valid individual ID`);
+                        console.log(`${filename}: '${column}' must start with 'I'`)
+                    }
+                    if (column === "language_id" && isNaN(Number(row[column]))) {
+                        langIdErrors.push(`${filename}: row ${index + 1} is not a valid language ID`);
+                        console.log(`${filename}: '${column}' must be a number`)
+                    }
+                    break;
+            }
+        });
+    });
+    return indiIdErrors.length <= 0 && famIdErrors.length <= 0 && langIdErrors.length <= 0
 }
 
