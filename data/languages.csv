@@ -2,7 +2,7 @@ id,name,family,ISO 639-3,latitude,longitude,legend
 1,español,indoeuropean,es,4.62,-74.06,purple
 2,resigaro,arawakan,rgr,-1.17,-71.61,yellow
 3,bora,boran,boa,-2.00,-72.26,red
-4,andoke,isolate (SAM),ano,-0.54,-72.09,royalblue
+4,andoke,isolate,ano,-0.54,-72.09,royalblue
 5,minika-witoto,witotoan,hto,-1.55,-73.11,gray10
 6,muinane,boran,bmr,-0.87,-72.42,red3
 7,okaina,witotoan,oca,-2.16,-72.14,gray30
@@ -17,3 +17,4 @@ id,name,family,ISO 639-3,latitude,longitude,legend
 16,tikuna,tikuna-yuri,tca,-4.00,-70.50,orange
 17,tucano,tucanoan,tuo,0.50,-69.17,deepskyblue
 18,miraña,boran,,-1.32,-70.81,darkred
+19,matapi,arawakan,,-0.76,-71.00,darkyellow
