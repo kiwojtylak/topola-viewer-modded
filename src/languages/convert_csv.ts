@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import {Individual, Sex} from "../languages/individual";
-import {Language} from "../languages/languages-loader";
-import {Family} from "../languages/family";
+import {Individual, Sex} from "./individual";
+import {Language} from "./languages-loader";
+import {Family} from "./family";
 
 type Relationships = Record<string, [string, string]>;
 
@@ -147,6 +147,7 @@ async function createGedcomString(
 ) {
     let egoIndi = null
     let lowestEgoIndi = null
+    let egoGeneration = null
     let filename = null
 
     if (egoIndiId) {
@@ -154,7 +155,10 @@ async function createGedcomString(
             egoIndi = individuals.filter(_i => _i.id === egoIndiId);
             // @ts-ignore
             lowestEgoIndi = egoIndi.reduce((prev, current) => (prev.id < current.id ? prev : current));
+            egoGeneration = lowestEgoIndi.generation(relationships)
             filename = `${lowestEgoIndi.givenName?.toLowerCase()}_${lowestEgoIndi.surname?.toLowerCase()}`
+            if (!lowestEgoIndi || !egoGeneration)
+                throw new Error()
         } catch(e) {
             throw new Error(`Ego individual not found: ${egoIndiId}`);
         }
@@ -162,7 +166,7 @@ async function createGedcomString(
     const header = await createHeader(
         filename,
         lowestEgoIndi ? lowestEgoIndi.id : null,
-        lowestEgoIndi ? lowestEgoIndi.generation(relationships) : null
+        egoGeneration ? egoGeneration : null
     );
     const indiRecords = individuals.map(indi => indi.asGedcom()).join("\n");
     const famRecords = families.map(fam => fam.asGedcom()).join("\n");
@@ -180,7 +184,7 @@ async function createHeader(filename: string | null, egoId: string | null, egoGe
         .replace(/{date}/g, date)
         .replace(/{subm}/g, 'drexa1@hotmail.com')
     if (egoId && egoGen) {
-        const egoSection = `0 @${egoId}@ EGO\n1 GEN ${egoGen}\n`;
+        const egoSection = `\n0 @${egoId}@ EGO\n1 GEN ${egoGen}\n`;
         replaced += egoSection;
     }
     return replaced

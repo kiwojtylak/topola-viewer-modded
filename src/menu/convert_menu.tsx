@@ -16,8 +16,8 @@ import {
     columnsValidation,
     validateCSV,
     validateFilenames
-} from "../util/validate_csv";
-import {csvToGedcom} from "../util/convert_csv";
+} from "../languages/validate_csv";
+import {csvToGedcom} from "../languages/convert_csv";
 
 interface Props {
     menuType: MenuType

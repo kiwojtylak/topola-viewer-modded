@@ -67,9 +67,14 @@ export class Individual {
             if (fatherId) g.addEdge(fatherId, indID);
             if (motherId) g.addEdge(motherId, indID);
         }
-        const source = g.nodes().reduce((min: string, current: string) => (current < min ? current : min));  // root MUST have the lowest ID!
         // @ts-ignore
-        return shortestPath.singleSourceLength(g, source)[this.id]
+        const source = g.nodes().reduce((min, current) => {
+            const minValue = parseInt(min.slice(1), 10);
+            const currentValue = parseInt(current.slice(1), 10);
+            return currentValue < minValue ? current : min;
+        });
+        // @ts-ignore
+        return shortestPath.singleSourceLength(g, source)[this.id]  // root MUST have the lowest ID!
     }
 
     asGedcom(): string {
