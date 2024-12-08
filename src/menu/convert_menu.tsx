@@ -1,7 +1,7 @@
 import {MenuItem, MenuType} from "./menu_item";
 import {Button, Icon, SemanticCOLORS, Input, Form, Header, Label, Modal, Message} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
-import {SyntheticEvent, useState} from "react";
+import {SyntheticEvent, useEffect, useState} from "react";
 import * as queryString from "query-string";
 import {useHistory} from "react-router";
 import {loadFile} from "../datasource/load_data";
@@ -94,6 +94,14 @@ export function ConvertCSVMenu(props: Props) {
             if (!validFiles || validFiles.length < 3 || validFiles.length > 4) {
                 console.error("Required files missing...")
                 return
+            }
+            // All validations passed, highlight Ego input
+            const egoInput = document.querySelector("#egoIndi") as HTMLDivElement;
+            // @ts-ignore
+            const egoTag = egoInput.parentElement.querySelector(".ui.label.label") as HTMLDivElement;
+            if (egoTag) {
+                egoTag.style.setProperty("background-color", "orange");
+                egoTag.style.setProperty("color", "white");
             }
             // (event.target as HTMLInputElement).value = ''; // Reset the file input
         });
@@ -215,11 +223,6 @@ export function ConvertCSVMenu(props: Props) {
                                    size="small"
                                    label="Ego ID"
                                    labelPosition="left"
-                                   className={
-                                       !["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
-                                           inputFiles.some((file: File) => file.name === fileName)
-                                       ) ? undefined : "ego-tag"
-                                   }
                                    icon="user"
                                    placeholder="I000"
                                    onChange={(_e, { value }) => setEgoIndiId(value)}

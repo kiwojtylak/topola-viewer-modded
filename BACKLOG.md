@@ -34,6 +34,6 @@ Backlog:
 - [x] Convert CSV to Gedcom
 - [x] Some files can have missing values
 - [x] No indi notes
-- [ ] Improve highlight of Ego input
+- [x] Improve highlight of Ego input
 - [ ] Add site to GA
 - [ ] Sometimes allLanguages does not load the first time
