@@ -25,9 +25,8 @@ export async function csvToGedcom(
             mapIndividualsLanguages(individuals, individualsLanguages, languages);
         }
         return await createGedcomString(individuals, relationships, families, egoIndiId);
-    } catch (error) {
-        console.error(error);
-        throw error;
+    } catch (e) {
+        throw e;
     }
 }
 
@@ -151,10 +150,14 @@ async function createGedcomString(
     let filename = null
 
     if (egoIndiId) {
-        egoIndi = individuals.filter(_i => _i.id === egoIndiId);
-        // @ts-ignore
-        lowestEgoIndi = egoIndi.reduce((prev, current) => (prev.id < current.id ? prev : current));
-        filename = `${lowestEgoIndi.givenName?.toLowerCase()}_${lowestEgoIndi.surname?.toLowerCase()}`
+        try {
+            egoIndi = individuals.filter(_i => _i.id === egoIndiId);
+            // @ts-ignore
+            lowestEgoIndi = egoIndi.reduce((prev, current) => (prev.id < current.id ? prev : current));
+            filename = `${lowestEgoIndi.givenName?.toLowerCase()}_${lowestEgoIndi.surname?.toLowerCase()}`
+        } catch(e) {
+            throw new Error(`Ego individual not found: ${egoIndiId}`);
+        }
     }
     const header = await createHeader(
         filename,

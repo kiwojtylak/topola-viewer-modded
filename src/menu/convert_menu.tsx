@@ -117,12 +117,12 @@ export function ConvertCSVMenu(props: Props) {
             const familiesFile = inputFiles.find(file => file.name === "3_families.csv");
             const individualsLanguagesFile = inputFiles.find(file => file.name === "4_individuals_languages.csv");
 
-            const [individualsContent, relationshipsContent, familiesContent, individualsLanguagesContent] = await Promise.all([
+            const [individualsContent, relationshipsContent, familiesContent] = await Promise.all([
                 readFileContents(individualsFile!),
                 readFileContents(relationshipsFile!),
                 readFileContents(familiesFile!),
-                readFileContents(individualsLanguagesFile!)
             ])
+            const individualsLanguagesContent = individualsLanguagesFile ? await readFileContents(individualsLanguagesFile) : null;
 
             const languagesFile = await fetch("data/languages.csv");
             const languagesContents = await languagesFile.text();
@@ -152,9 +152,9 @@ export function ConvertCSVMenu(props: Props) {
             });
             // Finally
             closeDialog()
-        } catch (error) {
-            console.error("Error converting to GEDCOM:", error);
-            setErrors([error])
+        } catch (e) {
+            console.error(e);
+            setErrors([e.message])
         }
     }
 
@@ -215,18 +215,13 @@ export function ConvertCSVMenu(props: Props) {
                                    size="small"
                                    label="Ego ID"
                                    labelPosition="left"
-                                   error={
-                                       ["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
-                                           inputFiles.some((file: File) => file.name === fileName)
-                                       )
-                                   }
                                    className={
                                        !["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
                                            inputFiles.some((file: File) => file.name === fileName)
                                        ) ? undefined : "ego-tag"
                                    }
                                    icon="user"
-                                   placeholder="I..."
+                                   placeholder="I000"
                                    onChange={(_e, { value }) => setEgoIndiId(value)}
                             />
                         </div>
