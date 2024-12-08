@@ -3,7 +3,7 @@
     font-size: 12px;
 }
 
-.ego-tag > div.label {
+.ego-tag > .label {
     color: white !important;
     background: orange !important;
 }
