@@ -35,5 +35,5 @@ Backlog:
 - [x] Some files can have missing values
 - [x] No indi notes
 - [x] Improve highlight of Ego input
-- [ ] Add site to GA
+- [x] Add site to GA
 - [ ] Sometimes allLanguages does not load the first time
