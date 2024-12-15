@@ -1,5 +1,6 @@
 import * as H from 'history';
 import * as queryString from 'query-string';
+import {analyticsEvent} from './util/analytics';
 import {DataSourceEnum, SourceSelection} from './datasource/data_source';
 import {Details} from './details/details';
 import {EmbeddedDataSource, EmbeddedSourceSpec} from './datasource/embedded';
@@ -483,6 +484,7 @@ export function App() {
                         ),
                     },
                 ];
+                analyticsEvent('Topola landing');
                 return (
                     <div id="content">
                         <ErrorPopup
