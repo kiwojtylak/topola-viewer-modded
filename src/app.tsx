@@ -456,6 +456,7 @@ export function App() {
     }
 
     function renderMainArea() {
+        analyticsEvent('Topola/landing');
         switch (state) {
             case AppState.SHOWING_CHART:
             case AppState.LOADING_MORE:
@@ -484,7 +485,6 @@ export function App() {
                         ),
                     },
                 ];
-                analyticsEvent('Topola/landing');
                 return (
                     <div id="content">
                         <ErrorPopup
@@ -522,7 +522,6 @@ export function App() {
                 return <Loader active size="large"/>;
         }
     }
-
     return (
         <>
             <Route
