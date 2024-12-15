@@ -333,6 +333,7 @@ export function App() {
     }, [location.pathname]);
 
     useEffect(() => {
+        analyticsEvent('Topola/landing');
         const rootElement = document.getElementById('root');
         if (location.pathname === '/') {
             // @ts-ignore
@@ -456,7 +457,6 @@ export function App() {
     }
 
     function renderMainArea() {
-        analyticsEvent('Topola/landing');
         switch (state) {
             case AppState.SHOWING_CHART:
             case AppState.LOADING_MORE:
