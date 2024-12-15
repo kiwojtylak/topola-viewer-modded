@@ -484,7 +484,7 @@ export function App() {
                         ),
                     },
                 ];
-                analyticsEvent('Topola landing');
+                analyticsEvent('Topola/landing');
                 return (
                     <div id="content">
                         <ErrorPopup
