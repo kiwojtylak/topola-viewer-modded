@@ -333,7 +333,7 @@ export function App() {
     }, [location.pathname]);
 
     useEffect(() => {
-        analyticsEvent('Topola/landing');
+        analyticsEvent('topola_landing');
         const rootElement = document.getElementById('root');
         if (location.pathname === '/') {
             // @ts-ignore
