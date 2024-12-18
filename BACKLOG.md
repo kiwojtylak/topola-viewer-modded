@@ -36,4 +36,6 @@ Backlog:
 - [x] No indi notes
 - [x] Improve highlight of Ego input
 - [x] Add site to GA
+- [x] GA events
+- [x] Add site to CloudFlare
 - [ ] Sometimes allLanguages does not load the first time

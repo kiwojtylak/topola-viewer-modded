@@ -18,6 +18,7 @@ import {
     validateFilenames
 } from "../languages/validate_csv";
 import {csvToGedcom} from "../languages/convert_csv";
+import {analyticsEvent} from "../util/analytics";
 
 interface Props {
     menuType: MenuType
@@ -159,6 +160,7 @@ export function ConvertCSVMenu(props: Props) {
                 state: {data: gedcom, images}
             });
             // Finally
+            analyticsEvent('topola_convert_csv');
             closeDialog()
         } catch (e) {
             console.error(e);

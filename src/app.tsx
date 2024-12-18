@@ -313,8 +313,10 @@ export function App() {
     function loadData(newSourceSpec: DataSourceSpec, newSelection?: IndiInfo, allLanguages?: Language[]) {
         switch (newSourceSpec.source) {
             case DataSourceEnum.UPLOADED:
+                analyticsEvent('topola_gedcom_upload');
                 return uploadedDataSource.loadData({spec: newSourceSpec, selection: newSelection, allLanguages: allLanguages});
             case DataSourceEnum.GEDCOM_URL:
+                analyticsEvent('topola_url_load');
                 return gedcomUrlDataSource.loadData({spec: newSourceSpec, selection: newSelection, allLanguages: allLanguages});
             case DataSourceEnum.EMBEDDED:
                 return embeddedDataSource.loadData({spec: newSourceSpec, selection: newSelection, allLanguages: allLanguages});
@@ -412,6 +414,7 @@ export function App() {
 
     async function onDownloadPdf() {
         try {
+            analyticsEvent('topola_download_pdf');
             const filename = getFilename(data?.gedcom)
             await downloadPdf(filename);
         } catch (e) {
@@ -426,6 +429,7 @@ export function App() {
 
     async function onDownloadPng() {
         try {
+            analyticsEvent('topola_download_png');
             const filename = getFilename(data?.gedcom)
             await downloadPng(filename);
         } catch (e) {
@@ -439,11 +443,13 @@ export function App() {
     }
 
     async function onDownloadSvg() {
+        analyticsEvent('topola_download_svg');
         const filename = getFilename(data?.gedcom)
         await downloadSvg(filename);
     }
 
     async function onDownloadGedcom() {
+        analyticsEvent('topola_download_gedcom');
         const filename = getFilename(data?.gedcom)
         await downloadGedcom(gedcomString as string, filename);
     }
