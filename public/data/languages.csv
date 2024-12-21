@@ -19,3 +19,4 @@ id,name,family,ISO 639-3,latitude,longitude,legend
 18,miraña,boran,,-1.32,-70.81,darkred
 19,matapi,arawakan,,-0.76,-71.00,darkyellow
 20,tanimuca,tucanoan,tnc,-0.59,-70.39,lightblue
+21,cubeo,tucanoan,cub,1.32,-70.19,royalblue
