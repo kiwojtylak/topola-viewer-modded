@@ -212,7 +212,7 @@ function parseCSV(data: string): Record<string, string>[] {
     return rows.map(row => {
         const values = row.split(",");
         return keys.reduce((acc, key, index) => {
-            acc[key.trim()] = values[index];
+            acc[key.trim()] = values[index].trim();
             return acc;
         }, {} as Record<string, string>);
     });
