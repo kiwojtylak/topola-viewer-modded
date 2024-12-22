@@ -97,7 +97,7 @@ export async function loadFromUrl(
         console.warn('Failed to load data from session storage: ' + e);
     }
 
-    const urlToFetch = handleCors ? 'https://corsproxy.io/?' + encodeURIComponent(url) : url;
+    const urlToFetch = handleCors ? 'https://universal-cors-proxy.glitch.me/' + encodeURIComponent(url) : url;
     const response = await fetch(urlToFetch);
     if (!response.ok) {
         throw new Error(response.statusText);
@@ -111,8 +111,11 @@ export async function loadFromUrl(
     } else if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
         return prepareData(data.contents, url, allLanguages, new Map());
-    } else if (contentType && contentType.includes("text/plain")) {
-        const data = await response.text();
+    } else if (contentType && (contentType.includes("text/plain") || contentType.includes("text/html"))) {
+        let data = await response.text();
+        while (data.charCodeAt(0) > 127) {
+            data = data.slice(1);
+        }
         return prepareData(data, url, allLanguages, new Map());
     }
 }
@@ -143,7 +146,6 @@ export async function loadGedcom(
 
 /** Files opened from the local computer. */
 export class UploadedDataSource implements DataSource<UploadSourceSpec> {
-
     isNewData(
         newSource: SourceSelection<UploadSourceSpec>,
         oldSource: SourceSelection<UploadSourceSpec>,

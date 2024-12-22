@@ -32,6 +32,10 @@ Backlog:
 - [x] Missing literals
 - [x] Validate indi ids and family ids
 - [x] Convert CSV to Gedcom
-- [ ] Improve highlight of Ego input
-- [ ] Add site to GA 
+- [x] Some files can have missing values
+- [x] No indi notes
+- [x] Improve highlight of Ego input
+- [x] Add site to GA
+- [x] GA events
+- [x] Add site to CloudFlare
 - [ ] Sometimes allLanguages does not load the first time

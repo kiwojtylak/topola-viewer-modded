@@ -8,7 +8,7 @@ export const columnsValidation = {
 }
 
 export const valuesValidation = {
-    "1_individuals.csv": ["id", "sex", "ethnic"],
+    "1_individuals.csv": ["id", "sex"],
     "2_relationships.csv": ["person_id"],
     "3_families.csv": ["id", "husband_id", "wife_id"],
     "4_individuals_languages.csv": ["person_id", "language_id"]

@@ -1,7 +1,7 @@
 import {MenuItem, MenuType} from "./menu_item";
 import {Button, Icon, SemanticCOLORS, Input, Form, Header, Label, Modal, Message} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
-import {SyntheticEvent, useState} from "react";
+import {SyntheticEvent, useEffect, useState} from "react";
 import * as queryString from "query-string";
 import {useHistory} from "react-router";
 import {loadFile} from "../datasource/load_data";
@@ -16,8 +16,9 @@ import {
     columnsValidation,
     validateCSV,
     validateFilenames
-} from "../util/validate_csv";
-import {csvToGedcom} from "../util/convert_csv";
+} from "../languages/validate_csv";
+import {csvToGedcom} from "../languages/convert_csv";
+import {analyticsEvent} from "../util/analytics";
 
 interface Props {
     menuType: MenuType
@@ -95,6 +96,14 @@ export function ConvertCSVMenu(props: Props) {
                 console.error("Required files missing...")
                 return
             }
+            // All validations passed, highlight Ego input
+            const egoInput = document.querySelector("#egoIndi") as HTMLDivElement;
+            // @ts-ignore
+            const egoTag = egoInput.parentElement.querySelector(".ui.label.label") as HTMLDivElement;
+            if (egoTag) {
+                egoTag.style.setProperty("background-color", "orange");
+                egoTag.style.setProperty("color", "white");
+            }
             // (event.target as HTMLInputElement).value = ''; // Reset the file input
         });
     }
@@ -117,12 +126,12 @@ export function ConvertCSVMenu(props: Props) {
             const familiesFile = inputFiles.find(file => file.name === "3_families.csv");
             const individualsLanguagesFile = inputFiles.find(file => file.name === "4_individuals_languages.csv");
 
-            const [individualsContent, relationshipsContent, familiesContent, individualsLanguagesContent] = await Promise.all([
+            const [individualsContent, relationshipsContent, familiesContent] = await Promise.all([
                 readFileContents(individualsFile!),
                 readFileContents(relationshipsFile!),
                 readFileContents(familiesFile!),
-                readFileContents(individualsLanguagesFile!)
             ])
+            const individualsLanguagesContent = individualsLanguagesFile ? await readFileContents(individualsLanguagesFile) : null;
 
             const languagesFile = await fetch("data/languages.csv");
             const languagesContents = await languagesFile.text();
@@ -151,10 +160,11 @@ export function ConvertCSVMenu(props: Props) {
                 state: {data: gedcom, images}
             });
             // Finally
+            analyticsEvent('topola_convert_csv');
             closeDialog()
-        } catch (error) {
-            console.error("Error converting to GEDCOM:", error);
-            setErrors([error])
+        } catch (e) {
+            console.error(e);
+            setErrors([e.message])
         }
     }
 
@@ -215,18 +225,8 @@ export function ConvertCSVMenu(props: Props) {
                                    size="small"
                                    label="Ego ID"
                                    labelPosition="left"
-                                   error={
-                                       ["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
-                                           inputFiles.some((file: File) => file.name === fileName)
-                                       )
-                                   }
-                                   className={
-                                       !["1_individuals.csv", "2_relationships.csv", "3_families.csv"].every(fileName =>
-                                           inputFiles.some((file: File) => file.name === fileName)
-                                       ) ? undefined : "ego-tag"
-                                   }
                                    icon="user"
-                                   placeholder="I..."
+                                   placeholder="I000"
                                    onChange={(_e, { value }) => setEgoIndiId(value)}
                             />
                         </div>

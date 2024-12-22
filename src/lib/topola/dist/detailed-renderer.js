@@ -316,7 +316,9 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 .forEach(indi => {
                     const ethnicity = indi.getEthnicity()
                     if (!ethnicityCss.has(ethnicity)) {
-                        ethnicityCss.set(ethnicity, "eth" + ethnicityCss.size)
+                        // Might be a tree with no ego individual. Then there is no eth0
+                        const classNum = Object.keys(ethnicityCss).find(k => ethnicityCss[k] === "ego") ? ethnicityCss.size : ethnicityCss.size + 1
+                        ethnicityCss.set(ethnicity, "eth" + classNum)
                     }
                     if (ethnicityCss.size > 14) {
                         throw new Error('No CSS for more than 14 different ethnicities')

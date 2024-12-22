@@ -3,11 +3,6 @@
     font-size: 12px;
 }
 
-.ego-tag > div.label {
-    color: white !important;
-    background: orange !important;
-}
-
 .detailed .name {
     font-weight: bold;
 }
