@@ -55,7 +55,6 @@
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 .detailed rect.bygeneration,
-.detailed rect.bylanguages.n1,
 .detailed rect.bylanguages.l1,
 .detailed rect.bylanguages.l13 {
     fill: #ffffdd;
@@ -70,7 +69,6 @@
 
 .generation-10 .detailed rect.bygeneration,
 .generation2 .detailed rect.bygeneration,
-.detailed rect.bylanguages.n2,
 .detailed rect.bylanguages.l3,
 .detailed rect.bylanguages.l15 {
     fill: #dbffdb;
@@ -85,7 +83,6 @@
 
 .generation-8 .detailed rect.bygeneration,
 .generation4 .detailed rect.bygeneration,
-.detailed rect.bylanguages.n4,
 .detailed rect.bylanguages.l5,
 .detailed rect.bylanguages.l17 {
     fill: #dbffff;
@@ -93,7 +90,6 @@
 
 .generation-7 .detailed rect.bygeneration,
 .generation5 .detailed rect.bygeneration,
-.detailed rect.bylanguages.n7,
 .detailed rect.bylanguages.l6,
 .detailed rect.bylanguages.l18 {
     fill: #dbedff;
@@ -101,7 +97,6 @@
 
 .generation-6 .detailed rect.bygeneration,
 .generation6 .detailed rect.bygeneration,
-.detailed rect.bylanguages.n6,
 .detailed rect.bylanguages.l7,
 .detailed rect.bylanguages.l19 {
     fill: #dbdbff;
@@ -109,7 +104,6 @@
 
 .generation-5 .detailed rect.bygeneration,
 .generation7 .detailed rect.bygeneration,
-.detailed rect.bylanguages.n5,
 .detailed rect.bylanguages.l8,
 .detailed rect.bylanguages.l20 {
     fill: #eddbff;
@@ -124,7 +118,6 @@
 
 .generation-3 .detailed rect.bygeneration,
 .generation9 .detailed rect.bygeneration,
-.detailed rect.bylanguages.n3,
 .detailed rect.bylanguages.l10,
 .detailed rect.bylanguages.l22 {
     fill: #ffdbed;
@@ -143,7 +136,28 @@
 .detailed rect.bylanguages.l24 {
     fill: #ffeddb;
 }
-
+/* ------------------------------------------------------------------------------------------------------------------ */
+.detailed rect.bylanguages.n7 {
+    fill: #ffeddb;
+}
+.detailed rect.bylanguages.n6 {
+    fill: #ffdbdb;
+}
+.detailed rect.bylanguages.n5 {
+    fill: #ffdbed;
+}
+.detailed rect.bylanguages.n4 {
+    fill: #ffdbff;
+}
+.detailed rect.bylanguages.n3 {
+    fill: #dbdbff;
+}
+.detailed rect.bylanguages.n2 {
+    fill: #dbedff;
+}
+.detailed rect.bylanguages.n1 {
+    fill: #dbffff;
+}
 /* ------------------------------------------------------------------------------------------------------------------ */
 .detailed rect.byethnicity.ego {
     fill: #ffffdd;
