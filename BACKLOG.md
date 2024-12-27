@@ -38,4 +38,6 @@ Backlog:
 - [x] Add site to GA
 - [x] GA events
 - [x] Add site to CloudFlare
+- [x] N languages heat
+- [ ] Different rect stroke for nodes with hidden relatives
 - [ ] Sometimes allLanguages does not load the first time
