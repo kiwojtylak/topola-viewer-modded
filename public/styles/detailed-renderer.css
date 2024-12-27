@@ -137,27 +137,34 @@
     fill: #ffeddb;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
-.detailed rect.bylanguages.n7 {
-    fill: #ffeddb;
+.detailed rect.bylanguages.n1 {
+    fill: #dbedff;
 }
-.detailed rect.bylanguages.n6 {
-    fill: #ffdbdb;
+
+.detailed rect.bylanguages.n2 {
+    fill: #dbdbff;
 }
-.detailed rect.bylanguages.n5 {
-    fill: #ffdbed;
+
+.detailed rect.bylanguages.n3 {
+    fill: #eddbff;
 }
+
 .detailed rect.bylanguages.n4 {
     fill: #ffdbff;
 }
-.detailed rect.bylanguages.n3 {
-    fill: #dbdbff;
+
+.detailed rect.bylanguages.n5 {
+    fill: #ffdbed;
 }
-.detailed rect.bylanguages.n2 {
-    fill: #dbedff;
+
+.detailed rect.bylanguages.n6 {
+    fill: #ffdbdb;
 }
-.detailed rect.bylanguages.n1 {
-    fill: #dbffff;
+
+.detailed rect.bylanguages.n7 {
+    fill: #ffeddb;
 }
+
 /* ------------------------------------------------------------------------------------------------------------------ */
 .detailed rect.byethnicity.ego {
     fill: #ffffdd;
