@@ -193,29 +193,25 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .data(function (node) {
                 const result = [];
                 const famXOffset = !_this.options.horizontal && node.data.family
-                ? d3_array_1.max([-composite_renderer_1.getFamPositionVertical(node.data), 0])
-                : 0;
+                    ? d3_array_1.max([-composite_renderer_1.getFamPositionVertical(node.data), 0])
+                    : 0;
                 const famYOffset = _this.options.horizontal && node.data.family
-                ? d3_array_1.max([-composite_renderer_1.getFamPositionHorizontal(node.data), 0])
-                : 0;
-            if (node.data.indi) {
-                result.push({
-                    indi: node.data.indi,
-                    generation: node.data.generation,
-                    xOffset: famXOffset,
-                    yOffset: 0,
-                });
-            }
-            if (node.data.spouse) {
-                result.push({
-                    indi: node.data.spouse,
-                    generation: node.data.generation,
-                    xOffset: !_this.options.horizontal && node.data.indi
-                        ? node.data.indi.width + famXOffset
-                        : 0,
-                    yOffset: _this.options.horizontal && node.data.indi
-                        ? node.data.indi.height + famYOffset
-                        : 0,
+                    ? d3_array_1.max([-composite_renderer_1.getFamPositionHorizontal(node.data), 0])
+                    : 0;
+                if (node.data.indi) {
+                    result.push({
+                        indi: node.data.indi,
+                        generation: node.data.generation,
+                        xOffset: famXOffset,
+                        yOffset: 0
+                    });
+                }
+                if (node.data.spouse) {
+                    result.push({
+                        indi: node.data.spouse,
+                        generation: node.data.generation,
+                        xOffset: !_this.options.horizontal && node.data.indi ? node.data.indi.width + famXOffset : 0,
+                        yOffset: _this.options.horizontal && node.data.indi ? node.data.indi.height + famYOffset : 0
                 });
             }
             return result;
@@ -226,12 +222,10 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('class', 'indi');
         this.transition(indiEnter.merge(indiUpdate)).attr('transform', function (node) { return "translate(" + node.xOffset + ", " + node.yOffset + ")"; });
         this.renderIndi(indiEnter, indiUpdate);
-        const familyEnter = enter
-            .select(function (node) {
-            return node.data.family ? this : null;
-        }).append('g').attr('class', 'family');
-        const familyUpdate = update
-            .select(function (node) {
+        const familyEnter = enter.select(function (node) {
+                return node.data.family ? this : null;
+            }).append('g').attr('class', 'family');
+        const familyUpdate = update.select(function (node) {
             return node.data.family ? this : null;
         }).select('g.family');
         this.transition(familyEnter.merge(familyUpdate)).attr('transform', function (node) {

@@ -14,12 +14,25 @@ var HourglassChart = /** @class */ (function () {
     }
     HourglassChart.prototype.render = function () {
         const ancestorsRoot = ancestor_chart_1.getAncestorsTree(this.options);
-        const ancestorNodes = this.util.layOutChart(ancestorsRoot, {
-            flipVertically: true,
-        });
+        const ancestorNodes = this.util.layOutChart(ancestorsRoot, { flipVertically: true });
         const descendantNodes = descendant_chart_1.layOutDescendants(this.options);
         // slice(1) removes the duplicated start node.
         const nodes = ancestorNodes.slice(1).concat(descendantNodes);
+
+        // DEBUG
+        // const indiNodes = nodes.map(function (node) {
+        //     return node.data.indi.id;
+        // });
+        // const allIndiNodes = new Set(indiNodes)
+        // const allIndis = new Set(this.options.data.indis.keys())
+        // const difference = new Set();
+        // allIndis.forEach(item => {
+        //     if (!allIndiNodes.has(item)) {
+        //         difference.add(item);
+        //     }
+        // });
+        // console.log("Difference: " + difference.size)
+
         const animationPromise = this.util.renderChart(nodes);
         const info = chart_util_1.getChartInfo(nodes);
         this.util.updateSvgDimensions(info);

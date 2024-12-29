@@ -11,10 +11,9 @@ import {Loader, Message, Portal, Tab} from 'semantic-ui-react';
 import {Media} from './util/media';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {TopBar} from './menu/top_bar';
-import {jsonToGedcom, TopolaData} from './util/gedcom_util';
+import {idToIndiMap, jsonToGedcom, TopolaData} from './util/gedcom_util';
 import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router';
-import {idToIndiMap} from './util/gedcom_util';
 import {
     Chart,
     ChartType,
@@ -25,9 +24,25 @@ import {
     getEgoIndi,
     getFilename
 } from './chart';
-import {getSelection, UploadSourceSpec, UrlSourceSpec, GedcomUrlDataSource, UploadedDataSource} from './datasource/load_data';
+import {
+    GedcomUrlDataSource,
+    getSelection,
+    UploadedDataSource,
+    UploadSourceSpec,
+    UrlSourceSpec
+} from './datasource/load_data';
 import CSVLoader, {Language} from "./languages/languages-loader";
-import {argsToConfig, Config, ConfigPanel, configToArgs, DEFAULT_CONFIG, LanguagesArg, EthnicityArg, IdsArg, SexArg} from './config';
+import {
+    argsToConfig,
+    Config,
+    ConfigPanel,
+    configToArgs,
+    DEFAULT_CONFIG,
+    EthnicityArg,
+    IdsArg,
+    LanguagesArg,
+    SexArg
+} from './config';
 
 
 /**
@@ -145,27 +160,12 @@ function getEthnicities(data: TopolaData | undefined) {
         }, new Set<string>());
 }
 
-function getTribes(data: TopolaData | undefined) {
-    return Object.entries(data?.gedcom?.indis || {})
-        .reduce<Set<string>>((acc, [_, value]) => {
-            const langDataArray = value.tree.filter((sub: any) => sub.tag === "_TRIB");
-            langDataArray.forEach(lang => {
-                if (lang.data) acc.add(lang.data);
-            });
-            return acc;
-        }, new Set<string>());
-}
-
 /**
  * Retrieve arguments passed into the application through the URL and uploaded data.
  */
 function getArguments(location: H.Location<any>, allLanguages: Language[]): Arguments {
-    const chartTypes = new Map<string | undefined, ChartType>([
-        ['hourglass', ChartType.Hourglass]
-    ]);
     const search = queryString.parse(location.search);
     const getParam = (name: string) => getParamFromSearch(name, search);
-    const view = getParam('view');
     const hash = getParam('file');
     const url = getParam('url');
     const embedded = getParam('embedded') === 'true'; // False by default.
@@ -205,7 +205,7 @@ function getArguments(location: H.Location<any>, allLanguages: Language[]): Argu
     return {
         sourceSpec,
         selection,
-        chartType: chartTypes.get(view) || ChartType.Hourglass, // Hourglass is the default view.
+        chartType: ChartType.Hourglass,
         showSidePanel: getParam('sidePanel') !== 'false', // True by default.
         standalone: getParam('standalone') !== 'false' && !embedded && !staticUrl,
         freezeAnimation: getParam('freeze') === 'true', // False by default

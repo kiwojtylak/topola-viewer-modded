@@ -29,6 +29,7 @@ function linkId(node) {
     return parent.id + ":" + child.id;
 }
 exports.linkId = linkId;
+
 function getChartInfo(nodes) {
     // Calculate chart boundaries.
     const x0 = d3_array_1.min(nodes, function (d) {
@@ -46,6 +47,7 @@ function getChartInfo(nodes) {
     return { size: [x1 - x0, y1 - y0], origin: [-x0, -y0] };
 }
 exports.getChartInfo = getChartInfo;
+
 function getChartInfoWithoutMargin(nodes) {
     // Calculate chart boundaries.
     const x0 = d3_array_1.min(nodes, function (d) {
@@ -63,11 +65,14 @@ function getChartInfoWithoutMargin(nodes) {
     return { size: [x1 - x0, y1 - y0], origin: [-x0, -y0] };
 }
 exports.getChartInfoWithoutMargin = getChartInfoWithoutMargin;
+
 /** Utility class with common code for all chart types. */
 let ChartUtil = /** @class */ (function () {
+
     function ChartUtil(options) {
         this.options = options;
     }
+
     /** Creates a path from parent to the child node (horizontal layout). */
     ChartUtil.prototype.linkHorizontal = function (s, d) {
         const sAnchor = this.options.renderer.getFamilyAnchor(s.data);
@@ -79,6 +84,7 @@ let ChartUtil = /** @class */ (function () {
         const midX = (s.x + s.data.width / 2 + d.x - d.data.width / 2) / 2;
         return "M " + sx + " " + sy + "\n            L " + midX + " " + sy + ",\n              " + midX + " " + dy + ",\n              " + dx + " " + dy;
     };
+
     /** Creates a path from parent to the child node (vertical layout). */
     ChartUtil.prototype.linkVertical = function (s, d) {
         const sAnchor = this.options.renderer.getFamilyAnchor(s.data);
@@ -90,6 +96,7 @@ let ChartUtil = /** @class */ (function () {
         const midY = s.y + s.data.height / 2 + exports.V_SPACING / 2;
         return "M " + sx + " " + sy + "\n            L " + sx + " " + midY + ",\n              " + dx + " " + midY + ",\n              " + dx + " " + dy;
     };
+
     ChartUtil.prototype.linkAdditionalMarriage = function (node) {
         const nodeIndex = node.parent.children.findIndex(function (n) {
             return n.data.id === node.data.id;
@@ -102,6 +109,7 @@ let ChartUtil = /** @class */ (function () {
         const _b = [siblingNode.x + dAnchor[0], siblingNode.y + dAnchor[1]], dx = _b[0], dy = _b[1];
         return "M " + sx + ", " + sy + "\n            L " + dx + ", " + dy;
     };
+
     ChartUtil.prototype.updateSvgDimensions = function (chartInfo) {
         const svg = d3_selection_1.select(this.options.svgSelector);
         const group = svg.select('g');
@@ -110,6 +118,7 @@ let ChartUtil = /** @class */ (function () {
             : group;
         transition.attr('transform', "translate(" + chartInfo.origin[0] + ", " + chartInfo.origin[1] + ")");
     };
+
     ChartUtil.prototype.layOutChart = function (root, layoutOptions) {
         const _this = this;
         if (layoutOptions === void 0) { layoutOptions = {}; }
@@ -184,6 +193,7 @@ let ChartUtil = /** @class */ (function () {
         });
         return nodes;
     };
+
     ChartUtil.prototype.renderChart = function (nodes) {
         const svg = this.getSvgForRendering();
         const nodeAnimation = this.renderNodes(nodes, svg);
@@ -193,6 +203,7 @@ let ChartUtil = /** @class */ (function () {
             linkAnimation,
         ]);
     };
+
     ChartUtil.prototype.renderNodes = function (nodes, svg) {
         const _this = this;
         return new Promise(function (resolve) {
@@ -254,6 +265,7 @@ let ChartUtil = /** @class */ (function () {
             }
         });
     };
+
     ChartUtil.prototype.renderLinks = function (nodes, svg) {
         const _this = this;
         return new Promise(function (resolve) {
@@ -331,6 +343,7 @@ let ChartUtil = /** @class */ (function () {
             }
         });
     };
+
     ChartUtil.prototype.getSvgForRendering = function () {
         const svg = d3_selection_1.select(this.options.svgSelector);
         if (svg.select('g').empty()) {
