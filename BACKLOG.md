@@ -39,5 +39,7 @@ Backlog:
 - [x] GA events
 - [x] Add site to CloudFlare
 - [x] N languages heat
+- [ ] Check/fix import from GoogleDrive
+- [ ] Restore all relatives view
 - [ ] Different rect stroke for nodes with hidden relatives
 - [ ] Sometimes allLanguages does not load the first time
