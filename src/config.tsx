@@ -178,10 +178,10 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
             <Item.Group>
                 <Item>
                     <Item.Content>
-                        <Header sub>
+                        <Header sub style={{ "margin-bottom": "14px" }}>
                             <FormattedMessage id="config.colors" defaultMessage="Colors"/>
                         </Header>
-                        <Form.Field className="no-margin">
+                        <Form.Field>
                             <Checkbox
                                 radio
                                 label={
@@ -205,7 +205,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 }
                             />
                         </Form.Field>
-                        <Form.Field className="no-margin">
+                        <Form.Field>
                             <Checkbox
                                 radio
                                 label={
@@ -229,11 +229,11 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 }
                             />
                         </Form.Field>
-                        <Form.Field className="no-margin">
+                        <Form.Field>
                             <Checkbox
                                 radio
                                 label={
-                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_SEX" defaultMessage="by sex"/>
+                                    <FormattedMessage tagName="label" id="config.colors.COLOR_BY_SEX" defaultMessage="by gender"/>
                                 }
                                 name="checkboxRadioGroup"
                                 value="gender"
@@ -253,7 +253,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 }
                             />
                         </Form.Field>
-                        <Form.Field className={!props.config.renderEthnicityOption ? 'hidden' : 'no-margin'}>
+                        <Form.Field className={!props.config.renderEthnicityOption ? 'hidden' : ''}>
                             <Checkbox
                                 radio
                                 label={
@@ -277,7 +277,7 @@ export function ConfigPanel(props: {config: Config; onChange: (config: Config) =
                                 }
                             />
                         </Form.Field>
-                        <Form.Field className={!props.config.renderLanguagesOption ? 'hidden' : 'no-margin'}>
+                        <Form.Field className={!props.config.renderLanguagesOption ? 'hidden' : ''}>
                             <Checkbox
                                 radio
                                 label={

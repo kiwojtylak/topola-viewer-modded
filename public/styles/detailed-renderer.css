@@ -7,6 +7,10 @@
     font-weight: bold;
 }
 
+div .ui.sub.header {
+    margin-bottom: 14px; !important;
+}
+
 .link {
     fill: none;
     stroke: #000;

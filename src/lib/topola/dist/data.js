@@ -21,7 +21,11 @@ var JsonIndiDetails = /** @class */ (function () {
         return this.json.firstName || null;
     };
     JsonIndiDetails.prototype.getLastName = function () {
-        return this.json.lastName || null;
+        // Check if this.json and this.json.lastName exist and are valid before calling toUpperCase()
+        if (this.json.lastName) {
+            return this.json.lastName.toUpperCase();
+        }
+        return null;
     };
     JsonIndiDetails.prototype.getBirthDate = function () {
         return this.json.birth || null;
