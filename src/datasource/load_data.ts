@@ -97,6 +97,14 @@ export async function loadFromUrl(
         console.warn('Failed to load data from session storage: ' + e);
     }
 
+    // handle GoogleDrive files
+    const driveUrlMatch = url.match(
+        /https:\/\/drive\.google\.com\/file\/d\/(.*)\/.*/,
+    );
+    if (driveUrlMatch) {
+        url = `https://drive.google.com/uc?id=${driveUrlMatch[1]}&export=download`;
+    }
+
     const urlToFetch = handleCors ? 'https://universal-cors-proxy.glitch.me/' + encodeURIComponent(url) : url;
     const response = await fetch(urlToFetch);
     if (!response.ok) {

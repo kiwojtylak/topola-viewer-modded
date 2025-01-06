@@ -39,7 +39,12 @@ Backlog:
 - [x] GA events
 - [x] Add site to CloudFlare
 - [x] N languages heat
-- [ ] Check/fix import from GoogleDrive
+- [x] Check/fix import from GoogleDrive
+- [ ] Uppercase surnames
 - [ ] Restore all relatives view
 - [ ] Different rect stroke for nodes with hidden relatives
 - [ ] Sometimes allLanguages does not load the first time
+- [ ] Reset zoom button
+- [ ] Touch friendly zoom buttons
+- [ ] Collapsible panel
+- [ ] Emojis?
