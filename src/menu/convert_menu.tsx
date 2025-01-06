@@ -260,7 +260,7 @@ export function ConvertCSVMenu(props: Props) {
     return (
         <>
             <MenuItem onClick={() => setDialogOpen(true)} menuType={props.menuType}>
-                <Icon name="sitemap"/>
+                <Icon name="file excel"/>
                 <FormattedMessage id="menu.convert_csv_gedcom" defaultMessage="Convert CSV's"/>
             </MenuItem>
             {convertCSVModal()}
