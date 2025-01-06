@@ -1,7 +1,7 @@
 {
-  "menu.open": "Abrir",
-  "menu.open_file": "Abrir fichero",
-  "menu.load_from_url": "Abrir URL",
+  "menu.open": "Cargar",
+  "menu.open_file": "Cargar fichero",
+  "menu.load_from_url": "Cargar URL",
   "menu.convert_csv_gedcom": "Convertir CSV a GEDCOM",
   "menu.download": "Descargar",
   "menu.download_pdf": "Descargar PDF",
