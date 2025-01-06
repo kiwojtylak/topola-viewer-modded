@@ -42,6 +42,7 @@ Backlog:
 - [x] Check/fix import from GoogleDrive
 - [x] Uppercase surnames
 - [x] Touch friendly zoom buttons
+- [ ] Lowest ID TODO
 - [ ] Different rect stroke for nodes with hidden relatives
 - [ ] Restore all relatives view
 - [ ] Sometimes allLanguages does not load the first time

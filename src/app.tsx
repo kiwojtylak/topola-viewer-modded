@@ -21,7 +21,7 @@ import {
     downloadPdf,
     downloadPng,
     downloadSvg,
-    getEgoIndi,
+    getEgoRecord,
     getFilename
 } from './chart';
 import {
@@ -122,15 +122,20 @@ function getParamFromSearch(name: string, search: queryString.ParsedQuery) {
 function startIndi(data: TopolaData | undefined) {
     const egoGen = getEgoGen(data)
     return {
-        id: data?.chartData?.indis?.[0]?.id || 'I0',  // lowest ID on the chart, focus at the root, not at the EGO
+        id: getLowestId(data) || 'I0',  // lowest ID on the chart, focus at the root, not at the EGO
         generation: egoGen !== undefined ? -parseInt(egoGen, 10) : 0
     };
 }
 
 function getEgoGen(data: TopolaData | undefined) {
-    return getEgoIndi(data?.gedcom)
+    return getEgoRecord(data?.gedcom)
         .map(([_, value]) => value.tree.find(sub => sub.tag === "GEN")?.data)
         .find(data => data !== undefined);
+}
+
+function getLowestId(data: TopolaData | undefined) {
+    // FIXME: compute lowest number, this is just the first entry of file. I1 could come earlier than I0
+    return data?.chartData?.indis?.[0]?.id
 }
 
 function loadLanguageOptions(data: TopolaData | undefined, allLanguages: Language[]) {

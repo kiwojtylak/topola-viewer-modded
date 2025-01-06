@@ -180,7 +180,7 @@ export async function downloadGedcom(gedcom: string, filename: string | undefine
     saveAs(blob, filename ? filename + ".ged" : "genealogy.ged");
 }
 
-export function getEgoIndi(gedcom: GedcomData | undefined) {
+export function getEgoRecord(gedcom: GedcomData | undefined) {
     return Object.entries(gedcom?.other || {}).filter(([_, value]) => value.tag === "EGO")
 }
 
