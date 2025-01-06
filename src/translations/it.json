@@ -55,7 +55,7 @@
   "config.colors": "Colori",
   "config.colors.NO_COLOR": "nessuno",
   "config.colors.COLOR_BY_GENERATION": "per generazione",
-  "config.colors.COLOR_BY_SEX": "per sesso",
+  "config.colors.COLOR_BY_SEX": "per genere",
   "config.colors.COLOR_BY_ETHNICITY": "per etnia",
   "config.colors.COLOR_BY_LANGUAGES": "per nr. lingue",
   "config.ethnicity": "etnia",
