@@ -44,7 +44,7 @@ Backlog:
 - [x] Touch friendly zoom buttons
 - [x] Lowest ID TODO
 - [x] Different rect stroke for nodes with hidden relatives
-- [ ] Exclude current node from stroked nodes
+- [ ] Click on node does not trigger nodes redraw
 - [ ] Restore all relatives view
 - [ ] Sometimes allLanguages does not load the first time
 - [ ] Collapsible panel

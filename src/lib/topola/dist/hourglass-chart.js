@@ -13,7 +13,7 @@ var HourglassChart = /** @class */ (function () {
         this.util = new chart_util_1.ChartUtil(options);
     }
 
-    HourglassChart.prototype.markHiddenRelatives = function (nodes, gedcomData, selectedIndi) {
+    HourglassChart.prototype.markHiddenRelatives = function (nodes, gedcomData) {
         let displayedNodes = nodes.flatMap(function (node) {
             if (node.data.family) {
                 return [node.data.indi.id, node.data.spouse.id];
@@ -35,20 +35,19 @@ var HourglassChart = /** @class */ (function () {
                     const childId = fam.json.children[c]
                     if (!displayedNodes.includes(childId)) {
                         node.data.hiddenRelatives = true
-                        console.log(node.data.family.id + " has hidden children")
                         break;
                     }
                 }
                 // check the wife parents
-                this.markHiddenRelativesForIndi(node.data.spouse, gedcomData, displayedNodes, selectedIndi);
+                this.markHiddenRelativesForIndi(node.data.spouse, gedcomData, displayedNodes);
             } else {
                 // go through each family to find the parents of this indi
-                this.markHiddenRelativesForIndi(node.data.indi, gedcomData, displayedNodes, selectedIndi);
+                this.markHiddenRelativesForIndi(node.data.indi, gedcomData, displayedNodes);
             }
         }
     }
 
-    HourglassChart.prototype.markHiddenRelativesForIndi = function (node, gedcomData, displayedNodes, selectedIndi) {
+    HourglassChart.prototype.markHiddenRelativesForIndi = function (node, gedcomData, displayedNodes) {
         // check all parent until it finds the child
         for (var f = 0; f < gedcomData.fams.size; f++) {
             const fam = Array.from(gedcomData.fams.values())[f]
@@ -57,12 +56,10 @@ var HourglassChart = /** @class */ (function () {
                     // parents found
                     if (!displayedNodes.includes(fam.json.husb)) {
                         node.hiddenRelatives = true
-                        console.log(node.id + " parents not displayed")
                         break;
                     }
                     if (!displayedNodes.includes(fam.json.wife)) {
                         node.hiddenRelatives = true
-                        console.log(node.id + " parents not displayed")
                         break;
                     }
                 }
@@ -77,7 +74,7 @@ var HourglassChart = /** @class */ (function () {
         // slice(1) removes the duplicated start node.
         const nodes = ancestorNodes.slice(1).concat(descendantNodes);
         // dash the stroke of indis having non-visible relatives
-        this.markHiddenRelatives(nodes, this.options.data, this.options.startIndi)
+        this.markHiddenRelatives(nodes, this.options.data)
 
         const animationPromise = this.util.renderChart(nodes);
         const info = chart_util_1.getChartInfo(nodes);

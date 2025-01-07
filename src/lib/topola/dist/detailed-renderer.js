@@ -187,6 +187,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const _this = this;
         enter = enter.append('g').attr('class', 'detailed');
         update = update.select('g');
+
         const indiUpdate = enter
             .merge(update)
             .selectAll('g.indi')
@@ -222,11 +223,14 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .enter()
             .append('g')
             .attr('class', 'indi');
-        this.transition(indiEnter.merge(indiUpdate)).attr('transform', function (node) { return "translate(" + node.xOffset + ", " + node.yOffset + ")"; });
+        this.transition(indiEnter.merge(indiUpdate)).attr('transform', function (node) {
+            return "translate(" + node.xOffset + ", " + node.yOffset + ")";
+        });
         this.renderIndi(indiEnter, indiUpdate);
+
         const familyEnter = enter.select(function (node) {
-                return node.data.family ? this : null;
-            }).append('g').attr('class', 'family');
+            return node.data.family ? this : null;
+        }).append('g').attr('class', 'family');
         const familyUpdate = update.select(function (node) {
             return node.data.family ? this : null;
         }).select('g.family');
@@ -358,6 +362,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
         if (this.options.indiCallback) {
             enter.on('click', function (event, data) {
+                data.indi.hiddenRelatives = false
                 return _this.options.indiCallback({
                     id: data.indi.id,
                     generation: data.generation,
@@ -541,7 +546,11 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('fill-opacity', 0)
             .attr('class', 'border')
             .attr('stroke-dasharray', function (node) {
-                return node.indi.hiddenRelatives ? '5, 5' : '0, 0' // hidden relatives
+                if (node.indi.hiddenRelatives) {
+                    return '5, 5'
+                } else {
+                    return '0, 0'
+                }
             })
             .merge(update.select('rect.border'));
         this.transition(border)
