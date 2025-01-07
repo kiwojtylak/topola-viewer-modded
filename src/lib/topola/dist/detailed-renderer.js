@@ -198,7 +198,9 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 const famYOffset = _this.options.horizontal && node.data.family
                     ? d3_array_1.max([-composite_renderer_1.getFamPositionHorizontal(node.data), 0])
                     : 0;
+
                 if (node.data.indi) {
+                    node.data.indi.hiddenRelatives = node.data.hiddenRelatives;
                     result.push({
                         indi: node.data.indi,
                         generation: node.data.generation,
@@ -376,6 +378,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     + _this.getLanguagesClass(node.indi.id, _this.options.selectedLanguage) + " ";
             })
             .merge(update.select('rect.background'));
+
         this.transition(background)
             .attr('width', function (node) { return node.indi.width; })
             .attr('height', function (node) { return node.indi.height; });
@@ -537,6 +540,9 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr('rx', 5)
             .attr('fill-opacity', 0)
             .attr('class', 'border')
+            .attr('stroke-dasharray', function (node) {
+                return node.indi.hiddenRelatives ? '5, 5' : '0, 0' // hidden relatives
+            })
             .merge(update.select('rect.border'));
         this.transition(border)
             .attr('width', function (node) { return node.indi.width; })

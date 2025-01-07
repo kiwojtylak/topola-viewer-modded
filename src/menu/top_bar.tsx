@@ -123,7 +123,7 @@ export function TopBar(props: Props) {
 
                         <Menu.Item onClick={props.eventHandlers.onCenterView}>
                             <Icon name="target" />
-                            <FormattedMessage id="menu.view" defaultMessage="Center view" />
+                            <FormattedMessage id="menu.view" defaultMessage="Reset view" />
                         </Menu.Item>
 
                         <Menu.Menu position="right">
@@ -165,7 +165,7 @@ export function TopBar(props: Props) {
                             <Dropdown.Divider/>
                             <Menu.Item onClick={props.eventHandlers.onCenterView}>
                                 <Icon name="eye" />
-                                <FormattedMessage id="menu.view" defaultMessage="Center view" />
+                                <FormattedMessage id="menu.view" defaultMessage="Reset view" />
                             </Menu.Item>
                         </>
                     );

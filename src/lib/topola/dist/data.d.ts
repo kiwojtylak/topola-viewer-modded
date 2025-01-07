@@ -51,7 +51,6 @@ export interface JsonIndi {
     hideEthnicity?: boolean;
     hideId?: boolean;
     hideSex?: boolean;
-    hiddenRelatives?: boolean;
 }
 /** Json representation of a family. */
 export interface JsonFam {
@@ -91,7 +90,6 @@ export interface IndiDetails extends Indi {
     showEthnicity(): boolean;
     showId(): boolean;
     showSex(): boolean;
-    hasHiddenRelatives(): boolean;
 }
 /** Details of a family record. */
 export interface FamDetails extends Fam {

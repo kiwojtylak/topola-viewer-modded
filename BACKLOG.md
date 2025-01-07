@@ -43,7 +43,8 @@ Backlog:
 - [x] Uppercase surnames
 - [x] Touch friendly zoom buttons
 - [x] Lowest ID TODO
-- [ ] Different rect stroke for nodes with hidden relatives
+- [x] Different rect stroke for nodes with hidden relatives
+- [ ] Exclude current node from stroked nodes
 - [ ] Restore all relatives view
 - [ ] Sometimes allLanguages does not load the first time
 - [ ] Collapsible panel
