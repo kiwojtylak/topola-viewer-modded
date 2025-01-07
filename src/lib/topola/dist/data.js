@@ -94,6 +94,9 @@ var JsonIndiDetails = /** @class */ (function () {
     JsonIndiDetails.prototype.showSex = function () {
         return !this.json.hideSex;
     };
+    JsonIndiDetails.prototype.hasHiddenRelatives = function () {
+        return !this.json.hiddenRelatives;
+    };
     return JsonIndiDetails;
 }());
 /** Details of a family based on Json input. */

@@ -19,19 +19,21 @@ var HourglassChart = /** @class */ (function () {
         // slice(1) removes the duplicated start node.
         const nodes = ancestorNodes.slice(1).concat(descendantNodes);
 
-        // DEBUG
-        // const indiNodes = nodes.map(function (node) {
-        //     return node.data.indi.id;
-        // });
-        // const allIndiNodes = new Set(indiNodes)
-        // const allIndis = new Set(this.options.data.indis.keys())
-        // const difference = new Set();
-        // allIndis.forEach(item => {
-        //     if (!allIndiNodes.has(item)) {
-        //         difference.add(item);
-        //     }
-        // });
-        // console.log("Difference: " + difference.size)
+        // TODO: flag hidden relatives
+        // is family
+        //    get all children
+        //    match with the currently displayed children
+        //      not all displayed -> set true for both
+        //    set false for both
+        // is indi
+        // check father
+        //  is father displayed
+        //    if not -> set true for father
+        //  return set false for father
+        // check mother
+        //  is mother displayed
+        //    if not -> set true for mother
+        //  set false false for mother
 
         const animationPromise = this.util.renderChart(nodes);
         const info = chart_util_1.getChartInfo(nodes);
