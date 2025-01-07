@@ -11,7 +11,7 @@ import {Loader, Message, Portal, Tab} from 'semantic-ui-react';
 import {Media} from './util/media';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {TopBar} from './menu/top_bar';
-import {idToIndiMap, jsonToGedcom, TopolaData} from './util/gedcom_util';
+import {GedcomData, idToIndiMap, jsonToGedcom, TopolaData} from './util/gedcom_util';
 import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router';
 import {
@@ -21,7 +21,6 @@ import {
     downloadPdf,
     downloadPng,
     downloadSvg,
-    getEgoRecord,
     getFilename
 } from './chart';
 import {
@@ -133,9 +132,17 @@ function getEgoGen(data: TopolaData | undefined) {
         .find(data => data !== undefined);
 }
 
+export function getEgoRecord(gedcom: GedcomData | undefined) {
+    return Object.entries(gedcom?.other || {}).filter(([_, value]) => value.tag === "EGO")
+}
+
 function getLowestId(data: TopolaData | undefined) {
-    // FIXME: compute lowest number, this is just the first entry of file. I1 could come earlier than I0
-    return data?.chartData?.indis?.[0]?.id
+    return data?.chartData?.indis?.reduce((lowest, current) =>
+            current.id.startsWith('I') && parseInt(current.id.slice(1), 10) < parseInt(lowest.id.slice(1), 10)
+            ? current
+            : lowest,
+        data?.chartData?.indis?.[0]
+    )?.id;
 }
 
 function loadLanguageOptions(data: TopolaData | undefined, allLanguages: Language[]) {
