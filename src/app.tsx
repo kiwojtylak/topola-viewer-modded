@@ -178,9 +178,13 @@ function getEthnicities(data: TopolaData | undefined) {
 function getArguments(location: H.Location<any>, allLanguages: Language[]): Arguments {
     const search = queryString.parse(location.search);
     const getParam = (name: string) => getParamFromSearch(name, search);
-    const hash = getParam('file');
-    const url = getParam('url');
-    const embedded = getParam('embedded') === 'true'; // False by default.
+    const view = getParam("view");
+    const chartTypes = new Map<string | undefined, ChartType>([
+        ["relatives", ChartType.Relatives]
+    ]);
+    const hash = getParam("file");
+    const url = getParam("url");
+    const embedded = getParam("embedded") === "true"; // False by default.
     let sourceSpec: DataSourceSpec | undefined = undefined;
     if (staticUrl) {
         sourceSpec = {
@@ -202,14 +206,14 @@ function getArguments(location: H.Location<any>, allLanguages: Language[]): Argu
             source: DataSourceEnum.GEDCOM_URL,
             url,
             allLanguages: allLanguages,
-            handleCors: getParam('handleCors') !== 'false', // True by default.
+            handleCors: getParam("handleCors") !== "false", // True by default.
         };
     } else if (embedded) {
         sourceSpec = {source: DataSourceEnum.EMBEDDED};
     }
 
-    const indi = getParam('indi');
-    const parsedGen = Number(getParam('gen'));
+    const indi = getParam("indi");
+    const parsedGen = Number(getParam("gen"));
     const selection = indi
         ? {id: indi, generation: !isNaN(parsedGen) ? parsedGen : 0}
         : undefined
@@ -217,10 +221,10 @@ function getArguments(location: H.Location<any>, allLanguages: Language[]): Argu
     return {
         sourceSpec,
         selection,
-        chartType: ChartType.Hourglass,
-        showSidePanel: getParam('sidePanel') !== 'false', // True by default.
-        standalone: getParam('standalone') !== 'false' && !embedded && !staticUrl,
-        freezeAnimation: getParam('freeze') === 'true', // False by default
+        chartType: chartTypes.get(view) || ChartType.Hourglass,
+        showSidePanel: getParam("sidePanel") !== "false", // True by default.
+        standalone: getParam("standalone") !== "false" && !embedded && !staticUrl,
+        freezeAnimation: getParam("freeze") === "true", // False by default
         config: argsToConfig(search),
     };
 }
@@ -347,18 +351,18 @@ export function App() {
     }, [location.pathname]);
 
     useEffect(() => {
-        analyticsEvent('topola_landing');
+        analyticsEvent("topola_landing");
         const rootElement = document.getElementById('root');
         if (location.pathname === '/') {
             // @ts-ignore
-            rootElement.classList.add('bgLogo');
+            rootElement.classList.add("bgLogo");
         } else {
             // @ts-ignore
-            rootElement.classList.remove('bgLogo');
+            rootElement.classList.remove("bgLogo");
         }
 
         (async () => {
-            if (location.pathname !== '/view') {
+            if (location.pathname !== "/view") {
                 if (state !== AppState.INITIAL) {
                     setState(AppState.INITIAL);
                 }
@@ -426,14 +430,14 @@ export function App() {
 
     async function onDownloadPdf() {
         try {
-            analyticsEvent('topola_download_pdf');
+            analyticsEvent("topola_download_pdf");
             const filename = getFilename(data?.gedcom)
             await downloadPdf(filename);
         } catch (e) {
             displayErrorPopup(
                 intl.formatMessage({
-                    id: 'error.failed_pdf',
-                    defaultMessage: 'Failed to generate PDF file. Please try with a smaller diagram or download an SVG file.',
+                    id: "error.failed_pdf",
+                    defaultMessage: "Failed to generate PDF file. Please try with a smaller diagram or download an SVG file.",
                 })
             );
         }
@@ -441,27 +445,27 @@ export function App() {
 
     async function onDownloadPng() {
         try {
-            analyticsEvent('topola_download_png');
+            analyticsEvent("topola_download_png");
             const filename = getFilename(data?.gedcom)
             await downloadPng(filename);
         } catch (e) {
             displayErrorPopup(
                 intl.formatMessage({
-                    id: 'error.failed_png',
-                    defaultMessage:'Failed to generate PNG file. Please try with a smaller diagram or download an SVG file.'
+                    id: "error.failed_png",
+                    defaultMessage: "Failed to generate PNG file. Please try with a smaller diagram or download an SVG file."
                 })
             );
         }
     }
 
     async function onDownloadSvg() {
-        analyticsEvent('topola_download_svg');
+        analyticsEvent("topola_download_svg");
         const filename = getFilename(data?.gedcom)
         await downloadSvg(filename);
     }
 
     async function onDownloadGedcom() {
-        analyticsEvent('topola_download_gedcom');
+        analyticsEvent("topola_download_gedcom");
         const filename = getFilename(data?.gedcom)
         await downloadGedcom(gedcomString as string, filename);
     }
@@ -481,15 +485,15 @@ export function App() {
                 const updatedSelection = getSelection(data!.chartData, selection);
                 const sidePanelTabs = [
                     {
-                        menuItem: intl.formatMessage({id: 'tab.info', defaultMessage: 'Info'}),
+                        menuItem: intl.formatMessage({id: "tab.info", defaultMessage: "Info"}),
                         render: () => (
                             <Details gedcom={data!.gedcom} indi={updatedSelection.id}/>
                         ),
                     },
                     {
                         menuItem: intl.formatMessage({
-                            id: 'tab.settings',
-                            defaultMessage: 'Settings',
+                            id: "tab.settings",
+                            defaultMessage: "Settings",
                         }),
                         render: () => (
                             <ConfigPanel
@@ -547,7 +551,7 @@ export function App() {
                     <TopBar
                         data={data?.chartData}
                         showingChart={
-                            history.location.pathname === '/view' &&
+                            history.location.pathname === "/view" &&
                             (state === AppState.SHOWING_CHART || state === AppState.LOADING_MORE)
                         }
                         standalone={standalone}
@@ -565,7 +569,7 @@ export function App() {
             {staticUrl ? (
                 <Switch>
                     <Route exact path="/view" render={renderMainArea}/>
-                    <Redirect to={'/view'}/>
+                    <Redirect to={"/view"}/>
                 </Switch>
             ) : (
                 <Switch>

@@ -9,6 +9,8 @@
   "menu.download_svg": "Descargar SVG",
   "menu.download_gedcom": "Descargar GEDCOM",
   "menu.view": "Vista",
+  "menu.hourglass": "Reloj de arena",
+  "menu.relatives": "Todos los parientes",
   "menu.view.reset": "Recentrar gráfico",
   "menu.github": "Proyecto en el sitio web GitHub",
   "menu.search.placeholder": "Buscar persona",

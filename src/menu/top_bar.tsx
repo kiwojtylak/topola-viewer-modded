@@ -1,14 +1,15 @@
+import * as queryString from 'query-string';
 import {Dropdown, Icon, Menu} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
+import {IndiInfo, JsonGedcomData} from '../lib/topola';
+import {useRef, useState} from "react";
+import {ConvertCSVMenu} from "./convert_menu";
 import {Media} from '../util/media';
 import {MenuType} from './menu_item';
 import {SearchBar} from './search';
 import {UploadMenu} from './upload_menu';
 import {UrlMenu} from './url_menu';
 import {useHistory, useLocation} from 'react-router';
-import {IndiInfo, JsonGedcomData} from '../lib/topola';
-import {useRef, useState} from "react";
-import {ConvertCSVMenu} from "./convert_menu";
 
 enum ScreenSize {
     LARGE,
@@ -32,8 +33,17 @@ interface Props {
 }
 
 export function TopBar(props: Props) {
-    useHistory();
-    useLocation();
+    const history = useHistory();
+    const location = useLocation();
+
+    function changeView(view: string) {
+        const search = queryString.parse(location.search);
+        if (search.view !== view) {
+            search.view = view;
+            location.search = queryString.stringify(search);
+            history.push(location);
+        }
+    }
 
     function FileMenus(screenSize: ScreenSize) {
         const [menuOpen, setMenuOpen] = useState(false);
@@ -88,6 +98,27 @@ export function TopBar(props: Props) {
         }
     }
 
+    function ViewMenus() {
+        return (
+            <>
+                <Dropdown.Item onClick={() => changeView("hourglass")}>
+                    <Icon name="hourglass" />
+                    <FormattedMessage
+                        id="menu.hourglass"
+                        defaultMessage="Hourglass"
+                    />
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => changeView("relatives")}>
+                    <Icon name="users" />
+                    <FormattedMessage
+                        id="menu.relatives"
+                        defaultMessage="All relatives"
+                    />
+                </Dropdown.Item>
+            </>
+        );
+    }
+
     function ChartMenus(screenSize: ScreenSize) {
         if (!props.showingChart) {
             return null;
@@ -121,9 +152,21 @@ export function TopBar(props: Props) {
                             </Dropdown.Menu>
                         </Dropdown>
 
+                        <Dropdown
+                            trigger={
+                                <div>
+                                    <Icon name="eye" />
+                                    <FormattedMessage id="menu.view" defaultMessage="View" />
+                                </div>
+                            }
+                            className="item"
+                        >
+                            <Dropdown.Menu>{ViewMenus()}</Dropdown.Menu>
+                        </Dropdown>
+
                         <Menu.Item onClick={props.eventHandlers.onCenterView}>
                             <Icon name="target" />
-                            <FormattedMessage id="menu.view" defaultMessage="Reset view" />
+                            <FormattedMessage id="menu.view.reset" defaultMessage="Reset view" />
                         </Menu.Item>
 
                         <Menu.Menu position="right">
@@ -165,7 +208,7 @@ export function TopBar(props: Props) {
                             <Dropdown.Divider/>
                             <Menu.Item onClick={props.eventHandlers.onCenterView}>
                                 <Icon name="eye" />
-                                <FormattedMessage id="menu.view" defaultMessage="Reset view" />
+                                <FormattedMessage id="menu.view.reset" defaultMessage="Reset view" />
                             </Menu.Item>
                         </>
                     );

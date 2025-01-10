@@ -22,4 +22,5 @@ __exportStar(require("./descendant-chart"), exports);
 __exportStar(require("./detailed-renderer"), exports);
 __exportStar(require("./gedcom"), exports);
 __exportStar(require("./hourglass-chart"), exports);
+__exportStar(require("./relatives-chart"), exports);
 __exportStar(require("./simple-api"), exports);

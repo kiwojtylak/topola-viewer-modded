@@ -1,5 +1,6 @@
 import { Chart, ChartInfo, ChartOptions, Fam, Indi } from './api';
 import { ChartUtil } from './chart-util';
+
 /**
  * Renders an hourglass chart. It consists of an ancestor chart and
  * a descendant chart for a family.

@@ -1,8 +1,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HourglassChart = void 0;
+
 var ancestor_chart_1 = require("./ancestor-chart");
 var chart_util_1 = require("./chart-util");
 var descendant_chart_1 = require("./descendant-chart");
+
 /**
  * Renders an hourglass chart. It consists of an ancestor chart and
  * a descendant chart for a family.

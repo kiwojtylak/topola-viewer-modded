@@ -16,11 +16,13 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RelativesChart = void 0;
+
 var ancestor_chart_1 = require("./ancestor-chart");
 var id_generator_1 = require("./id-generator");
 var descendant_chart_1 = require("./descendant-chart");
 var d3_array_1 = require("d3-array");
 var chart_util_1 = require("./chart-util");
+
 /** A view of a family that hides one child individual. */
 var FilterChildFam = /** @class */ (function () {
     function FilterChildFam(fam, childId) {

@@ -14,10 +14,11 @@ import {
     createChart,
     DetailedRenderer,
     HourglassChart,
+    RelativesChart,
     IndiInfo,
     JsonGedcomData,
 } from './lib/topola';
-import {GedcomData, TopolaData} from "./util/gedcom_util";
+import {GedcomData} from "./util/gedcom_util";
 
 /** How much to zoom when using the +/- buttons. */
 const ZOOM_FACTOR = 1.3;
@@ -195,7 +196,19 @@ export function getFilename(gedcom: GedcomData | undefined) {
 
 /** Supported chart types. */
 export enum ChartType {
-    Hourglass
+    Hourglass,
+    Relatives
+}
+
+function getChartType(chartType: ChartType) {
+    switch (chartType) {
+        case ChartType.Hourglass:
+            return HourglassChart;
+        case ChartType.Relatives:
+            return RelativesChart;
+        default:
+            return HourglassChart;
+    }
 }
 
 const chartColors = new Map<ChartColors, TopolaChartColors>([
@@ -267,7 +280,7 @@ class ChartWrapper {
             (select("#chart").node() as HTMLElement).innerHTML = '';
             this.chart = createChart({
                 json: props.data,
-                chartType: HourglassChart,
+                chartType: getChartType(props.chartType),
                 renderer: DetailedRenderer,
                 svgSelector: "#chart",
                 indiCallback: (info) => props.onSelection(info),

@@ -9,4 +9,5 @@ export * from './descendant-chart';
 export * from './detailed-renderer';
 export * from './gedcom';
 export * from './hourglass-chart';
+export * from './relatives-chart';
 export * from './simple-api';
