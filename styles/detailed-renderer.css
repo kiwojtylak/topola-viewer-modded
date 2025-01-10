@@ -25,6 +25,10 @@ div .ui.sub.header {
     stroke: black;
 }
 
+.ego-stroke {
+    stroke: gold !important;
+}
+
 .detailed {
     stroke-width: 2px;
 }
