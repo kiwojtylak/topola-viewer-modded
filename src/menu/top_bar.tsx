@@ -36,15 +36,6 @@ export function TopBar(props: Props) {
     const history = useHistory();
     const location = useLocation();
 
-    function changeView(view: string) {
-        const search = queryString.parse(location.search);
-        if (search.view !== view) {
-            search.view = view;
-            location.search = queryString.stringify(search);
-            history.push(location);
-        }
-    }
-
     function FileMenus(screenSize: ScreenSize) {
         const [menuOpen, setMenuOpen] = useState(false);
         const cooldown = useRef(false);
@@ -98,28 +89,41 @@ export function TopBar(props: Props) {
         }
     }
 
-    function ViewMenus() {
+    interface ViewMenusProps {
+        currentView: string;
+        changeView: (view: string) => void;
+    }
+    function ViewMenus({ currentView, changeView }: ViewMenusProps) {
         return (
             <>
-                <Dropdown.Item onClick={() => changeView("hourglass")}>
-                    <Icon name="hourglass" />
-                    <FormattedMessage
-                        id="menu.hourglass"
-                        defaultMessage="Hourglass"
-                    />
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => changeView("relatives")}>
-                    <Icon name="users" />
-                    <FormattedMessage
-                        id="menu.relatives"
-                        defaultMessage="All relatives"
-                    />
-                </Dropdown.Item>
+                {currentView !== "hourglass" && (
+                    <Dropdown.Item onClick={() => changeView("hourglass")}>
+                        <Icon name="hourglass" />
+                        <FormattedMessage id="menu.hourglass" defaultMessage="Hourglass"/>
+                    </Dropdown.Item>
+                )}
+                {currentView !== "relatives" && (
+                    <Dropdown.Item onClick={() => changeView("relatives")}>
+                        <Icon name="users" />
+                        <FormattedMessage id="menu.relatives" defaultMessage="All relatives"/>
+                    </Dropdown.Item>
+                )}
             </>
         );
     }
 
     function ChartMenus(screenSize: ScreenSize) {
+        const [currentView, setCurrentView] = useState("hourglass");
+        const changeView = (view: string) => {
+            setCurrentView(view);
+            const search = queryString.parse(location.search);
+            if (search.view !== view) {
+                search.view = view;
+                location.search = queryString.stringify(search);
+                history.push(location);
+            }
+        };
+
         if (!props.showingChart) {
             return null;
         }
@@ -155,13 +159,24 @@ export function TopBar(props: Props) {
                         <Dropdown
                             trigger={
                                 <div>
-                                    <Icon name="eye" />
-                                    <FormattedMessage id="menu.view" defaultMessage="View" />
+                                    {currentView === "hourglass" ? (
+                                        <>
+                                            <Icon name="hourglass"/>
+                                            <FormattedMessage id="menu.hourglass" defaultMessage="Hourglass"/>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Icon name="users"/>
+                                            <FormattedMessage id="menu.relatives" defaultMessage="All relatives"/>
+                                        </>
+                                    )}
                                 </div>
                             }
                             className="item"
                         >
-                            <Dropdown.Menu>{ViewMenus()}</Dropdown.Menu>
+                            <Dropdown.Menu>
+                                <ViewMenus currentView={currentView} changeView={changeView} />
+                            </Dropdown.Menu>
                         </Dropdown>
 
                         <Menu.Item onClick={props.eventHandlers.onCenterView}>

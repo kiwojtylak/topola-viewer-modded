@@ -53,7 +53,7 @@
   "error.failed_pdf": "Nie udało się utworzyć pliku PDF. Spróbuj jeszcze raz z mniejszym diagramem lub pobierz plik SVG.",
   "error.failed_png": "Nie udało się utworzyć pliku PNG. Spróbuj jeszcze raz z mniejszym diagramem lub pobierz plik SVG.",
   "error.failed_to_load_file": "Błąd wczytania pliku",
-  "tab.info": "Info",
+  "tab.info": "Dane osobowe",
   "tab.settings": "Ustawienia",
   "config.colors": "Kolory",
   "config.colors.NO_COLOR": "brak",

@@ -351,6 +351,61 @@ let ChartUtil = /** @class */ (function () {
         }
         return svg;
     };
+
+    ChartUtil.prototype.markHiddenRelatives = function (nodes, gedcomData) {
+        let displayedNodes = nodes.flatMap(function (node) {
+            if (node.data.family) {
+                return [node.data.indi.id, node.data.spouse.id];
+            } else {
+                return [node.data.indi.id];
+            }
+        });
+        displayedNodes = displayedNodes.sort((a, b) => {
+            const numA = parseInt(a.slice(1));
+            const numB = parseInt(b.slice(1));
+            return numA - numB;
+        });
+        for (var n = 0; n < nodes.length; n++) {
+            var node = nodes[n];
+            if (node.data.family) {
+                const fam = gedcomData.fams.get(node.data.family.id)
+                // this family has children who are not displayed
+                for (var c = 0; c < fam.json.children.length; c++) {
+                    const childId = fam.json.children[c]
+                    if (!displayedNodes.includes(childId)) {
+                        node.data.hiddenRelatives = true
+                        break;
+                    }
+                }
+                // check the wife parents
+                this.markHiddenRelativesForIndi(node.data.spouse, gedcomData, displayedNodes);
+            } else {
+                // go through each family to find the parents of this indi
+                this.markHiddenRelativesForIndi(node.data.indi, gedcomData, displayedNodes);
+            }
+        }
+    }
+
+    ChartUtil.prototype.markHiddenRelativesForIndi = function (node, gedcomData, displayedNodes) {
+        // check all parent until it finds the child
+        for (var f = 0; f < gedcomData.fams.size; f++) {
+            const fam = Array.from(gedcomData.fams.values())[f]
+            if (fam.json.children.length > 0) {
+                if (fam.json.children.includes(node.id)) {
+                    // parents found
+                    if (!displayedNodes.includes(fam.json.husb)) {
+                        node.hiddenRelatives = true
+                        break;
+                    }
+                    if (!displayedNodes.includes(fam.json.wife)) {
+                        node.hiddenRelatives = true
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     return ChartUtil;
 }());
 exports.ChartUtil = ChartUtil;

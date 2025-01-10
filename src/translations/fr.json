@@ -53,7 +53,7 @@
   "error.failed_pdf": "Échec de la création du PDF. Réessayez avec un diagramme plus petit ou téléchargez le fichier SVG.",
   "error.failed_png": "Impossible de créer le fichier PNG. Réessayez avec un diagramme plus petit ou téléchargez le fichier SVG.",
   "error.failed_to_load_file": "Erreur lors du chargement du fichier",
-  "tab.info": "Info",
+  "tab.info": "Détails",
   "tab.settings": "Paramètres",
   "config.colors": "Couleurs",
   "config.colors.NO_COLOR": "aucune",

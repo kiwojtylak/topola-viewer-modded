@@ -69,6 +69,7 @@ var RelativesChart = /** @class */ (function () {
         this.util = new chart_util_1.ChartUtil(options);
         this.options.idGenerator = this.options.idGenerator || new id_generator_1.IdGenerator();
     }
+
     RelativesChart.prototype.layOutAncestorDescendants = function (ancestorsRoot, focusedNode) {
         // let ancestorDescentants: Array<HierarchyPointNode<TreeNode>> = [];
         var _this = this;
@@ -265,6 +266,7 @@ var RelativesChart = /** @class */ (function () {
             .map(function (data) { return data.descendantNodes; })
             .reduce(function (a, b) { return a.concat(b); }, []);
     };
+
     RelativesChart.prototype.render = function () {
         var descendantNodes = descendant_chart_1.layOutDescendants(this.options);
         // Don't use common id generator because these nodes will not be drawn.
@@ -274,6 +276,9 @@ var RelativesChart = /** @class */ (function () {
         var ancestorsRoot = ancestor_chart_1.getAncestorsTree(ancestorOptions);
         var ancestorDescentants = this.layOutAncestorDescendants(ancestorsRoot, descendantNodes[0]);
         var nodes = descendantNodes.concat(ancestorDescentants);
+        // dash the stroke of indis having non-visible relatives
+        this.util.markHiddenRelatives(nodes, this.options.data)
+
         var animationPromise = this.util.renderChart(nodes);
         var info = chart_util_1.getChartInfo(nodes);
         this.util.updateSvgDimensions(info);

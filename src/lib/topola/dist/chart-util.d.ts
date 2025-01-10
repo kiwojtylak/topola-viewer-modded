@@ -1,5 +1,5 @@
 import { BaseType, Selection } from 'd3-selection';
-import { ChartOptions, TreeNode } from './api';
+import {ChartOptions, DataProvider, Fam, Indi, TreeNode} from './api';
 import { HierarchyNode, HierarchyPointNode } from 'd3-hierarchy';
 import 'd3-transition';
 declare type SVGSelection = Selection<BaseType, {}, BaseType, {}>;
@@ -38,5 +38,6 @@ export declare class ChartUtil {
     renderNodes(nodes: Array<HierarchyPointNode<TreeNode>>, svg: SVGSelection): Promise<void>;
     renderLinks(nodes: Array<HierarchyPointNode<TreeNode>>, svg: SVGSelection): Promise<void>;
     getSvgForRendering(): SVGSelection;
+    markHiddenRelatives(nodes: Array<HierarchyPointNode<TreeNode>>, gedcomData: DataProvider<Indi, Fam>): Promise<void>;
 }
 export {};

@@ -49,12 +49,12 @@ const textLengthCache = new Map();
 
 /** Calculates the length of the given text in pixels when rendered. */
 function getLength(text, textClass) {
-    const cacheKey = text + "|" + textClass;
+    const cacheKey = text + '|' + textClass;
     if (textLengthCache.has(cacheKey)) {
         return textLengthCache.get(cacheKey);
     }
-    const g = d3_selection_1.select('svg').append('g').attr('class', 'detailed node');
-    const x = g.append('text').attr('class', textClass).text(text);
+    const g = d3_selection_1.select("svg").append('g').attr("class", "detailed node");
+    const x = g.append("text").attr("class", textClass).text(text);
     const length = x.node().getComputedTextLength();
     g.remove();
     textLengthCache.set(cacheKey, length);
@@ -83,19 +83,19 @@ var DetailedRenderer = /** @class */ (function (_super) {
     DetailedRenderer.prototype.getColoringClass = function () {
         switch (this.options.colors) {
             case _1.ChartColors.NO_COLOR:
-                return 'nocolor';
+                return "nocolor";
             case _1.ChartColors.COLOR_BY_GENERATION:
-                return 'bygeneration';
+                return "bygeneration";
             case _1.ChartColors.COLOR_BY_SEX:
-                return 'bysex';
+                return "bysex";
             case _1.ChartColors.COLOR_BY_ETHNICITY:
-                return 'byethnicity';
+                return "byethnicity";
             case _1.ChartColors.COLOR_BY_NR_LANGUAGES:
-                return 'bylanguages';
+                return "bylanguages";
             case _1.ChartColors.COLOR_BY_LANGUAGE:
-                return 'bylanguages';
+                return "bylanguages";
             default:
-                return 'bygeneration';
+                return "bygeneration";
         }
     };
 
@@ -143,14 +143,14 @@ var DetailedRenderer = /** @class */ (function (_super) {
             indi.getImageUrl() ? IMAGE_HEIGHT : 0,
         ]);
         // Width
-        const maxDetailsWidth = d3_array_1.max(details.map(detail => getLength(detail.text, 'details')));
+        const maxDetailsWidth = d3_array_1.max(details.map(detail => getLength(detail.text, "details")));
         const width = d3_array_1.max([
             maxDetailsWidth + 22,
-            getLength(indi.getFirstName() || '', 'name') + 8,
-            getLength(indi.getLastName() || '', 'name') + 8,
-            indi.showLanguages() && indi.getLanguages().length > 0 ? (getLength(indi.getLanguagesLabel(), 'languages') + 28) : 0,
-            indi.showEthnicity() && indi.getEthnicity() != null ? (getLength(indi.getEthnicity(), 'ethnicity') + 28) : 0,
-            getLength(id, 'id') + 32,
+            getLength(indi.getFirstName() || '', "name") + 8,
+            getLength(indi.getLastName() || '', "name") + 8,
+            indi.showLanguages() && indi.getLanguages().length > 0 ? (getLength(indi.getLanguagesLabel(), "languages") + 28) : 0,
+            indi.showEthnicity() && indi.getEthnicity() != null ? (getLength(indi.getEthnicity(), "ethnicity") + 28) : 0,
+            getLength(id, "id") + 32,
             INDI_MIN_WIDTH,
         ]) + (indi.getImageUrl() ? IMAGE_WIDTH : 0);
         return [width, height];
@@ -178,19 +178,19 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const fam = this.options.data.getFam(id);
         const details = this.getFamDetails(fam);
         const height = d3_array_1.max([10 + details.length * DETAILS_HEIGHT, FAM_MIN_HEIGHT]);
-        const maxDetailsWidth = d3_array_1.max(details.map(function (x) { return getLength(x.text, 'details'); }));
+        const maxDetailsWidth = d3_array_1.max(details.map(function (x) { return getLength(x.text, "details"); }));
         const width = d3_array_1.max([maxDetailsWidth + 22, FAM_MIN_WIDTH]);
         return [width, height];
     };
 
     DetailedRenderer.prototype.render = function (enter, update) {
         const _this = this;
-        enter = enter.append('g').attr('class', 'detailed');
+        enter = enter.append('g').attr("class", "detailed");
         update = update.select('g');
 
         const indiUpdate = enter
             .merge(update)
-            .selectAll('g.indi')
+            .selectAll("g.indi")
             .data(function (node) {
                 const result = [];
                 const famXOffset = !_this.options.horizontal && node.data.family
@@ -222,19 +222,19 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const indiEnter = indiUpdate
             .enter()
             .append('g')
-            .attr('class', 'indi');
-        this.transition(indiEnter.merge(indiUpdate)).attr('transform', function (node) {
+            .attr("class", "indi");
+        this.transition(indiEnter.merge(indiUpdate)).attr("transform", function (node) {
             return "translate(" + node.xOffset + ", " + node.yOffset + ")";
         });
         this.renderIndi(indiEnter, indiUpdate);
 
         const familyEnter = enter.select(function (node) {
             return node.data.family ? this : null;
-        }).append('g').attr('class', 'family');
+        }).append('g').attr("class", "family");
         const familyUpdate = update.select(function (node) {
             return node.data.family ? this : null;
-        }).select('g.family');
-        this.transition(familyEnter.merge(familyUpdate)).attr('transform', function (node) {
+        }).select("g.family");
+        this.transition(familyEnter.merge(familyUpdate)).attr("transform", function (node) {
             return _this.getFamTransform(node.data);
         });
         this.renderFamily(familyEnter);
@@ -242,17 +242,17 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
     DetailedRenderer.prototype.getCss = function () {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', './styles/detailed-renderer.css', false);
+        xhr.open("GET", "./styles/detailed-renderer.css", false);
         try {
             xhr.send();
             if (xhr.status === 200) {
                 const cssCode = xhr.responseText
                 return cssCode;
             } else {
-                throw new Error('Failed to load CSS file:' + xhr.statusText);
+                throw new Error("Failed to load CSS file:" + xhr.statusText);
             }
         } catch (error) {
-            console.error('Error occurred while loading CSS:', error);
+            console.error("Error occurred while loading CSS:", error);
             return null;
         }
     };
@@ -268,9 +268,15 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
     DetailedRenderer.prototype.getFamTransform = function (node) {
         if (this.options.horizontal) {
-            return "translate(" + ((node.indi && node.indi.width) || node.spouse.width) + ", " + d3_array_1.max([composite_renderer_1.getFamPositionHorizontal(node), 0]) + ")";
+            return "translate("
+                + ((node.indi && node.indi.width) || node.spouse.width) + ", "
+                + d3_array_1.max([composite_renderer_1.getFamPositionHorizontal(node), 0])
+                + ")";
         }
-        return "translate(" + d3_array_1.max([composite_renderer_1.getFamPositionVertical(node), 0]) + ", " + ((node.indi && node.indi.height) || node.spouse.height) + ")";
+        return "translate("
+            + d3_array_1.max([composite_renderer_1.getFamPositionVertical(node), 0]) + ", "
+            + ((node.indi && node.indi.height) || node.spouse.height)
+            + ")";
     };
 
     DetailedRenderer.prototype.getSexClass = function (indiId) {
@@ -278,9 +284,9 @@ var DetailedRenderer = /** @class */ (function (_super) {
         const sex = (_a = this.options.data.getIndi(indiId)) === null || _a === void 0 ? void 0 : _a.getSex();
         switch (sex) {
             case 'M':
-                return 'male';
+                return "male";
             case 'F':
-                return 'female';
+                return "female";
             default:
                 break;
         }
@@ -321,12 +327,18 @@ var DetailedRenderer = /** @class */ (function (_super) {
                         ethnicityCss.set(ethnicity, "eth" + classNum)
                     }
                     if (ethnicityCss.size > 14) {
-                        throw new Error('No CSS for more than 14 different ethnicities')
+                        throw new Error("No CSS for more than 14 different ethnicities")
                     }
                 })
         } catch (e) {
             console.log(e)
         }
+    }
+
+    let egoStrokeUsed = false;
+    DetailedRenderer.prototype.getEgoStroke = function (indiId) {
+        // TODO someday return " ego-stroke"
+        return ' '
     }
 
     DetailedRenderer.prototype.getLanguagesClass = function (indiId, selectedLanguageId) {
@@ -347,7 +359,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
     DetailedRenderer.prototype.resetCss = function () {
         ethnicityCss.clear()
-        console.log('Cleared CSS maps')
+        console.log("Cleared CSS maps")
     }
 
     DetailedRenderer.prototype.renderIndi = function (enter, update) {
@@ -356,12 +368,12 @@ var DetailedRenderer = /** @class */ (function (_super) {
         if (this.options.indiHrefFunc) {
             enter = enter
                 .append('a')
-                .attr('href', function (data) { return _this.options.indiHrefFunc(data.indi.id); });
+                .attr("href", function (data) { return _this.options.indiHrefFunc(data.indi.id); });
             update = update.select('a');
         }
 
         if (this.options.indiCallback) {
-            enter.on('click', function (event, data) {
+            enter.on("click", function (event, data) {
                 data.indi.hiddenRelatives = false
                 return _this.options.indiCallback({
                     id: data.indi.id,
@@ -372,34 +384,34 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
         // Background
         const background = enter
-            .append('rect')
-            .attr('rx', 5)
-            .attr('stroke-width', 0)
-            .attr('class', function (node) {
+            .append("rect")
+            .attr("rx", 5)
+            .attr("stroke-width", 0)
+            .attr("class", function (node) {
                 return "background "
-                    +_this.getColoringClass() + " "
+                    + _this.getColoringClass() + " "
                     + _this.getSexClass(node.indi.id) + " "
                     + _this.getEthnicityClass(node.indi.id) + " "
-                    + _this.getLanguagesClass(node.indi.id, _this.options.selectedLanguage) + " ";
+                    + _this.getLanguagesClass(node.indi.id, _this.options.selectedLanguage) + " "
             })
-            .merge(update.select('rect.background'));
+            .merge(update.select("rect.background"));
 
         this.transition(background)
-            .attr('width', function (node) { return node.indi.width; })
-            .attr('height', function (node) { return node.indi.height; });
+            .attr("width", function (node) { return node.indi.width; })
+            .attr("height", function (node) { return node.indi.height; });
 
         // Clip path
         const getClipId = function (id) {
             return "clip-" + id;
         };
         enter
-            .append('clipPath')
-            .attr('id', function (node) { return getClipId(node.indi.id); })
-            .append('rect')
-            .attr('rx', 5)
-            .merge(update.select('clipPath rect'))
-            .attr('width', function (node) { return node.indi.width; })
-            .attr('height', function (node) { return node.indi.height; });
+            .append("clipPath")
+            .attr("id", function (node) { return getClipId(node.indi.id); })
+            .append("rect")
+            .attr("rx", 5)
+            .merge(update.select("clipPath rect"))
+            .attr("width", function (node) { return node.indi.width; })
+            .attr("height", function (node) { return node.indi.height; });
         const getIndi = function (data) {
             return _this.options.data.getIndi(data.indi.id);
         };
@@ -409,16 +421,16 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
         // Name
         enter
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('class', 'name')
-            .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 17)"; })
+            .append("text")
+            .attr("text-anchor", "middle")
+            .attr("class", "name")
+            .attr("transform", function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 17)"; })
             .text(function (node) { return getIndi(node).getFirstName(); });
         enter
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('class', 'name')
-            .attr('transform', function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
+            .append("text")
+            .attr("text-anchor", "middle")
+            .attr("class", "name")
+            .attr("transform", function (node) { return "translate(" + getDetailsWidth(node) / 2 + ", 33)"; })
             .text(function (node) { return getIndi(node).getLastName(); })
 
         // Languages
@@ -426,13 +438,13 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .filter(function (node) {
                 return getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0
             })
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('class', 'languages')
+            .append("text")
+            .attr("text-anchor", "middle")
+            .attr("class", "languages")
             .text(function (node) {
                 return getIndi(node).getLanguagesLabel()
             });
-        this.transition(languages).attr('transform', function (node) {
+        this.transition(languages).attr("transform", function (node) {
             // if the indi does not have languages to show, the height start does not apply
             const languages_height_start =  getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0 ? 52 : null
             return "translate(" + getDetailsWidth(node) / 2 + ", " + languages_height_start + ")";
@@ -443,12 +455,12 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .filter(function (node) {
                 return getIndi(node).showEthnicity() && getIndi(node).getEthnicity() != null
             })
-            .append('text')
-            .attr('class', 'ethnicity')
+            .append("text")
+            .attr("class", "ethnicity")
             .text(function (node) {
                 return '¤ ' + getIndi(node).getEthnicity()
             });
-        this.transition(ethnicity).attr('transform', function (node) {
+        this.transition(ethnicity).attr("transform", function (node) {
             let ethnicity_height_start =  null
             if (getIndi(node).showLanguages() && getIndi(node).getLanguages().length > 0) {
                 ethnicity_height_start = 71
@@ -481,19 +493,19 @@ var DetailedRenderer = /** @class */ (function (_super) {
             });
 
             lineGroup
-                .append('text')
-                .attr('text-anchor', 'middle')
-                .attr('class', 'details')
-                .attr('transform', function (node) {
+                .append("text")
+                .attr("text-anchor", "middle")
+                .attr("class", "details")
+                .attr("transform", function (node) {
                     return "translate(9, " + (details_height_start(node) + i * DETAILS_HEIGHT) + ")"
                 })
                 .text(function (node) {
                     return details.get(node.indi.id)[i].symbol;
                 });
             lineGroup
-                .append('text')
-                .attr('class', 'details')
-                .attr('transform', function (node) {
+                .append("text")
+                .attr("class", "details")
+                .attr("transform", function (node) {
                     return "translate(15, " + (details_height_start(node) + i * DETAILS_HEIGHT) + ")"
                 })
                 .text(function (node) {
@@ -507,55 +519,57 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
         // Render id
         const id = enter
-            .append('text')
-            .attr('class', 'id')
+            .append("text")
+            .attr("class", "id")
             .text(function (node) {
                 return (getIndi(node).showId() ? node.indi.id : '');
             })
-            .merge(update.select('text.id'));
-        this.transition(id).attr('transform', function (node) { return "translate(9, " + (node.indi.height - 5) + ")"; });
+            .merge(update.select("text.id"));
+        this.transition(id).attr("transform", function (node) { return "translate(9, " + (node.indi.height - 5) + ")"; });
 
         // Render sex
         const sex = enter
-            .append('text')
-            .attr('class', 'details sex')
-            .attr('text-anchor', 'end')
+            .append("text")
+            .attr("class", "details sex")
+            .attr("text-anchor", "end")
             .text(function (node) {
                 const sexSymbol = SEX_SYMBOLS.get(getIndi(node).getSex() || '') || '';
                 return getIndi(node).showSex() ? sexSymbol : '';
             })
-            .merge(update.select('text.sex'));
-        this.transition(sex).attr('transform', function (node) {
+            .merge(update.select("text.sex"));
+        this.transition(sex).attr("transform", function (node) {
             return "translate(" + (getDetailsWidth(node) - 5) + ", " + (node.indi.height - 5) + ")";
         });
 
         // Image
         enter.filter(function (node) { return !!getIndi(node).getImageUrl(); })
-            .append('image')
-            .attr('width', IMAGE_WIDTH)
-            .attr('height', function (node) { return node.indi.height; })
-            .attr('preserveAspectRatio', 'xMidYMin')
-            .attr('transform', function (node) { return "translate(" + (node.indi.width - IMAGE_WIDTH) + ", 0)"; })
-            .attr('clip-path', function (node) { return "url(#" + getClipId(node.indi.id) + ")"; })
-            .attr('href', function (node) { return getIndi(node).getImageUrl(); });
+            .append("image")
+            .attr("width", IMAGE_WIDTH)
+            .attr("height", function (node) { return node.indi.height; })
+            .attr("preserveAspectRatio", "xMidYMin")
+            .attr("transform", function (node) { return "translate(" + (node.indi.width - IMAGE_WIDTH) + ", 0)"; })
+            .attr("clip-path", function (node) { return "url(#" + getClipId(node.indi.id) + ")"; })
+            .attr("href", function (node) { return getIndi(node).getImageUrl(); });
 
         // Border on top
         const border = enter
-            .append('rect')
-            .attr('rx', 5)
-            .attr('fill-opacity', 0)
-            .attr('class', 'border')
-            .attr('stroke-dasharray', function (node) {
+            .append("rect")
+            .attr("rx", 5)
+            .attr("fill-opacity", 0)
+            .attr("class", function (node) {
+                return "border" + _this.getEgoStroke(node.indi.id);
+            })
+            .attr("stroke-dasharray", function (node) {
                 if (node.indi.hiddenRelatives) {
-                    return '5, 5'
+                    return "5, 5"
                 } else {
-                    return '0, 0'
+                    return "0, 0"
                 }
             })
-            .merge(update.select('rect.border'));
+            .merge(update.select("rect.border"));
         this.transition(border)
-            .attr('width', function (node) { return node.indi.width; })
-            .attr('height', function (node) { return node.indi.height; });
+            .attr("width", function (node) { return node.indi.width; })
+            .attr("height", function (node) { return node.indi.height; });
     };
 
     DetailedRenderer.prototype.renderFamily = function (enter) {
@@ -564,13 +578,13 @@ var DetailedRenderer = /** @class */ (function (_super) {
         if (this.options.famHrefFunc) {
             enter = enter
                 .append('a')
-                .attr('href', function (node) {
+                .attr("href", function (node) {
                 return _this.options.famHrefFunc(node.data.family.id);
             });
         }
 
         if (this.options.famCallback) {
-            enter.on('click', function (event, node) {
+            enter.on("click", function (event, node) {
                 return _this.options.famCallback({
                     id: node.data.family.id,
                     generation: node.data.generation,
@@ -594,29 +608,29 @@ var DetailedRenderer = /** @class */ (function (_super) {
         enter.filter(function (node) {
                 const detail = details.get(node.data.family.id);
                 return 0 < detail.length;
-        }).append('rect')
-        .attr('class', this.getColoringClass())
-        .attr('rx', 5)
-        .attr('ry', 5)
-        .attr('width', function (node) { return node.data.family.width; })
-        .attr('height', function (node) { return node.data.family.height; });
+        }).append("rect")
+        .attr("class", this.getColoringClass())
+        .attr("rx", 5)
+        .attr("ry", 5)
+        .attr("width", function (node) { return node.data.family.width; })
+        .attr("height", function (node) { return node.data.family.height; });
         const _loop_2 = function (i) {
             const lineGroup = enter.filter(function (node) {
                 return details.get(node.data.family.id).length > i;
             });
             lineGroup
-                .append('text')
-                .attr('text-anchor', 'middle')
-                .attr('class', 'details')
-                .attr('transform', "translate(9, " + (16 + i * DETAILS_HEIGHT) + ")")
+                .append("text")
+                .attr("text-anchor", "middle")
+                .attr("class", "details")
+                .attr("transform", "translate(9, " + (16 + i * DETAILS_HEIGHT) + ")")
                 .text(function (node) {
                     return details.get(node.data.family.id)[i].symbol;
                 });
             lineGroup
-                .append('text')
-                .attr('text-anchor', 'start')
-                .attr('class', 'details')
-                .attr('transform', "translate(15, " + (16 + i * DETAILS_HEIGHT) + ")")
+                .append("text")
+                .attr("text-anchor", "start")
+                .attr("class", "details")
+                .attr("transform", "translate(15, " + (16 + i * DETAILS_HEIGHT) + ")")
                 .text(function (node) {
                     return details.get(node.data.family.id)[i].text;
                 });
