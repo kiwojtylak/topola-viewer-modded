@@ -335,7 +335,6 @@ var DetailedRenderer = /** @class */ (function (_super) {
         }
     }
 
-    let egoStrokeUsed = false;
     DetailedRenderer.prototype.getEgoStroke = function (indiId) {
         // TODO someday return " ego-stroke"
         return ' '
