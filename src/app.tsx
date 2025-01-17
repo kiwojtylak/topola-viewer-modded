@@ -30,7 +30,7 @@ import {
     UploadSourceSpec,
     UrlSourceSpec
 } from './datasource/load_data';
-import CSVLoader, {Language} from "./languages/languages-loader";
+import CSVLoader, {Language} from "././model/languages-loader";
 import {
     argsToConfig,
     Config,

@@ -3,7 +3,7 @@ import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
 import {IndiInfo, JsonGedcomData} from '../lib/topola';
 import {TopolaError} from '../util/error';
 import AdmZip from 'adm-zip';
-import {Language} from "../languages/languages-loader";
+import {Language} from ".././model/languages-loader";
 
 export interface UploadSourceSpec {
     source: DataSourceEnum.UPLOADED;

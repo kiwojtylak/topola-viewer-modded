@@ -1,7 +1,7 @@
 import {DataSource, DataSourceEnum, SourceSelection} from './data_source';
 import {TopolaData} from '../util/gedcom_util';
 import {loadGedcom} from './load_data';
-import {Language} from "../languages/languages-loader";
+import {Language} from ".././model/languages-loader";
 
 /**
  * Message types used in embedded mode.

@@ -1,7 +1,7 @@
 import {Item, Checkbox, Form, Header} from 'semantic-ui-react';
 import {FormattedMessage} from 'react-intl';
 import {ParsedQuery} from 'query-string';
-import {Language} from "./languages/languages-loader";
+import {Language} from "././model/languages-loader";
 import {useState} from "react";
 
 export enum ChartColors {

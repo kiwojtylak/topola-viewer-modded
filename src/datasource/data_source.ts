@@ -1,6 +1,6 @@
 import {IndiInfo} from '../lib/topola';
 import {TopolaData} from '../util/gedcom_util';
-import {Language} from "../languages/languages-loader";
+import {Language} from ".././model/languages-loader";
 
 /** Supported data sources. */
 export enum DataSourceEnum {
