@@ -25,7 +25,7 @@ div .ui.sub.header {
     stroke: black;
 }
 
-.ego-stroke {
+.selected-stroke {
     stroke: gold !important;
 }
 

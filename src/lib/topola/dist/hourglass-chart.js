@@ -22,7 +22,7 @@ var HourglassChart = /** @class */ (function () {
         // slice(1) removes the duplicated start node.
         const nodes = ancestorNodes.slice(1).concat(descendantNodes);
         // dash the stroke of indis having non-visible relatives
-        this.util.markHiddenRelatives(nodes, this.options.data)
+        this.util.markHiddenRelatives(nodes, this.options)
 
         const animationPromise = this.util.renderChart(nodes);
         const info = chart_util_1.getChartInfo(nodes);

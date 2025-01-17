@@ -470,8 +470,19 @@ export function App() {
         await downloadGedcom(gedcomString as string, filename);
     }
 
-    function onCenterView() {
-        onSelection(startIndi(data))
+    function onResetView() {
+        // FIXME: do not add I0, just remove args
+        const s = startIndi(data);
+        const args = {
+            indi: s.id,
+            gen:  s.generation
+        };
+        const search = queryString.parse(location.search);
+        for (const key in args) {
+            delete search[key]
+        }
+        location.search = queryString.stringify(search);
+        history.push(location);
     }
 
     function onDismissErrorPopup() {
@@ -561,7 +572,7 @@ export function App() {
                             onDownloadPng,
                             onDownloadSvg,
                             onDownloadGedcom,
-                            onCenterView,
+                            onResetView,
                         }}
                     />
                 )}

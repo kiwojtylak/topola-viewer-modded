@@ -200,6 +200,8 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     ? d3_array_1.max([-composite_renderer_1.getFamPositionHorizontal(node.data), 0])
                     : 0;
 
+                // FIXME: at this point, it only pushes the indis from the updates.
+                //        If the selected indi, is not pushed to redraw, it will keep the dashed stroke if it has it
                 if (node.data.indi) {
                     node.data.indi.hiddenRelatives = node.data.hiddenRelatives;
                     result.push({
@@ -218,7 +220,9 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 });
             }
             return result;
-        }, function (data) { return data.indi.id; });
+        }, function (data) {
+            return data.indi.id;
+        });
         const indiEnter = indiUpdate
             .enter()
             .append('g')
@@ -335,8 +339,8 @@ var DetailedRenderer = /** @class */ (function (_super) {
         }
     }
 
-    DetailedRenderer.prototype.getEgoStroke = function (indiId) {
-        // TODO someday return " ego-stroke"
+    DetailedRenderer.prototype.getSelectedStroke = function (indiId) {
+        // TODO someday return " selected-stroke"
         return ' '
     }
 
@@ -373,7 +377,6 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
         if (this.options.indiCallback) {
             enter.on("click", function (event, data) {
-                data.indi.hiddenRelatives = false
                 return _this.options.indiCallback({
                     id: data.indi.id,
                     generation: data.generation,
@@ -556,7 +559,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr("rx", 5)
             .attr("fill-opacity", 0)
             .attr("class", function (node) {
-                return "border" + _this.getEgoStroke(node.indi.id);
+                return "border" + _this.getSelectedStroke(node.indi.id);
             })
             .attr("stroke-dasharray", function (node) {
                 if (node.indi.hiddenRelatives) {

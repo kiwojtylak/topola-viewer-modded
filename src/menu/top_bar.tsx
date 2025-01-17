@@ -22,7 +22,7 @@ interface EventHandlers {
     onDownloadPng: () => void;
     onDownloadSvg: () => void;
     onDownloadGedcom: () => void;
-    onCenterView: () => void;
+    onResetView: () => void;
 }
 
 interface Props {
@@ -179,7 +179,7 @@ export function TopBar(props: Props) {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <Menu.Item onClick={props.eventHandlers.onCenterView}>
+                        <Menu.Item onClick={props.eventHandlers.onResetView}>
                             <Icon name="target" />
                             <FormattedMessage id="menu.view.reset" defaultMessage="Reset view" />
                         </Menu.Item>
@@ -221,7 +221,7 @@ export function TopBar(props: Props) {
                                 <FormattedMessage id="menu.download_gedcom" defaultMessage="Download GEDCOM"/>
                             </Dropdown.Item>
                             <Dropdown.Divider/>
-                            <Menu.Item onClick={props.eventHandlers.onCenterView}>
+                            <Menu.Item onClick={props.eventHandlers.onResetView}>
                                 <Icon name="eye" />
                                 <FormattedMessage id="menu.view.reset" defaultMessage="Reset view" />
                             </Menu.Item>

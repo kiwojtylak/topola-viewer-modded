@@ -367,29 +367,37 @@ let ChartUtil = /** @class */ (function () {
         });
         for (var n = 0; n < nodes.length; n++) {
             var node = nodes[n];
+            // if it is FAM
             if (node.data.family) {
-                const fam = gedcomData.fams.get(node.data.family.id)
-                // this family has children who are not displayed
-                for (var c = 0; c < fam.json.children.length; c++) {
-                    const childId = fam.json.children[c]
-                    if (!displayedNodes.includes(childId)) {
-                        node.data.hiddenRelatives = true
-                        break;
-                    }
-                }
+                // check if husband has hidden children
+                this.hasHiddenChildren(gedcomData, node, displayedNodes);
                 // check the wife parents
-                this.markHiddenRelativesForIndi(node.data.spouse, gedcomData, displayedNodes);
+                this.hasHiddenParents(node.data.spouse, gedcomData, displayedNodes);
+            // if it INDI
             } else {
-                // go through each family to find the parents of this indi
-                this.markHiddenRelativesForIndi(node.data.indi, gedcomData, displayedNodes);
+                this.hasHiddenParents(node.data.indi, gedcomData, displayedNodes);
             }
         }
     }
 
-    ChartUtil.prototype.markHiddenRelativesForIndi = function (node, gedcomData, displayedNodes) {
+    ChartUtil.prototype.hasHiddenChildren = function(gedcomData, node, displayedNodes) {
+        const fam = gedcomData.data.fams.get(node.data.family.id)
+        // iterate all children of this family
+        for (var c = 0; c < fam.json.children.length; c++) {
+            const childId = fam.json.children[c]
+            // this family has children which are not displayed
+            if (!displayedNodes.includes(childId)) {
+                node.data.hiddenRelatives = true
+                break;
+            }
+        }
+        return false;
+    }
+
+    ChartUtil.prototype.hasHiddenParents = function (node, gedcomData, displayedNodes) {
         // check all parent until it finds the child
-        for (var f = 0; f < gedcomData.fams.size; f++) {
-            const fam = Array.from(gedcomData.fams.values())[f]
+        for (var f = 0; f < gedcomData.data.fams.size; f++) {
+            const fam = Array.from(gedcomData.data.fams.values())[f]
             if (fam.json.children.length > 0) {
                 if (fam.json.children.includes(node.id)) {
                     // parents found
@@ -404,6 +412,7 @@ let ChartUtil = /** @class */ (function () {
                 }
             }
         }
+        return false;
     }
 
     return ChartUtil;
