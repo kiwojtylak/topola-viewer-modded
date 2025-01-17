@@ -42,6 +42,7 @@ import {
     LanguagesArg,
     SexArg
 } from './config';
+import SidePanel from "./menu/side_panel";
 
 
 /**
@@ -471,7 +472,6 @@ export function App() {
     }
 
     function onResetView() {
-        // FIXME: do not add I0, just remove args
         const s = startIndi(data);
         const args = {
             indi: s.id,
@@ -591,4 +591,3 @@ export function App() {
         </>
     );
 }
-
