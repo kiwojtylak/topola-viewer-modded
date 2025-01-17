@@ -42,7 +42,7 @@ import {
     LanguagesArg,
     SexArg
 } from './config';
-import SidePanel from "./menu/side_panel";
+import SidePanel from "./util/side_panel";
 
 
 /**
