@@ -30,7 +30,8 @@ div .ui.sub.header {
 }
 
 .selected-stroke {
-    stroke: gold !important;
+    stroke: black !important;
+    stroke-width: 2px;
 }
 
 .detailed {
