@@ -276,9 +276,6 @@ var RelativesChart = /** @class */ (function () {
         var ancestorsRoot = ancestor_chart_1.getAncestorsTree(ancestorOptions);
         var ancestorDescentants = this.layOutAncestorDescendants(ancestorsRoot, descendantNodes[0]);
         var nodes = descendantNodes.concat(ancestorDescentants);
-        // dash the stroke of indis having non-visible relatives
-        this.util.markHiddenRelatives(nodes, this.options.data)
-
         var animationPromise = this.util.renderChart(nodes);
         var info = chart_util_1.getChartInfo(nodes);
         this.util.updateSvgDimensions(info);

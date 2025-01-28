@@ -353,53 +353,50 @@ let ChartUtil = /** @class */ (function () {
     };
 
     ChartUtil.prototype.markHiddenRelatives = function (nodes, gedcomData) {
-        let displayedNodes = nodes.flatMap(function (node) {
-            if (node.data.family) {
-                return [node.data.indi.id, node.data.spouse.id];
-            } else {
-                return [node.data.indi.id];
-            }
-        });
-        displayedNodes = displayedNodes.sort((a, b) => {
-            const numA = parseInt(a.slice(1));
-            const numB = parseInt(b.slice(1));
+        const displayedIndiIDs = nodes.sort((a, b) => {
+            const numA = parseInt(a.id.slice(1));
+            const numB = parseInt(b.id.slice(1));
             return numA - numB;
-        });
+        }).map(function (n) { return n.id });
+
         for (var n = 0; n < nodes.length; n++) {
-            var node = nodes[n];
-            if (node.data.family) {
-                const fam = gedcomData.fams.get(node.data.family.id)
-                // this family has children who are not displayed
-                for (var c = 0; c < fam.json.children.length; c++) {
-                    const childId = fam.json.children[c]
-                    if (!displayedNodes.includes(childId)) {
-                        node.data.hiddenRelatives = true
-                        break;
-                    }
-                }
-                // check the wife parents
-                this.markHiddenRelativesForIndi(node.data.spouse, gedcomData, displayedNodes);
-            } else {
-                // go through each family to find the parents of this indi
-                this.markHiddenRelativesForIndi(node.data.indi, gedcomData, displayedNodes);
-            }
+            this.markHiddenAncestorsForIndi(nodes[n], gedcomData, displayedIndiIDs);
+            this.markHiddenDescendantsForIndi(nodes[n], gedcomData, displayedIndiIDs);
         }
     }
 
-    ChartUtil.prototype.markHiddenRelativesForIndi = function (node, gedcomData, displayedNodes) {
-        // check all parent until it finds the child
+    ChartUtil.prototype.markHiddenAncestorsForIndi = function (node, gedcomData, displayedIndiIDs) {
+        // go through each family to find the parents of this indi
         for (var f = 0; f < gedcomData.fams.size; f++) {
             const fam = Array.from(gedcomData.fams.values())[f]
             if (fam.json.children.length > 0) {
                 if (fam.json.children.includes(node.id)) {
                     // parents found
-                    if (!displayedNodes.includes(fam.json.husb)) {
+                    const fatherID = fam.json.husb
+                    const motherID = fam.json.wife
+                    if (!displayedIndiIDs.includes(fatherID) || !displayedIndiIDs.includes(motherID)) {
                         node.hiddenRelatives = true
                         break;
                     }
-                    if (!displayedNodes.includes(fam.json.wife)) {
-                        node.hiddenRelatives = true
-                        break;
+                }
+            }
+        }
+    }
+
+    ChartUtil.prototype.markHiddenDescendantsForIndi = function (node, gedcomData, displayedIndiIDs) {
+        // go through each family to find the children
+        for (var f = 0; f < gedcomData.fams.size; f++) {
+            const fam = Array.from(gedcomData.fams.values())[f]
+            if (fam.json.husb === node.id) {  // || fam.json.wife === node.id mark only the father. Otherwise difficult to distinguish from women with missing parents
+                // family found
+                if (fam.json.children.length > 0) {
+                    for (var c = 0; c < fam.json.children.length; c++) {
+                        const childId = fam.json.children[c]
+                        if (!displayedIndiIDs.includes(childId)) {
+                            // some children are not displayed
+                            node.hiddenRelatives = true
+                            break;
+                        }
                     }
                 }
             }

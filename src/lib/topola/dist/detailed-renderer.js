@@ -26,6 +26,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DetailedRenderer = exports.getLength = void 0;
 
+var chart_util_1 = require("./chart-util");
 const d3_selection_1 = require("d3-selection");
 const _1 = require("./index");
 const date_format_1 = require("./date-format");
@@ -77,6 +78,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
     function DetailedRenderer(options) {
         var _this = _super.call(this, options) || this;
         _this.options = options;
+        this.util = new chart_util_1.ChartUtil(options);
         return _this;
     }
 
@@ -188,6 +190,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
         enter = enter.append('g').attr("class", "detailed");
         update = update.select('g');
 
+        const indisToStroke = []
         const indiUpdate = enter
             .merge(update)
             .selectAll("g.indi")
@@ -201,6 +204,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     : 0;
 
                 if (node.data.indi) {
+                    indisToStroke.push(node.data.indi)
                     node.data.indi.hiddenRelatives = node.data.hiddenRelatives;
                     result.push({
                         indi: node.data.indi,
@@ -210,6 +214,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     });
                 }
                 if (node.data.spouse) {
+                    indisToStroke.push(node.data.spouse)
                     result.push({
                         indi: node.data.spouse,
                         generation: node.data.generation,
@@ -219,6 +224,10 @@ var DetailedRenderer = /** @class */ (function (_super) {
             }
             return result;
         }, function (data) { return data.indi.id; });
+
+        // dash the stroke of indis having non-visible relatives
+        this.util.markHiddenRelatives(indisToStroke, this.options.data)
+
         const indiEnter = indiUpdate
             .enter()
             .append('g')
