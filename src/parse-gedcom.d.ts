@@ -1,6 +1,6 @@
 // Data type definitions for the parse-gedcom library.
 declare module 'parse-gedcom' {
-    import {Language} from "languages/languages-loader";
+    import {Language} from "model/languages-loader";
 
     interface GedcomEntry {
         level: number;

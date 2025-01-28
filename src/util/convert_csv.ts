@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import {Individual, Sex} from "./individual";
-import {Language} from "./languages-loader";
-import {Family} from "./family";
+import {Individual, Sex} from ".././model/individual";
+import {Language} from ".././model/languages-loader";
+import {Family} from ".././model/family";
 
 type Relationships = Record<string, [string, string]>;
 

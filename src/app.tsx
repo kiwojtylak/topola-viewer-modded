@@ -30,7 +30,7 @@ import {
     UploadSourceSpec,
     UrlSourceSpec
 } from './datasource/load_data';
-import CSVLoader, {Language} from "./languages/languages-loader";
+import CSVLoader, {Language} from "././model/languages-loader";
 import {
     argsToConfig,
     Config,
@@ -42,6 +42,7 @@ import {
     LanguagesArg,
     SexArg
 } from './config';
+import SidePanel from "./util/side_panel";
 
 
 /**
@@ -470,8 +471,18 @@ export function App() {
         await downloadGedcom(gedcomString as string, filename);
     }
 
-    function onCenterView() {
-        onSelection(startIndi(data))
+    function onResetView() {
+        const s = startIndi(data);
+        const args = {
+            indi: s.id,
+            gen:  s.generation
+        };
+        const search = queryString.parse(location.search);
+        for (const key in args) {
+            delete search[key]
+        }
+        location.search = queryString.stringify(search);
+        history.push(location);
     }
 
     function onDismissErrorPopup() {
@@ -561,7 +572,7 @@ export function App() {
                             onDownloadPng,
                             onDownloadSvg,
                             onDownloadGedcom,
-                            onCenterView,
+                            onResetView,
                         }}
                     />
                 )}
@@ -580,4 +591,3 @@ export function App() {
         </>
     );
 }
-

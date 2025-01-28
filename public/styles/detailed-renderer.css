@@ -1,3 +1,7 @@
+.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item {
+    background-color: #2185d0;  /* In case anyone wants to theme this */
+}
+
 .detailed text {
     font-family: verdana, arial, sans-serif;
     font-size: 12px;
@@ -25,7 +29,7 @@ div .ui.sub.header {
     stroke: black;
 }
 
-.ego-stroke {
+.selected-stroke {
     stroke: gold !important;
 }
 
