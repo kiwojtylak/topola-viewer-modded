@@ -47,6 +47,6 @@ Backlog:
 - [x] Restore all relatives view
 - [x] onResetView not to select I0, but to remove query params
 - [x] Click on node does not include the node for redraw
-- [ ] Highlight selected/ego indi
-- [ ] Sometimes allLanguages does not load the first time
+- [x] Highlight selected/ego indi
 - [ ] Collapsible panel
+- [ ] Sometimes allLanguages does not load the first time
