@@ -46,7 +46,7 @@ Backlog:
 - [x] Different rect stroke for nodes with hidden relatives
 - [x] Restore all relatives view
 - [x] onResetView not to select I0, but to remove query params
-- [ ] Click on node does not include the node for redraw
+- [x] Click on node does not include the node for redraw
 - [ ] Highlight selected/ego indi
 - [ ] Sometimes allLanguages does not load the first time
 - [ ] Collapsible panel

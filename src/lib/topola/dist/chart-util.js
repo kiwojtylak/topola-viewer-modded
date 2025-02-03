@@ -251,6 +251,7 @@ let ChartUtil = /** @class */ (function () {
             updateTransition.attr('transform', function (node) {
                 return "translate(" + (node.x - node.data.width / 2) + ", " + (node.y - node.data.height / 2) + ")";
             });
+            _this.options.renderer.options.startIndi = _this.options.startIndi
             _this.options.renderer.render(nodeEnter, boundNodes);
             if (_this.options.animate) {
                 boundNodes

@@ -344,9 +344,10 @@ var DetailedRenderer = /** @class */ (function (_super) {
         }
     }
 
-    DetailedRenderer.prototype.getEgoStroke = function (indiId) {
-        // TODO someday return " ego-stroke"
-        return ' '
+    DetailedRenderer.prototype.getSelectedStroke = function (indiId) {
+        if (this.options.startIndi && this.options.startIndi === indiId) {
+            return 'selected-stroke'
+        }
     }
 
     DetailedRenderer.prototype.getLanguagesClass = function (indiId, selectedLanguageId) {
@@ -401,6 +402,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
                     + _this.getSexClass(node.indi.id) + " "
                     + _this.getEthnicityClass(node.indi.id) + " "
                     + _this.getLanguagesClass(node.indi.id, _this.options.selectedLanguage) + " "
+
             })
             .merge(update.select("rect.background"));
 
@@ -565,7 +567,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
             .attr("rx", 5)
             .attr("fill-opacity", 0)
             .attr("class", function (node) {
-                return "border" + _this.getEgoStroke(node.indi.id);
+                return _this.getSelectedStroke(node.indi.id);
             })
             .attr("stroke-dasharray", function (node) {
                 if (node.indi.hiddenRelatives) {

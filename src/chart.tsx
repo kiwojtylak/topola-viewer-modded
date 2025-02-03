@@ -399,7 +399,8 @@ export function Chart(props: ChartProps) {
                 props.hideLanguages !== prevProps?.hideLanguages ||
                 props.hideEthnicity !== prevProps?.hideEthnicity ||
                 props.hideIds !== prevProps?.hideIds ||
-                props.hideSex !== prevProps?.hideSex;
+                props.hideSex !== prevProps?.hideSex ||
+                props.selection.id !== prevProps?.selection.id;
             const resetPosition =
                 props.chartType !== prevProps?.chartType ||
                 props.data !== prevProps.data ||
