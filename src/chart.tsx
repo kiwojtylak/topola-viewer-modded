@@ -298,6 +298,7 @@ class ChartWrapper {
             startIndi: props.selection.id,
             baseGeneration: props.selection.generation,
         });
+
         const svg = select("#chartSvg");
         const parent = select("#svgContainer").node() as Element;
         const scale = zoomTransform(parent).k;
@@ -318,50 +319,36 @@ class ChartWrapper {
         const scrollTopTween = (scrollTop: number) => {
             return () => {
                 const i = interpolateNumber(parent.scrollTop, scrollTop);
-                return (t: number) => {
-                    parent.scrollTop = i(t);
-                };
-            };
+                return (t: number) => parent.scrollTop = i(t);
+            }
         };
-
         const scrollLeftTween = (scrollLeft: number) => {
             return () => {
                 const i = interpolateNumber(parent.scrollLeft, scrollLeft);
-                return (t: number) => {
-                    parent.scrollLeft = i(t);
-                };
-            };
+                return (t: number) => parent.scrollLeft = i(t);
+            }
         };
 
         const dx = parent.clientWidth / 2 - chartInfo.origin[0] * scale;
         const dy = parent.clientHeight / 2 - chartInfo.origin[1] * scale;
-        const offsetX = max([
-            0,
-            (parent.clientWidth - chartInfo.size[0] * scale) / 2,
-        ]);
-        const offsetY = max([
-            0,
-            (parent.clientHeight - chartInfo.size[1] * scale) / 2,
-        ]);
+        const offsetX = max([0, (parent.clientWidth - chartInfo.size[0] * scale) / 2]);
+        const offsetY = max([0, (parent.clientHeight - chartInfo.size[1] * scale) / 2]);
         const svgTransition = svg.transition().delay(200).duration(500);
         const transition = args.initialRender ? svg : svgTransition;
-        transition
-            .attr("transform", `translate(${offsetX}, ${offsetY})`)
-            .attr("width", chartInfo.size[0] * scale)
-            .attr("height", chartInfo.size[1] * scale);
+        transition.attr("transform", `translate(${offsetX}, ${offsetY})`)
+                  .attr("width", chartInfo.size[0] * scale)
+                  .attr("height", chartInfo.size[1] * scale);
         if (args.resetPosition) {
             if (args.initialRender) {
                 parent.scrollLeft = -dx;
                 parent.scrollTop = -dy;
             } else {
-                svgTransition
-                    .tween("scrollLeft", scrollLeftTween(-dx))
-                    .tween("scrollTop", scrollTopTween(-dy));
+                svgTransition.tween("scrollLeft", scrollLeftTween(-dx)).tween("scrollTop", scrollTopTween(-dy));
             }
         }
 
-        // After the animation is finished, rerender the chart if required.
         this.animating = true;
+        // After the animation is finished, re-render the chart if required.
         chartInfo.animationPromise.then(() => {
             this.animating = false;
             if (this.rerenderRequired) {
@@ -393,23 +380,25 @@ export function Chart(props: ChartProps) {
     useEffect(() => {
         if (prevProps) {
             const initialRender =
-                props.chartType !== prevProps?.chartType ||
-                props.colors !== prevProps?.colors ||
-                props.selectedLanguage !== prevProps?.selectedLanguage ||
-                props.hideLanguages !== prevProps?.hideLanguages ||
-                props.hideEthnicity !== prevProps?.hideEthnicity ||
-                props.hideIds !== prevProps?.hideIds ||
-                props.hideSex !== prevProps?.hideSex ||
-                props.selection.id !== prevProps?.selection.id;
+                props.chartType !== prevProps?.chartType
+                || props.colors !== prevProps?.colors
+                || props.selectedLanguage !== prevProps?.selectedLanguage
+                || props.hideLanguages !== prevProps?.hideLanguages
+                || props.hideEthnicity !== prevProps?.hideEthnicity
+                || props.hideIds !== prevProps?.hideIds
+                || props.hideSex !== prevProps?.hideSex
+                //|| props.selection !== prevProps?.selection;
             const resetPosition =
-                props.chartType !== prevProps?.chartType ||
-                props.data !== prevProps.data ||
-                props.selection !== prevProps.selection;
+                props.chartType !== prevProps?.chartType
+                || props.data !== prevProps.data
+                || props.selection !== prevProps.selection;
+            // non-first render
             chartWrapper.current.renderChart(props, intl, {
                 initialRender,
                 resetPosition,
             });
         } else {
+            // first render
             chartWrapper.current.renderChart(props, intl, {
                 initialRender: true,
                 resetPosition: true,

@@ -185,12 +185,13 @@ var DetailedRenderer = /** @class */ (function (_super) {
         return [width, height];
     };
 
+    let indisToStroke = []
     DetailedRenderer.prototype.render = function (enter, update) {
         const _this = this;
         enter = enter.append('g').attr("class", "detailed");
         update = update.select('g');
 
-        const indisToStroke = []
+        indisToStroke = []
         const indiUpdate = enter
             .merge(update)
             .selectAll("g.indi")
@@ -202,7 +203,6 @@ var DetailedRenderer = /** @class */ (function (_super) {
                 const famYOffset = _this.options.horizontal && node.data.family
                     ? d3_array_1.max([-composite_renderer_1.getFamPositionHorizontal(node.data), 0])
                     : 0;
-
                 if (node.data.indi) {
                     indisToStroke.push(node.data.indi)
                     node.data.indi.hiddenRelatives = node.data.hiddenRelatives;
@@ -220,9 +220,9 @@ var DetailedRenderer = /** @class */ (function (_super) {
                         generation: node.data.generation,
                         xOffset: !_this.options.horizontal && node.data.indi ? node.data.indi.width + famXOffset : 0,
                         yOffset: _this.options.horizontal && node.data.indi ? node.data.indi.height + famYOffset : 0
-                });
-            }
-            return result;
+                    });
+                }
+                return result;
         }, function (data) { return data.indi.id; });
 
         // dash the stroke of indis having non-visible relatives
@@ -383,7 +383,7 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
         if (this.options.indiCallback) {
             enter.on("click", function (event, data) {
-                data.indi.hiddenRelatives = false
+                //_this.util.markHiddenRelatives(indisToStroke, _this.options.data);
                 return _this.options.indiCallback({
                     id: data.indi.id,
                     generation: data.generation,
