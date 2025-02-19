@@ -2,7 +2,7 @@ id,name,family,ISO 639-3,latitude,longitude,legend
 1,español,indoeuropean,es,4.62,-74.06,#9C27B0
 2,resigaro,arawak,rgr,-1.17,-71.61,#8D6E63
 3,bora,boran,boa,-2.00,-72.26,#A5D6A7
-4,andoke,isolate,ano,-0.54,-72.09,#9E9E9E
+4,andoke,isolate,ano,-0.54,-72.09,#9E9E9A
 5,minika-witoto,witotoan,hto,-1.55,-73.11,#A31515
 6,muinane,boran,bmr,-0.80,-72.04,#4CAF50
 7,okaina,witotoan,oca,-2.16,-72.14,#FF7043
