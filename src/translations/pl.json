@@ -71,5 +71,7 @@
   "name.unknown_name": "N.N.",
   "extras.notes": "Notatki",
   "extras.images": "Zdjęcia",
-  "extras.sources": "Źródło"
+  "extras.sources": "Źródło",
+  "legend.stroke.1": "Osoby w linii przerywanej",
+  "legend.stroke.2": "mają więcej krewnych"
 }

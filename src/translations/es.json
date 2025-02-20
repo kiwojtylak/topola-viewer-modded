@@ -71,5 +71,7 @@
   "name.unknown_name": "N.N.",
   "extras.notes": "Notas",
   "extras.images": "Imágenes",
-  "extras.sources": "Fuentes"
+  "extras.sources": "Fuentes",
+  "legend.stroke.1": "Los individuos con linea de puntos",
+  "legend.stroke.2": "tienen más parientes"
 }

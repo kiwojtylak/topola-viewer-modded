@@ -2,6 +2,31 @@ body, html {
     height: 100%;
 }
 
+.legend {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.legend svg {
+    width: 280px;
+    height: 80px;
+}
+
+.meta a {
+    color: #4dabf7 !important;
+}
+
+.meta a:hover {
+    color: #82cfff !important;
+}
+
 .node {
     cursor: pointer;
 }

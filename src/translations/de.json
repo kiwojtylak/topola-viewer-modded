@@ -71,5 +71,7 @@
   "name.unknown_name": "N.N.",
   "extras.notes": "Anmerkungen",
   "extras.images": "Bilder",
-  "extras.sources": "Quellen"
+  "extras.sources": "Quellen",
+  "legend.stroke.1": "Die Individuen mit gestrichelter Linie",
+  "legend.stroke.2": "haben mehr Verwandte"
 }
