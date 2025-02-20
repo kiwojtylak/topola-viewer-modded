@@ -34,7 +34,7 @@ body, html {
 .sidePanel {
     flex: 0 0 320px;
     overflow: auto;
-    border-left: solid #ccc 1px;
+    /*border-left: solid #ccc 1px;*/
     overflow-x: hidden;
 }
 
@@ -240,6 +240,10 @@ div.zoom {
 
 .event-extras .ui.tabular.menu .item {
     border: none;
+}
+
+.ui.divided.items>.item {
+    border-top: 0 !important;
 }
 
 .event-extras .ui.menu .active.item .icon {
