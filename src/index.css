@@ -152,6 +152,7 @@ div.zoom {
 
 .ui.tabular.menu .active.item {
     border-radius: 0 0 !important;
+    border-top-width: 0 !important;
 }
 
 .ui.tabular.menu .item:first-child {
@@ -164,7 +165,7 @@ div.zoom {
 
 .details {
     padding: 15px 0;
-    border-bottom: 1px solid rgba(34, 36, 38, .15);
+    /*border-bottom: 1px solid rgba(34, 36, 38, .15);*/
 }
 
 .no-border-bottom {
