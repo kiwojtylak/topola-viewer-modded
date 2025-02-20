@@ -383,7 +383,6 @@ var DetailedRenderer = /** @class */ (function (_super) {
 
         if (this.options.indiCallback) {
             enter.on("click", function (event, data) {
-                //_this.util.markHiddenRelatives(indisToStroke, _this.options.data);
                 return _this.options.indiCallback({
                     id: data.indi.id,
                     generation: data.generation,
