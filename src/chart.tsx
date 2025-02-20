@@ -415,13 +415,15 @@ export function Chart(props: ChartProps) {
             <svg id="chartSvg">
                 <g id="chart"/>
             </svg>
-            <div className="legend">
-                <svg>
-                    <rect x="10" y="10" width="260" height="60" stroke="black" stroke-dasharray="5,5" fill="none" stroke-width="2"/>
-                    <text x="20" y="35" font-size="16" fill="black"><FormattedMessage id="legend.stroke.1" defaultMessage="Individuals with a dashed line"/></text>
-                    <text x="60" y="55" font-size="16" fill="black"><FormattedMessage id="legend.stroke.2" defaultMessage="have more relatives"/></text>
-                </svg>
-            </div>
+            <Media greaterThanOrEqual="large">
+                <div className="legend">
+                    <svg>
+                        <rect x="10" y="10" width="260" height="60" stroke="black" stroke-dasharray="5,5" fill="none" stroke-width="2"/>
+                        <text x="20" y="35" font-size="16" fill="black"><FormattedMessage id="legend.stroke.1" defaultMessage="Individuals with a dashed line"/></text>
+                        <text x="60" y="55" font-size="16" fill="black"><FormattedMessage id="legend.stroke.2" defaultMessage="have more relatives"/></text>
+                    </svg>
+                </div>
+            </Media>
         </div>
     );
 }
