@@ -1,10 +1,10 @@
 build
 node_modules
+out
 cypress/fixtures/example.json
 cypress/plugins/index.js
 cypress/support/commands.js
 cypress/support/index.js
 cypress/videos
-.out
 .idea
 .vscode
