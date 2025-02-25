@@ -1,4 +1,5 @@
-name: nodejs-build-deployment
+name: Node.js build
+run-name: node.js build
 
 on:
   push:
